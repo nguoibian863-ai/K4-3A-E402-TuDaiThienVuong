@@ -1,0 +1,10 @@
+# Environment variables
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Temp files
+data/slides_content_clean.txt
