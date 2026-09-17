@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLearn Smart Workflow - Học trên lớp & Ôn tập cá nhân hóa cùng AI</title>
+  <meta name="description" content="Mockup UI tương tác cho workflow Học trên lớp - Ghi chú thông minh - Dạy lại cho AI - Ôn tập cá nhân hóa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top App Navigation / Banner -->
+  <header class="main-header">
+    <div class="header-content">
+      <div class="brand-badge">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10"></path>
+            <path d="M6 10h10"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">VLearn <strong>Smart Learning</strong></span>
+          <span class="hackathon-tag">Batch 04 · Lớp 3A · E402</span>
+        </div>
+      </div>
+
+      <!-- Stage Quick Switcher -->
+      <div class="stage-nav">
+        <button id="nav-stage-1" class="stage-pill active" data-target="stage1">
+          <span class="stage-num">1</span>
+          <span>Trong lớp</span>
+        </button>
+        <button id="nav-stage-2" class="stage-pill" data-target="stage2">
+          <span class="stage-num">2</span>
+          <span>Sau buổi học</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title Section -->
+  <div class="page-title-banner">
+    <div class="container">
+      <h1 class="main-title">
+        Workflow: Học trên lớp – Ghi chú thông minh – Dạy lại cho AI – Ôn tập cá nhân hóa
+      </h1>
+      <p class="main-subtitle">
+        Biến những khoảnh khắc "chưa hiểu" thành dữ liệu học tập có giá trị, giúp bạn hiểu sâu hơn và nhớ lâu hơn.
+      </p>
+    </div>
+  </div>
+
+  <main class="main-container">
+
+
+
+    <!-- ================================================================= -->
+    <!-- VIEW 2: LIVE SIMULATION (Mô phỏng app thực tế có người dùng thật)  -->
+    <!-- ================================================================= -->
+    <div id="view-sim" class="view-panel active">
+      
+      <div class="sim-container">
+        <!-- Stage Tabs in Simulation -->
+        <div class="sim-phase-nav">
+          <button class="sim-phase-btn active" id="sim-tab-inclass">
+            <span class="phase-badge">Giai đoạn 1</span>
+            <strong>📚 Trong lớp: Học slide & Xử lý ngay điểm khó</strong>
+          </button>
+          <button class="sim-phase-btn" id="sim-tab-afterclass">
+            <span class="phase-badge">Giai đoạn 2</span>
+            <strong>🌙 Sau buổi học: Ôn tập & Dạy lại cho AI (Feynman)</strong>
+          </button>
+        </div>
+
+        <!-- SIMULATION PHASE 1: VLearn Lecture Room -->
+        <div id="sim-screen-inclass" class="sim-screen active">
+          
+          <div class="vlearn-classroom-layout">
+            <!-- Left Lecture Thumbnails -->
+            <aside class="lecture-sidebar">
+              <div class="sidebar-top">
+                <span class="vlearn-logo">VLearn</span>
+                <span class="course-code">AI-20k</span>
+              </div>
+              <div class="slides-thumb-list" id="slide-thumb-list"></div>
+            </aside>
+
+            <!-- Center Slide Presentation Stage -->
+            <main class="slide-stage">
+              <div class="slide-stage-header">
+                <div class="breadcrumb">
+                  <span>Bài giảng</span> ➔ <strong id="slide-lesson-title">Chưa tải slide</strong>
+                </div>
+                <div class="slide-pagination">
+                  <label class="btn-upload-pdf">
+                    📄 Tải slide PDF
+                    <input type="file" id="pdf-file-input" accept="application/pdf" hidden>
+                  </label>
+                  <button class="nav-page-btn" id="btn-prev-slide" title="Trang trước" disabled>◀</button>
+                  <span class="page-current" id="slide-page-indicator">Trang <strong>-</strong></span>
+                  <button class="nav-page-btn" id="btn-next-slide" title="Trang sau" disabled>▶</button>                </div>
+              </div>
+
+              <!-- Real Slide Frame: trang PDF gốc (canvas) + lớp chữ trong suốt để bôi đen -->
+              <div class="actual-slide-canvas" id="slide-canvas">
+                <div class="pdf-empty-state" id="pdf-empty-state">
+                  Chưa có slide. Bấm <strong>"📄 Tải slide PDF"</strong> để mở file bài giảng.
+                </div>
+                <div class="pdf-scroll-container" id="pdf-scroll-container" style="display: none;"></div>
+
+                <div class="slide-tip-box">
+                  <span class="tip-icon">💡</span>
+                  <span><strong>Mẹo thực hành:</strong> Bôi đen bất kỳ đoạn nào trên slide (kể cả câu tiếng Việt) để gọi trợ lý AI giải thích hoặc lưu ghi chú đánh giá độ hiểu!</span>
+                </div>
+
+                <!-- Floating Action Bar — JS định vị theo đúng vùng vừa bôi đen thật -->
+                <div class="live-action-popup" id="live-action-bar" style="display: none;">
+                  <div class="popup-arrow"></div>
+                  <button class="popup-btn btn-qa-live" id="live-btn-qa">
+                    <span class="btn-icon">🤖</span>
+                    <div class="btn-labels">
+                      <strong>Hỏi đáp</strong>
+                      <small>Giải thích ngay</small>
+                    </div>
+                  </button>
+                  <div class="divider-v"></div>
+                  <button class="popup-btn btn-note-live" id="live-btn-note">
+                    <span class="btn-icon">📝</span>
+                    <div class="btn-labels">
+                      <strong>Ghi chú</strong>
+                      <small>Lưu & đánh giá</small>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- In-Slide Triggered Overlays (Step 3 & Step 4) -->
+              
+              <!-- STEP 3 DRAWER: AI EXPLAIN -->
+              <div class="live-drawer-explain" id="live-step-3-drawer">
+                <div class="drawer-header">
+                  <div class="ai-badge-group">
+                    <span class="ai-avatar-sm">🤖</span>
+                    <div>
+                      <h4>AI Explain (Bước 3)</h4>
+                      <small id="live-qa-drawer-subtitle">Giải thích theo ngữ cảnh Slide</small>
+                    </div>
+                  </div>
+                  <button class="close-drawer-btn" id="close-step-3-drawer">✕</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="quoted-reference">
+                    <span class="quote-sign">"</span>
+                    <p id="live-qa-highlight-text"></p>
+                  </div>
+
+                  <div class="qa-messages" id="live-qa-messages"></div>
+
+                  <div class="qa-ask-row">
+                    <input type="text" id="live-qa-input" placeholder="Nhập câu hỏi của bạn về đoạn này...">
+                    <button class="btn-primary-action" id="live-qa-send">Gửi</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 4 MODAL: GHI CHÚ ĐOẠN NÀY -->
+              <div class="live-modal-backdrop" id="live-step-4-modal">
+                <div class="live-modal-content">
+                  <div class="modal-head">
+                    <div class="modal-title-wrap">
+                      <span class="modal-icon">📝</span>
+                      <div>
+                        <h3>Ghi chú đoạn này (Bước 4)</h3>
+                        <small>Vừa lưu làm tư liệu, vừa phục vụ thuật toán ôn tập thông minh</small>
+                      </div>
+                    </div>
+                    <button class="close-modal-btn" id="close-step-4-modal">✕</button>
+                  </div>
+
+                  <div class="modal-body">
+                    <div class="quoted-reference">
+                      <span class="quote-sign">“</span>
+                      <p id="live-note-quote"></p>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="live-note-textarea">Ghi chú cá nhân của bạn:</label>
+                      <textarea id="live-note-textarea" rows="3" maxlength="500" placeholder="Nhập suy nghĩ, thắc mắc hoặc ghi nhớ của bạn..."></textarea>
+                      <div class="char-indicator" id="live-note-char-indicator">0/500 ký tự</div>
+                    </div>
+
+                    <div class="two-way-save-container">
+                      <div class="save-method-card" id="card-save-link">
+                        <div class="method-head">
+                          <span class="m-icon">📍</span>
+                          <div>
+                            <strong>Lưu tiến độ học</strong>
+                            <span class="m-sub">Đánh dấu: đã học đến đoạn này</span>
+                          </div>
+                        </div>
+                        <p class="m-desc">Lưu vị trí đang học (trang + đoạn bôi đen). Sau buổi học, hỏi chatbot "Tôi đã học đến đâu?" để quay lại đúng chỗ.</p>
+                        <button class="btn-method btn-outline" id="btn-do-save-link">
+                          📍 Lưu tiến độ
+                        </button>
+                      </div>
+
+                      <div class="save-method-card active" id="card-save-study">
+                        <div class="method-badge">Khuyên dùng</div>
+                        <div class="method-head">
+                          <span class="m-icon">📊</span>
+                          <div>
+                            <strong>Lưu vào học tập</strong>
+                            <span class="m-sub">& đánh giá mức độ hiểu</span>
+                          </div>
+                        </div>
+                        <p class="m-desc">Lưu vào hệ thống, dùng để phân tích và gợi ý ôn tập thông minh.</p>
+                        
+                        <div class="rating-selector-block">
+                          <span class="rating-title">Mức độ hiểu hiện tại:</span>
+                          <div class="star-group" id="live-star-group">
+                            <button class="star-btn" data-val="1">1</button>
+                            <button class="star-btn active" data-val="2">2</button>
+                            <button class="star-btn" data-val="3">3</button>
+                            <button class="star-btn" data-val="4">4</button>
+                            <button class="star-btn" data-val="5">5</button>
+                          </div>
+                          <div class="star-caption" id="live-star-caption">
+                            <span>1: Chưa hiểu</span>
+                            <strong class="curr-val-label">2/5 (Chưa hiểu rõ)</strong>
+                            <span>5: Hiểu rõ</span>
+                          </div>
+                        </div>
+
+                        <button class="btn-method btn-solid-accent" id="btn-do-save-study">
+                          💾 Lưu và đánh giá mức độ 2/5
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </main>
+
+            <!-- Right Activity Log (Step 5) -->
+            <aside class="activity-sidebar">
+              <div class="sidebar-header">
+                <div class="header-left">
+                  <span class="live-dot"></span>
+                  <h4>Nhật ký buổi học (Bước 5)</h4>
+                </div>
+                <span class="auto-tag">Tự động</span>
+              </div>
+              <p class="sidebar-sub">Ghi nhận liên tục mọi hoạt động học tập:</p>
+
+              <div class="live-activity-stream" id="live-activity-stream">
+                <p class="review-empty-state" id="activity-empty-state">Chưa có hoạt động nào trong buổi học này.</p>
+              </div>
+
+              <!-- Go to Phase 2 Prompt -->
+              <div class="shift-phase-card">
+                <div class="shift-icon">🌙</div>
+                <div class="shift-text">
+                  <strong>Đã kết thúc buổi học?</strong>
+                  <p>Dữ liệu đã sẵn sàng trong Database để bắt đầu phiên ôn tập cá nhân hóa.</p>
+                </div>
+                <button class="btn-shift-phase" id="btn-go-phase-2">
+                  Chuyển sang Giai đoạn 2 (Sau buổi học) ➔
+                </button>
+              </div>
+            </aside>
+          </div>
+
+        </div><!-- End #sim-screen-inclass -->
+
+
+        <!-- SIMULATION PHASE 2: After Class - Teach AI & Review -->
+        <div id="sim-screen-afterclass" class="sim-screen">
+
+          <!-- GIAI ĐOẠN 2 — 1 khung chat duy nhất: hỏi ôn gì -> danh sách ôn -> dạy lại cho AI -> tổng kết -->
+          <div class="p2-chat-layout">
+            <div class="p2-chat-panel">
+              <div class="chat-panel-header">
+                <div class="roleplay-badge">
+                  <span class="icon">🌙</span>
+                  <div>
+                    <h4>Ôn tập &amp; Dạy lại cho AI</h4>
+                    <small id="p2-chat-status">Hỏi AI hôm nay cần ôn gì để bắt đầu</small>
+                  </div>
+                </div>
+                <div class="ai-mode-tag" id="p2-mode-tag">Ôn tập</div>
+              </div>
+
+              <div class="p2-messages" id="p2-messages"></div>
+
+              <div class="p2-quick-actions" id="p2-quick-actions"></div>
+
+              <div class="p2-input-bar">
+                <input type="text" id="p2-input" placeholder="Hỏi AI: Hôm nay tôi cần ôn gì?">
+                <button class="btn-send-custom" id="p2-send">Gửi</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- End #sim-screen-afterclass -->
+
+      </div>
+
+    </div><!-- End #view-sim -->
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="lecture-pdf-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

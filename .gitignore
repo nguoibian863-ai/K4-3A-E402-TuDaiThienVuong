@@ -1,0 +1,36 @@
+# ===== Secrets — không bao giờ commit key thật =====
+.env
+.env.*
+!.env.example
+codebase/backend/.env
+
+# ===== Python (backend) =====
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# ===== Node (nếu sau này dùng) =====
+node_modules/
+npm-debug.log*
+
+# ===== Slide bài giảng có bản quyền (của giảng viên, không phải data pack hackathon) =====
+# Repo public → không đưa nguyên slide lên. Dùng nút "📄 Tải slide PDF" trên giao diện để mở file.
+Buoi3_PromptEngineering_v2_compressed.pdf
+codebase/frontend/lecture-pdf-data.js
+
+# ===== Kết quả test / file tạm =====
+*.tmp
+*.log
+test-results/
+playwright-report/
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
