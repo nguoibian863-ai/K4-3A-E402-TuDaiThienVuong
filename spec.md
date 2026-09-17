@@ -18,6 +18,12 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
   - 13/24 (54,2%) không biết phần nào là trọng tâm; 12/24 (50%) gặp nội dung kéo dài qua nhiều slide.
   - 24/24 (100%) sẵn sàng thử AI đóng vai học viên và hỏi ngược.
   - Bằng chứng chi tiết: [evidence/evidence_summary.md](evidence/evidence_summary.md), [evidence/quotes.md](evidence/quotes.md), và [evidence/survey_results.csv](evidence/survey_results.csv).
+  - ≥5 quote/ví dụ nguyên văn + nguồn: Khảo sát Google Forms ẩn danh ngày 17/9/2026, câu hỏi mở bổ sung; bản ghi và mã người trả lời trong [evidence/quotes.md](evidence/quotes.md):
+    - U01: “Lúc vibecode. Thấy copy paste code chạy ra kết quả thì tưởng là hiểu, đến lúc labcode yêu cầu đổi show file test thì ngơ người không biết test ở đâu”
+    - U02: “ôn nọ học về Overfitting và Regularization. Tưởng hiểu rồi vì khái niệm khá dễ hình dung. Nhưng lúc làm quiz trắc nghiệm, các câu hỏi giả điều kiện thay đổi tham số L1, L2 kết hợp thì mình chọn sai hết, rồi lú luôn.”
+    - U03: “Bài về RAG (Retrieval-Augmented Generation). Tưởng hiểu cách chia chunk text rồi, nhưng lúc đưa vào dự án thực tế, dữ liệu bảng biểu bị cắt nát bét. Lúc đó mới phát hiện ra mình chưa thực sự xử lý context phức tạp.”
+    - U04: “Lúc xem video giải thích thấy rất logic, gật gù hiểu. Nhưng đến lúc làm lab thì mình chịu chết.”
+    - U05: “Mình hay nhẩm lại trong đầu khi chạy xe. Cứ nghĩ là trôi chảy nhưng hễ gặp từ chuyên ngành là ấp úng, không nối được logic từ A sang B, phải rút điện thoại ra check lại tài liệu.”
 
 ## §2. Impact & quyết định chọn
 - Bảng impact ≥3 ứng viên (bao nhiêu người · tần suất · tốn gì mỗi lần · khả thi):
