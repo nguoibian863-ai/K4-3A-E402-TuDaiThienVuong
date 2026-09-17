@@ -11,13 +11,13 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 - Job executor + workflow: Học viên VLearn, workflow 2 giai đoạn — (1) học trên lớp: bôi đen đoạn chưa hiểu, hỏi đáp AI, ghi chú; (2) sau buổi học: AI gợi ý nội dung cần ôn, học viên "dạy lại" kiến thức cho AI, AI hỏi ngược chỗ giải thích thiếu/sai. (đính kèm sơ đồ workflow trong `mock UI/`)
 - Core JTBD: Khi vừa nghe giảng xong và cảm thấy đã hiểu một khái niệm, tôi muốn tự kiểm tra xem mình có thực sự giải thích lại được không, để không mang lỗ hổng kiến thức tưởng-đã-hiểu sang lúc ôn thi.
 - Problem statement: Nhiều học viên tin mình đã hiểu một khái niệm ngay sau khi nghe giảng, nhưng khi phải tự giải thích lại mà không nhìn tài liệu thì không làm được — lỗ hổng này chỉ lộ ra lúc kiểm tra, khi đã quá muộn để ôn lại.
-- Evidence (chuẩn B — khảo sát, log đầy đủ trong `eval/survey-raw.csv`):
-  - Khảo sát n=24 học viên (Google Form, thu 16/9/2026):
-    - 83% (20/24) có tự học/ôn lại trên VLearn ngoài giờ lên lớp
-    - **63% (15/24)** trả lời không chắc/khó tự giải thích lại kiến thức vừa học mà không nhìn tài liệu ("Hiểu ý nhưng khó giải thích lại" / "Đôi khi làm được" / "Thường phải xem lại tài liệu" / "Không chắc mình thực sự hiểu") — bằng chứng trực tiếp cho "ảo tưởng đã hiểu bài"
-    - 54% (13/24) chọn "không biết phần nào là trọng tâm" và 50% (12/24) chọn "nội dung kéo dài qua nhiều slide" là lý do muốn có tính năng dạy lại cho AI
-    - 100% (24/24) sẵn sàng thử tính năng "AI đóng vai học viên, hỏi ngược" (mức từ "Sẵn sàng" đến "Vô cùng sẵn sàng") — không ai từ chối
-  - ≥5 quote/ví dụ nguyên văn + nguồn: **[CHƯA CÓ — form hiện tại chỉ trắc nghiệm, không có ô tự luận]**. Cần phỏng vấn thêm 3-5 bạn bằng câu hỏi mở kiểu Mom Test (vd: "Kể lần gần nhất bạn tưởng đã hiểu bài nhưng làm bài lại sai") để lấy quote nguyên văn.
+- Evidence (chuẩn A/B — khảo sát và evidence đã chuẩn hóa, log đầy đủ trong repo):
+  - Khảo sát trực tuyến ẩn danh, n = 24, thực hiện ngày 17/9/2026; riêng câu hỏi về khả năng tự giải thích lại có 23 câu trả lời hợp lệ.
+  - 20/24 (83,3%) có tự học/ôn lại trên VLearn ngoài giờ lên lớp.
+  - 15/24 (62,5%) không chắc hoặc khó tự giải thích lại kiến thức vừa học mà không nhìn tài liệu.
+  - 13/24 (54,2%) không biết phần nào là trọng tâm; 12/24 (50%) gặp nội dung kéo dài qua nhiều slide.
+  - 24/24 (100%) sẵn sàng thử AI đóng vai học viên và hỏi ngược.
+  - Bằng chứng chi tiết: [evidence/evidence_summary.md](evidence/evidence_summary.md), [evidence/quotes.md](evidence/quotes.md), và [evidence/survey_results.csv](evidence/survey_results.csv).
 
 ## §2. Impact & quyết định chọn
 - Bảng impact ≥3 ứng viên (bao nhiêu người · tần suất · tốn gì mỗi lần · khả thi):
