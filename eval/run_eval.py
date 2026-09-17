@@ -70,7 +70,7 @@ for idx, tc in enumerate(test_cases, 1):
     print(f"[{idx}/{len(test_cases)}] Đang test {tc_id} ({category})... ", end="", flush=True)
     
     tc_context = tc.get("context", {})
-    topic = tc_context.get("topic", "Day 02: Xác định bài toán cho AI")
+    topic = tc_context.get("topic", "Buổi 3: Prompt Engineering — Mô hình tạo sinh ảnh và video")
     turn = tc_context.get("turn", 1)
     session_context_str = f"\n\n[Bối cảnh phiên học Feynman hiện tại: Chủ đề = \"{topic}\" | Lượt trao đổi = {turn}]"
 
@@ -232,7 +232,7 @@ report_lines = [
     "# 📊 Báo Cáo Đo Lường & Đánh Giá Prompt (Evaluation Report)",
     "",
     "> **Dự án:** VLearn Smart Workflow — Trợ lý học tập Feynman & Ôn tập cá nhân hóa  ",
-    "> **Chủ đề bài học:** Day 02: Xác định bài toán cho AI (Problem Statement & Khung PAIR)  ",
+    "> **Chủ đề bài học:** Buổi 3: Prompt Engineering — Mô hình tạo sinh ảnh và video  ",
     f"> **Mục đích:** Nghiệm thu chất lượng System Prompt trên bộ {len(test_cases)} Test Cases (Golden Set) phục vụ **Mốc CP3 (16:00 17/9)** và **Mục §7 spec.md (CP4)**.",
     "",
     "---",
@@ -242,7 +242,7 @@ report_lines = [
     f"- **Mô hình LLM thử nghiệm:** `{MODEL_NAME} (OpenAI API)`",
     "- **Tham số cấu hình:** `temperature = 0.7`, `top_p = 0.95`",
     f"- **Tập dữ liệu kiểm thử:** `eval/golden_set.json` ({len(test_cases)} test cases)",
-    "- **Tài liệu nguồn (Grounding):** `data/d2-slide-hackathon.pdf` (29 slides)",
+    "- **Tài liệu nguồn (Grounding):** `data/Buoi3_PromptEngineering_v2_compressed.pdf` (100 slides)",
     f"- **Thời gian thực hiện:** `{datetime.now().strftime('%d/%m/%Y - %H:%M')}`",
     f"- **Kết quả nghiệm thu:** **{passed_count}/{len(test_cases)} ca đạt ({pass_rate}%)**",
     "",
