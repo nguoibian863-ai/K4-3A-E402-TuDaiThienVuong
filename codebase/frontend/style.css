@@ -1106,6 +1106,23 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  /* Chỉ thấy vài mục mới nhất; cuộn xuống để xem lại mục cũ */
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+.live-activity-stream .stream-card {
+  flex-shrink: 0;
+}
+
+/* Đoạn trích dài (tiến độ, bôi đen) chỉ hiện 3 dòng để nhật ký gọn */
+.live-activity-stream .stream-msg {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .stream-card {
