@@ -39,3 +39,7 @@ R08,student,Q6,open,"Có lần học xong một bài, làm đúng câu hỏi nh�
 R08,student,Q7,has_tried,"Có, mình từng tự giải thích lại mà không nhìn tài liệu. Khi nói thành lời, mình nhận ra phần nào còn hổng và không biết nối các khái niệm lại với nhau.",high,2026-09-17
 R08,student,Q8,read_and_reexplain,"Đọc lại vài lần, xem ví dụ, rồi tự diễn giải theo ngôn ngữ của mình; nếu chưa hiểu thì hỏi AI hoặc tìm tài liệu bổ sung.",high,2026-09-17
 R08,student,Q9,positive_but_concerned,"Mình nghĩ điều này rất hữu ích để phát hiện phần mình tưởng hiểu nhưng chưa thật sự hiểu, nhưng lo AI hỏi quá khó hoặc quá nhiều.",high,2026-09-17
+SUM01,summary,SUMMARY_SELF_STUDY,83_20_24,"83% (20/24) có tự học/ôn lại trên VLearn ngoài giờ lên lớp.",high,2026-09-17
+SUM02,summary,SUMMARY_ILLUSION,63_15_24,"63% (15/24) trả lời không chắc/khó tự giải thích lại kiến thức vừa học mà không nhìn tài liệu; đây là bằng chứng cho illusion of competence.",high,2026-09-17
+SUM03,summary,SUMMARY_NEED,54_13_24_50_12_24,"54% (13/24) chọn 'không biết phần nào là trọng tâm' và 50% (12/24) chọn 'nội dung kéo dài qua nhiều slide' là lý do muốn có tính năng dạy lại cho AI.",high,2026-09-17
+SUM04,summary,SUMMARY_WILLINGNESS,100_24_24,"100% (24/24) sẵn sàng thử tính năng 'AI đóng vai học viên, hỏi ngược'; không ai từ chối.",high,2026-09-17
