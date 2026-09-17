@@ -37,7 +37,7 @@ def _validate_summary(data: dict) -> bool:
 def student_reply(concept: str, evidence: list[dict], history: list[dict], message: str) -> dict:
     payload = {"concept": concept, "evidence": evidence, "history": history, "message": message}
     try:
-        raw_response, parsed = call_llm(get_prompt("feynman_reply"), payload)
+        raw_response, parsed = call_llm(get_prompt("feynman_reply"), payload, temperature=0.3)
     except Exception:
         return {
             "reply": "Em chưa nghe rõ (AI không phản hồi). Thầy/cô thử gửi lại giúp em nhé.",
@@ -52,6 +52,9 @@ def student_reply(concept: str, evidence: list[dict], history: list[dict], messa
             "understanding": None,
             "used_fallback": True,
         }
+    # Cần gợi ý nghĩa là lượt này giáo viên chưa giảng được ý nào
+    if message and parsed["feedback_type"] == "hint":
+        parsed["understanding"] = "weak"
     parsed["used_fallback"] = False
     return parsed
 
