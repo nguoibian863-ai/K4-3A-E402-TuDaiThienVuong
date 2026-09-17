@@ -1,10 +1,35 @@
-# Environment variables
+# ===== Secrets — không bao giờ commit key thật =====
 .env
-.env.local
+.env.*
+!.env.example
+codebase/backend/.env
 
-# Python
+# ===== Python (backend) =====
 __pycache__/
 *.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
 
-# Temp files
+# ===== Node (nếu sau này dùng) =====
+node_modules/
+npm-debug.log*
+
+# ===== Slide bài giảng có bản quyền =====
+codebase/frontend/lecture-pdf-data.js
+
+# ===== Temp files =====
 data/slides_content_clean.txt
+*.tmp
+*.log
+test-results/
+playwright-report/
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
