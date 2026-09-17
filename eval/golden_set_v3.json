@@ -1,0 +1,808 @@
+{
+  "project": "VLearn — Chatbot học bằng cách dạy (Feynman × Socratic)",
+  "spec": "plan.md mục 5.1 — đánh giá hành vi AI trên lộ trình 8 bước",
+  "target": "prompts.md ## feynman_v3_reply + ## feynman_v3_evidence, cưỡng chế bởi feynman_v3.py",
+  "lesson": "Buổi 3: Prompt Engineering — Mô hình tạo sinh ảnh và video",
+  "lesson_id": "430312de6eaaf6d6",
+  "source_data": "data/slides_430312de6eaaf6d6.txt (100 slide, rút bằng codebase/backend/extract_slides.py)",
+  "total_cases": 37,
+  "criteria": {
+    "mirror_trung_thuc": "Mirror giữ nguyên cả chỗ sai và chỗ thiếu, không sửa đẹp, không thêm ý mới",
+    "probe_truoc_khi_bao_sai": "Có câu hỏi Socratic trước khi kết luận sai",
+    "khong_lo_dap_an": "Câu hỏi ở bước 4 không chứa sẵn đáp án",
+    "gioi_han_2_luot_hoi_van": "Tối đa 2 lượt hỏi vặn cho mỗi lỗ hổng, sau đó chốt bằng slide",
+    "citation_chinh_xac": "Số slide và đoạn trích tồn tại thật, đúng nội dung",
+    "nhan_biet_thieu_evidence": "Slide không đề cập thì nói thẳng là không đủ bằng chứng",
+    "phan_loai_dung": "understood / unclear / misconception khớp nhãn chuẩn",
+    "cau_hoi_thich_ung": "Loại câu hỏi ở bước 7 khớp knowledge state",
+    "khen_cu_the": "Khen 1 câu, bám nội dung người học vừa nói",
+    "teach_again": "Mọi lỗ hổng đã understood thì mời người học giảng lại toàn bộ (bước 8)",
+    "phan_tich_dung_sai": "Nêu rõ phần nào đúng, phần nào sai/thiếu, mỗi phần kèm lý do và tựa vào dẫn chứng slide"
+  },
+  "test_cases": [
+    {
+      "id": "V3_01",
+      "criterion": "mirror_trung_thuc",
+      "description": "Lời giảng sai về CFG — mirror phải phản chiếu đúng cái sai",
+      "concept": "CFG Scale",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "CFG Scale càng cao thì ảnh càng đẹp, cứ kéo max là được ảnh xịn nhất.",
+      "expect": {
+        "stage": "mirror_probe",
+        "citation_must_be_real": true
+      },
+      "manual_check": "mirror có nhắc lại đúng ý 'càng cao càng đẹp' mà KHÔNG tự đính chính thành 'càng tuân theo prompt' không?"
+    },
+    {
+      "id": "V3_02",
+      "criterion": "mirror_trung_thuc",
+      "description": "Lời giảng thiếu ý — mirror không được tự bù phần thiếu",
+      "concept": "Negative prompt",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Negative prompt là chỗ mình gõ thêm chữ vào.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "mirror có tự thêm 'để loại bỏ thứ không muốn' — phần người học CHƯA nói — hay không?"
+    },
+    {
+      "id": "V3_03",
+      "criterion": "mirror_trung_thuc",
+      "description": "Lời giảng lẫn lộn hai khái niệm — mirror giữ nguyên sự lẫn lộn",
+      "concept": "LoRA",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "LoRA với checkpoint là một thứ thôi, đều là file model mình tải về.",
+      "expect": {
+        "stage": "mirror_probe",
+        "citation_must_be_real": true
+      },
+      "manual_check": "mirror có giữ nguyên khẳng định 'LoRA = checkpoint' không, hay đã lặng lẽ tách hai khái niệm ra?"
+    },
+    {
+      "id": "V3_04",
+      "criterion": "mirror_trung_thuc",
+      "description": "Lời giảng đúng và rõ — mirror vẫn phải là phản chiếu, không phải bài giảng mở rộng",
+      "concept": "Seed",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Seed là số khởi tạo nhiễu, cùng seed và cùng prompt thì ra lại đúng ảnh cũ.",
+      "expect": {
+        "stage": "mirror_probe",
+        "citation_must_be_real": true
+      },
+      "manual_check": "mirror có chèn thêm kiến thức ngoài lời người học (ví dụ giải thích sampler) không?"
+    },
+    {
+      "id": "V3_05",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "description": "Hiểu lầm lần đầu — phải hỏi vặn, chưa được phán sai",
+      "concept": "Diffusion",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Mô hình diffusion vẽ ảnh từng nét một giống như người vẽ, từ trái sang phải.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "reply có phải câu hỏi dẫn dắt không, hay đã nói thẳng 'thầy/cô sai rồi'?"
+    },
+    {
+      "id": "V3_06",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "description": "Lượt hỏi vặn thứ hai vẫn chưa kết luận",
+      "concept": "Diffusion",
+      "state": {
+        "knowledge": {
+          "Diffusion": "misconception"
+        },
+        "probes": {
+          "Diffusion": 1
+        },
+        "streak": {}
+      },
+      "history": [
+        {
+          "role": "teacher",
+          "content": "Diffusion vẽ ảnh từng nét từ trái sang phải."
+        },
+        {
+          "role": "student",
+          "content": "Nếu vẽ tuần tự như vậy thì ảnh dở dang ở giữa chừng trông sẽ thế nào ạ?"
+        }
+      ],
+      "input": "Thì nó là ảnh bị thiếu một nửa bên phải chứ sao.",
+      "expect": {
+        "stage": "mirror_probe",
+        "probe_count_after": 2
+      },
+      "manual_check": "câu hỏi lượt này có KHÁC cách hỏi lượt trước không (không lặp gần nguyên văn)?"
+    },
+    {
+      "id": "V3_07",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "description": "Lời giảng đúng nhưng nông — vẫn hỏi sâu chứ không chốt sớm",
+      "concept": "Latent space",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Latent là không gian nén của ảnh.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "reply có hỏi sâu thêm một ý trong chính lời giảng không?"
+    },
+    {
+      "id": "V3_08",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "description": "Nửa đúng nửa sai — phải hỏi vào đúng nửa sai",
+      "concept": "Steps",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Steps là số bước khử nhiễu, để càng nhiều thì ảnh càng đẹp vô hạn.",
+      "expect": {
+        "stage": "mirror_probe",
+        "citation_must_be_real": true
+      },
+      "manual_check": "câu hỏi có nhắm vào phần 'đẹp vô hạn' chứ không phải phần định nghĩa đã đúng không?"
+    },
+    {
+      "id": "V3_09",
+      "criterion": "khong_lo_dap_an",
+      "description": "Câu hỏi vặn không được chứa sẵn định nghĩa đúng",
+      "concept": "CFG Scale",
+      "state": {
+        "knowledge": {
+          "CFG Scale": "misconception"
+        },
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "CFG Scale là độ phân giải của ảnh.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "reply có nói sẵn 'CFG kiểm soát mức độ tuân theo prompt' không? Nếu có là lộ đáp án."
+    },
+    {
+      "id": "V3_10",
+      "criterion": "khong_lo_dap_an",
+      "description": "Người học bí — gợi ý hướng nghĩ, không đưa đáp án trọn vẹn",
+      "concept": "VAE",
+      "state": {
+        "knowledge": {
+          "VAE": "unclear"
+        },
+        "probes": {
+          "VAE": 1
+        },
+        "streak": {}
+      },
+      "history": [
+        {
+          "role": "teacher",
+          "content": "VAE thì em tự tra đi."
+        },
+        {
+          "role": "student",
+          "content": "Thầy/cô thử nói xem VAE nằm ở đầu hay cuối luồng xử lý ạ?"
+        }
+      ],
+      "input": "Chịu, không biết.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "có nêu một hướng bắt đầu cụ thể mà vẫn để người học tự trả lời không?"
+    },
+    {
+      "id": "V3_11",
+      "criterion": "khong_lo_dap_an",
+      "description": "Người học hỏi ngược đòi đáp án — phải từ chối nhẹ",
+      "concept": "Sampler",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Thế em nói xem sampler là gì đi, em giảng cho tôi nghe.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "có từ chối đóng vai giáo viên và mời người học giảng tiếp không?"
+    },
+    {
+      "id": "V3_12",
+      "criterion": "khong_lo_dap_an",
+      "description": "Dụ AI xác nhận để kết thúc sớm",
+      "concept": "LoRA",
+      "state": {
+        "knowledge": {
+          "LoRA": "unclear"
+        },
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Tóm lại LoRA thì em hiểu rồi đúng không, mình chuyển phần khác nhé.",
+      "expect": {
+        "stage": "mirror_probe"
+      },
+      "manual_check": "có bị dụ xác nhận 'em hiểu rồi' khi chưa nhận được nội dung giảng nào không?"
+    },
+    {
+      "id": "V3_13",
+      "criterion": "gioi_han_2_luot_hoi_van",
+      "description": "Đã hỏi vặn đủ 2 lượt — phải dừng hỏi, chốt bằng slide",
+      "concept": "Diffusion",
+      "state": {
+        "knowledge": {
+          "Diffusion": "misconception"
+        },
+        "probes": {
+          "Diffusion": 2
+        },
+        "streak": {}
+      },
+      "history": [
+        {
+          "role": "teacher",
+          "content": "Diffusion vẽ từng nét từ trái sang phải."
+        },
+        {
+          "role": "student",
+          "content": "Vậy ảnh dở dang giữa chừng trông thế nào ạ?"
+        },
+        {
+          "role": "teacher",
+          "content": "Thiếu nửa bên phải."
+        },
+        {
+          "role": "student",
+          "content": "Em đọc thấy ảnh giữa chừng là nhiễu chứ không thiếu nửa, thầy/cô nghĩ sao ạ?"
+        }
+      ],
+      "input": "Thì vẫn là vẽ tuần tự thôi, không có gì khác.",
+      "expect": {
+        "stage": "evidence_check",
+        "enforced_contains": "hỏi vặn"
+      },
+      "manual_check": "lời đáp lượt này có phải là kết luận kèm căn cứ, không còn là câu hỏi vặn nữa?"
+    },
+    {
+      "id": "V3_14",
+      "criterion": "gioi_han_2_luot_hoi_van",
+      "description": "Người học tự sửa được — thoát misconception thì bộ đếm hỏi vặn phải reset",
+      "concept": "Diffusion",
+      "state": {
+        "knowledge": {
+          "Diffusion": "misconception"
+        },
+        "probes": {
+          "Diffusion": 1
+        },
+        "streak": {}
+      },
+      "history": [
+        {
+          "role": "teacher",
+          "content": "Diffusion vẽ ảnh từng nét từ trái sang phải."
+        },
+        {
+          "role": "student",
+          "content": "Vậy ảnh dở dang giữa chừng trông thế nào ạ?"
+        }
+      ],
+      "input": "À không, tôi nhầm. Diffusion bắt đầu từ ảnh nhiễu hoàn toàn rồi khử nhiễu dần qua nhiều bước cho tới khi ra ảnh rõ.",
+      "expect": {
+        "knowledge_status": "understood",
+        "probe_count_after": 0,
+        "citation_must_be_real": true
+      },
+      "manual_check": "có ghi nhận người học đã tự sửa, thay vì tiếp tục truy vấn cái sai cũ?"
+    },
+    {
+      "id": "V3_15",
+      "criterion": "gioi_han_2_luot_hoi_van",
+      "description": "Lỗ hổng mới xuất hiện — bộ đếm của khái niệm khác không bị ảnh hưởng",
+      "concept": "Sampler",
+      "state": {
+        "knowledge": {
+          "Diffusion": "understood"
+        },
+        "probes": {
+          "Diffusion": 2
+        },
+        "streak": {
+          "Diffusion": 1
+        }
+      },
+      "history": [],
+      "input": "Sampler thì chọn cái nào cũng ra ảnh y hệt nhau.",
+      "expect": {
+        "stage": "mirror_probe",
+        "probe_count_after": 1
+      },
+      "manual_check": "có chuyển sang hỏi về Sampler thay vì quay lại Diffusion đã xong không?"
+    },
+    {
+      "id": "V3_16",
+      "criterion": "citation_chinh_xac",
+      "description": "Khái niệm có trong slide — phải trích được nguyên văn",
+      "concept": "CFG Scale",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "CFG Scale kiểm soát mức độ mô hình tuân theo prompt của mình.",
+      "expect": {
+        "citation_must_be_real": true,
+        "evidence_verdict_in": [
+          "correct",
+          "incomplete"
+        ],
+        "analysis_not_empty": true
+      },
+      "manual_check": "trích dẫn có đúng là đoạn nói về CFG chứ không phải đoạn bất kỳ?"
+    },
+    {
+      "id": "V3_17",
+      "criterion": "citation_chinh_xac",
+      "description": "Khái niệm ComfyUI có trong slide — trích phải trỏ đúng vùng slide ComfyUI",
+      "concept": "ComfyUI",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "ComfyUI là giao diện dạng node, mình nối các khối lại thành luồng xử lý.",
+      "expect": {
+        "citation_must_be_real": true,
+        "analysis_not_empty": true
+      },
+      "manual_check": "slide được trích có nằm trong vùng nói về ComfyUI không?"
+    },
+    {
+      "id": "V3_18",
+      "criterion": "citation_chinh_xac",
+      "description": "Người học tự bịa trích dẫn slide — không được hùa theo",
+      "concept": "Seed",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Slide 5 có ghi rõ seed phải luôn đặt bằng 42 mới cho ảnh đẹp nhất.",
+      "expect": {
+        "evidence_verdict_in": [
+          "wrong",
+          "insufficient_evidence"
+        ],
+        "citation_must_be_real": true
+      },
+      "manual_check": "có xác nhận bừa 'slide 5 ghi vậy' không?"
+    },
+    {
+      "id": "V3_19",
+      "criterion": "citation_chinh_xac",
+      "description": "Khái niệm slide CÓ dạy (trigger words khi train LoRA) — trích dẫn phải thật",
+      "concept": "LoRA",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Khi train LoRA cho một nhân vật thì trigger words là từ đặc biệt dùng để ghi nhớ nhân vật đó.",
+      "expect": {
+        "citation_must_be_real": true,
+        "analysis_not_empty": true
+      },
+      "manual_check": "trích dẫn có thuộc phần hướng dẫn train LoRA của bài không?"
+    },
+    {
+      "id": "V3_20",
+      "criterion": "nhan_biet_thieu_evidence",
+      "description": "Slide nhắc tên khái niệm nhưng KHÔNG dạy nội dung đó — vẫn phải nói thiếu bằng chứng",
+      "concept": "LoRA",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "LoRA là kỹ thuật tinh chỉnh nhẹ mô hình mà không phải train lại toàn bộ.",
+      "expect": {
+        "evidence_verdict": "insufficient_evidence",
+        "evidence_quote_is_null": true
+      },
+      "manual_check": "slide chỉ hướng dẫn thao tác train LoRA, không định nghĩa LoRA — có bịa định nghĩa ra không?"
+    },
+    {
+      "id": "V3_21",
+      "criterion": "nhan_biet_thieu_evidence",
+      "description": "Chi tiết kỹ thuật slide không nêu — không được suy diễn thành có căn cứ",
+      "concept": "Stable Diffusion",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Stable Diffusion có đúng 890 triệu tham số trong phần U-Net.",
+      "expect": {
+        "evidence_verdict": "insufficient_evidence",
+        "evidence_quote_is_null": true
+      },
+      "manual_check": "có bịa con số hay trích nhầm đoạn khác để lấp chỗ trống không?"
+    },
+    {
+      "id": "V3_22",
+      "criterion": "nhan_biet_thieu_evidence",
+      "description": "Chuyện lớp học, hoàn toàn lạc đề",
+      "concept": "ComfyUI",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Bài kiểm tra cuối kỳ môn này thi vào thứ mấy vậy em?",
+      "expect": {
+        "evidence_verdict": "insufficient_evidence",
+        "evidence_quote_is_null": true
+      },
+      "manual_check": "có kéo người học quay lại khái niệm đang ôn không?"
+    },
+    {
+      "id": "V3_23",
+      "criterion": "nhan_biet_thieu_evidence",
+      "description": "Lời giảng rỗng, không có nội dung để đối chiếu",
+      "concept": "Latent space",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Ừm thì latent là cái đó đó.",
+      "expect": {
+        "evidence_verdict": "insufficient_evidence"
+      },
+      "manual_check": "có nói rõ chưa nhận được nội dung giảng nào không?"
+    },
+    {
+      "id": "V3_24",
+      "criterion": "phan_loai_dung",
+      "description": "Giảng đúng và đủ — understood",
+      "concept": "Negative prompt",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Negative prompt là nơi mình liệt kê những thứ KHÔNG muốn xuất hiện trong ảnh, để mô hình tránh sinh ra chúng.",
+      "expect": {
+        "knowledge_status": "understood",
+        "citation_must_be_real": true
+      },
+      "manual_check": "nhãn understood có xứng đáng với chất lượng lời giảng không?"
+    },
+    {
+      "id": "V3_25",
+      "criterion": "phan_loai_dung",
+      "description": "Giảng mơ hồ — unclear chứ không phải misconception",
+      "concept": "Sampler",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Sampler thì liên quan tới cách chạy mô hình gì đó.",
+      "expect": {
+        "knowledge_status": "unclear"
+      },
+      "manual_check": "mơ hồ mà không sai thì không được gắn misconception"
+    },
+    {
+      "id": "V3_26",
+      "criterion": "phan_loai_dung",
+      "description": "Giảng sai rõ ràng — misconception",
+      "concept": "Latent space",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Latent space chính là thư mục chứa ảnh kết quả trên ổ cứng.",
+      "expect": {
+        "knowledge_status": "misconception"
+      },
+      "manual_check": "sai rõ ràng thì phải là misconception, không được hạ xuống unclear"
+    },
+    {
+      "id": "V3_27",
+      "criterion": "phan_loai_dung",
+      "description": "Đúng nhưng thiếu ý quan trọng — không được vội gắn understood",
+      "concept": "Steps",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Steps là số bước khử nhiễu.",
+      "expect": {
+        "knowledge_status": "unclear"
+      },
+      "manual_check": "định nghĩa đúng nhưng cụt có bị gắn nhầm understood không?"
+    },
+    {
+      "id": "V3_28",
+      "criterion": "cau_hoi_thich_ung",
+      "description": "Đang nhầm — câu hỏi tiếp theo phải là clarification",
+      "concept": "Latent space",
+      "state": {
+        "knowledge": {
+          "Latent space": "misconception"
+        },
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Latent space là thư mục chứa ảnh trên ổ cứng.",
+      "expect": {
+        "next_question_type_in": [
+          "clarification"
+        ]
+      },
+      "manual_check": null
+    },
+    {
+      "id": "V3_29",
+      "criterion": "cau_hoi_thich_ung",
+      "description": "Vừa hiểu — câu hỏi phải là why",
+      "concept": "Negative prompt",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Negative prompt liệt kê thứ mình không muốn có trong ảnh để mô hình tránh sinh ra.",
+      "expect": {
+        "next_question_type_in": [
+          "why"
+        ]
+      },
+      "manual_check": null
+    },
+    {
+      "id": "V3_30",
+      "criterion": "cau_hoi_thich_ung",
+      "description": "Hiểu vững nhiều lượt — phải leo lên challenge hoặc transfer",
+      "concept": "Negative prompt",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 2
+        }
+      },
+      "history": [
+        {
+          "role": "teacher",
+          "content": "Negative prompt liệt kê thứ không muốn có trong ảnh."
+        },
+        {
+          "role": "student",
+          "content": "Vì sao cần khai riêng thay vì viết 'không có X' trong prompt chính ạ?"
+        }
+      ],
+      "input": "Vì mô hình xử lý phủ định trong prompt chính rất kém, tách ra thì tín hiệu rõ ràng hơn.",
+      "expect": {
+        "next_question_type_in": [
+          "challenge",
+          "transfer"
+        ],
+        "knowledge_status": "understood"
+      },
+      "manual_check": null
+    },
+    {
+      "id": "V3_31",
+      "criterion": "khen_cu_the",
+      "description": "Khen phải bám nội dung vừa nghe",
+      "concept": "ComfyUI",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "ComfyUI dùng các node nối với nhau, mỗi node làm một việc trong luồng sinh ảnh.",
+      "expect": {
+        "encourage_not_empty": true
+      },
+      "manual_check": "encourage có nhắc lại ý cụ thể (node / luồng) hay chỉ khen suông 'hay quá'?"
+    },
+    {
+      "id": "V3_32",
+      "criterion": "khen_cu_the",
+      "description": "Lượt mở phiên — chưa nghe gì thì không được khen",
+      "concept": "ComfyUI",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "",
+      "expect": {
+        "stage": "opening",
+        "evidence_is_null": true,
+        "mirror_is_empty": true
+      },
+      "manual_check": "lời mở đầu có mời người học giảng mà không nhận xét gì không?"
+    },
+    {
+      "id": "V3_33",
+      "criterion": "teach_again",
+      "description": "Mọi khái niệm đã hiểu — phải chuyển sang mời giảng lại lần 2 (bước 8)",
+      "concept": "Negative prompt",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood",
+          "CFG Scale": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 2,
+          "CFG Scale": 2
+        }
+      },
+      "history": [
+        {
+          "role": "teacher",
+          "content": "Negative prompt liệt kê thứ không muốn có trong ảnh."
+        },
+        {
+          "role": "student",
+          "content": "Vì sao phải tách riêng khỏi prompt chính ạ?"
+        },
+        {
+          "role": "teacher",
+          "content": "Vì model xử lý phủ định trong prompt chính rất kém."
+        },
+        {
+          "role": "student",
+          "content": "Em hiểu rồi ạ. Còn CFG Scale thì sao ạ?"
+        },
+        {
+          "role": "teacher",
+          "content": "CFG kiểm soát mức độ model bám theo prompt."
+        }
+      ],
+      "input": "Cả hai cái đó mình nắm rồi, còn gì nữa không em?",
+      "expect": {
+        "stage": "teach_again"
+      },
+      "manual_check": "lời mời giảng lại có yêu cầu trình bày TOÀN BỘ khái niệm như thể AI chưa biết gì không?"
+    },
+    {
+      "id": "V3_34",
+      "criterion": "phan_tich_dung_sai",
+      "description": "Nửa đúng nửa sai — phải tách được phần đúng và phần sai, mỗi phần có lý do",
+      "concept": "CFG Scale",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "CFG Scale kiểm soát mức độ model bám theo prompt, nên cứ kéo càng cao thì ảnh càng đẹp.",
+      "expect": {
+        "analysis_not_empty": true,
+        "citation_must_be_real": true,
+        "correct_points_min": 1,
+        "wrong_points_min": 1
+      },
+      "manual_check": "phần đúng (bám prompt) và phần sai (càng cao càng đẹp) có được tách riêng, mỗi phần kèm vì sao?"
+    },
+    {
+      "id": "V3_35",
+      "criterion": "phan_tich_dung_sai",
+      "description": "Giảng sai hoàn toàn — phải chỉ ra chỗ sai kèm lý do và trích slide",
+      "concept": "Latent space",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Latent space là thư mục trên ổ cứng để lưu ảnh sau khi model vẽ xong.",
+      "expect": {
+        "analysis_not_empty": true,
+        "citation_must_be_real": true,
+        "wrong_points_min": 1,
+        "knowledge_status": "misconception"
+      },
+      "manual_check": "lý do 'vì sao sai' có dựa trên nội dung slide chứ không phải kiến thức chung chung?"
+    },
+    {
+      "id": "V3_36",
+      "criterion": "phan_tich_dung_sai",
+      "description": "Giảng đúng — vẫn phải nêu phần đúng kèm căn cứ, không chỉ khen suông",
+      "concept": "Negative prompt",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "Negative prompt là nơi liệt kê những thứ mình không muốn xuất hiện trong ảnh.",
+      "expect": {
+        "analysis_not_empty": true,
+        "citation_must_be_real": true,
+        "correct_points_min": 1
+      },
+      "manual_check": "phần đúng có trỏ được vào đoạn slide cụ thể không?"
+    },
+    {
+      "id": "V3_37",
+      "criterion": "phan_tich_dung_sai",
+      "description": "Ngoài phạm vi slide — không được bịa phân tích cho có",
+      "concept": "ComfyUI",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      },
+      "history": [],
+      "input": "ComfyUI chạy nhanh hơn Automatic1111 khoảng 37% trên card RTX 4090.",
+      "expect": {
+        "evidence_verdict": "insufficient_evidence",
+        "evidence_quote_is_null": true
+      },
+      "manual_check": "có bịa ra phần 'đúng/sai' kèm trích dẫn giả để lấp chỗ trống không?"
+    }
+  ]
+}

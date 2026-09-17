@@ -1,0 +1,1503 @@
+{
+  "lesson": "Buổi 3: Prompt Engineering — Mô hình tạo sinh ảnh và video",
+  "slides_loaded": 100,
+  "judge_advisory": false,
+  "summary": {
+    "pass": 37,
+    "total": 37,
+    "rate": 100.0
+  },
+  "by_criterion": {
+    "mirror_trung_thuc": {
+      "pass": 4,
+      "total": 4
+    },
+    "probe_truoc_khi_bao_sai": {
+      "pass": 4,
+      "total": 4
+    },
+    "khong_lo_dap_an": {
+      "pass": 4,
+      "total": 4
+    },
+    "gioi_han_2_luot_hoi_van": {
+      "pass": 3,
+      "total": 3
+    },
+    "citation_chinh_xac": {
+      "pass": 4,
+      "total": 4
+    },
+    "nhan_biet_thieu_evidence": {
+      "pass": 4,
+      "total": 4
+    },
+    "phan_loai_dung": {
+      "pass": 4,
+      "total": 4
+    },
+    "cau_hoi_thich_ung": {
+      "pass": 3,
+      "total": 3
+    },
+    "khen_cu_the": {
+      "pass": 2,
+      "total": 2
+    },
+    "teach_again": {
+      "pass": 1,
+      "total": 1
+    },
+    "phan_tich_dung_sai": {
+      "pass": 4,
+      "total": 4
+    }
+  },
+  "results": [
+    {
+      "id": "V3_01",
+      "criterion": "mirror_trung_thuc",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "CFG Scale càng cao thì ảnh càng đẹp — Slide 62 nói rằng CFG scale kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, không khẳng định rằng ảnh càng đẹp khi CFG scale cao.",
+          "cứ kéo max là được ảnh xịn nhất — Slide 62 chỉ ra rằng CFG scale càng cao thì càng tuân theo yêu cầu, nhưng không nói rằng kéo max sẽ cho ra ảnh xịn nhất."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo."
+          }
+        ],
+        "slide": 62,
+        "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo.",
+        "note": "Em đã đối chiếu các mệnh đề với nội dung slide, và không tìm thấy sự khớp nhau với những gì thầy/cô đã nói."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng CFG Scale càng cao thì ảnh càng đẹp.",
+      "mirror": "Thầy/cô cũng nhấn mạnh rằng cứ kéo max là được ảnh xịn nhất. Có đúng ý thầy/cô không?",
+      "reply": "Nếu CFG Scale càng cao thì ảnh càng đẹp, vậy có phải có giới hạn nào cho việc tăng CFG Scale không?",
+      "state": {
+        "knowledge": {
+          "CFG Scale": "misconception"
+        },
+        "probes": {
+          "CFG Scale": 1
+        },
+        "streak": {
+          "CFG Scale": 0
+        }
+      }
+    },
+    {
+      "id": "V3_02",
+      "criterion": "mirror_trung_thuc",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "Negative prompt là chỗ mình gõ thêm chữ vào. — Slide 62 định nghĩa negative prompt là yếu tố không muốn xuất hiện trong ảnh, không phải là chỗ để gõ thêm chữ."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh"
+          }
+        ],
+        "slide": 62,
+        "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide và thấy có sự khác biệt."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng negative prompt là chỗ mình gõ thêm chữ vào.",
+      "mirror": "Thầy/cô định nghĩa negative prompt là phần mà mình thêm chữ vào, có đúng ý thầy/cô không?",
+      "reply": "Vậy thầy/cô có thể giải thích thêm về cách mà negative prompt ảnh hưởng đến kết quả không?",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "misconception"
+        },
+        "probes": {
+          "Negative prompt": 1
+        },
+        "streak": {
+          "Negative prompt": 0
+        }
+      }
+    },
+    {
+      "id": "V3_03",
+      "criterion": "mirror_trung_thuc",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng LoRA và checkpoint đều là file model tải về.",
+      "mirror": "Thầy/cô nói rằng LoRA với checkpoint là một thứ, tức là cả hai đều là file model mà mình tải về. Có đúng ý thầy/cô không?",
+      "reply": "Nếu LoRA và checkpoint đều là file model, vậy thì chúng có điểm gì khác nhau không?",
+      "state": {
+        "knowledge": {
+          "LoRA": "unclear"
+        },
+        "probes": {
+          "LoRA": 1
+        },
+        "streak": {
+          "LoRA": 0
+        }
+      }
+    },
+    {
+      "id": "V3_04",
+      "criterion": "mirror_trung_thuc",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Seed là số khởi tạo nhiễu — Slide 62 nói \"Seed: tạo tensor ngẫu nhiên trong latent space\".",
+          "cùng seed và cùng prompt thì ra lại đúng ảnh cũ — Slide 94 khẳng định \"Seed: giá trị ban đầu tạo ngẫu nhiên để sinh, Fix: kết quả nhất quán\"."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Seed: tạo tensor ngẫu nhiên trong latent space, thường đặt là -1"
+          },
+          {
+            "slide": 94,
+            "quote": "Seed: giá trị ban đầu tạo ngẫu nhiên để sinh ■ Fix: kết quả nhất quán"
+          }
+        ],
+        "slide": 62,
+        "quote": "Seed: tạo tensor ngẫu nhiên trong latent space, thường đặt là -1",
+        "note": "Em đã đối chiếu các mệnh đề với nội dung slide và thấy rằng các thông tin đều được xác nhận trong tài liệu."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng seed là số khởi tạo nhiễu.",
+      "mirror": "Seed là số khởi tạo nhiễu, và nếu cùng seed và cùng prompt thì sẽ ra lại đúng ảnh cũ. Có đúng ý thầy/cô không?",
+      "reply": "Nếu seed là số khởi tạo nhiễu, thì tại sao cùng seed và cùng prompt lại cho ra đúng ảnh cũ, điều đó có nghĩa là gì?",
+      "state": {
+        "knowledge": {
+          "Seed": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Seed": 1
+        }
+      }
+    },
+    {
+      "id": "V3_05",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng mô hình diffusion vẽ ảnh từng nét một giống như người vẽ, từ trái sang phải.",
+      "mirror": "Mô hình diffusion hoạt động bằng cách vẽ ảnh từng nét một, theo thứ tự từ trái sang phải. Có đúng ý thầy/cô không?",
+      "reply": "Vậy mô hình này có thể tạo ra những hình ảnh phức tạp hơn bằng cách nào khi chỉ vẽ từng nét một?",
+      "state": {
+        "knowledge": {
+          "Diffusion": "unclear"
+        },
+        "probes": {
+          "Diffusion": 1
+        },
+        "streak": {
+          "Diffusion": 0
+        }
+      }
+    },
+    {
+      "id": "V3_06",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô đã chỉ ra rằng nếu diffusion vẽ ảnh từ trái sang phải thì ảnh sẽ bị thiếu một nửa bên phải.",
+      "mirror": "Thầy/cô nói rằng diffusion vẽ ảnh từng nét từ trái sang phải, và nếu dừng lại giữa chừng thì ảnh sẽ bị thiếu một nửa bên phải. Có đúng ý thầy/cô không?",
+      "reply": "Vậy nếu diffusion không hoàn thành thì ảnh có thể không còn rõ ràng hoặc không thể hiện đúng nội dung mong muốn, đúng không ạ?",
+      "state": {
+        "knowledge": {
+          "Diffusion": "misconception"
+        },
+        "probes": {
+          "Diffusion": 2
+        },
+        "streak": {
+          "Diffusion": 0
+        }
+      }
+    },
+    {
+      "id": "V3_07",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Latent là không gian nén của ảnh. — Slide 46 nói rằng 'VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng'."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 46,
+            "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng"
+          }
+        ],
+        "slide": 46,
+        "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng",
+        "note": "Em đã đối chiếu và xác nhận rằng ý kiến của thầy/cô về latent space là chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "lời giảng đúng nhưng còn cụt -> hạ 'Latent space' xuống 'chưa rõ'"
+      ],
+      "encourage": "Thầy/cô đã nói rằng latent là không gian nén của ảnh.",
+      "mirror": "Thầy/cô định nghĩa latent space là không gian nén của ảnh. Có đúng ý thầy/cô không?",
+      "reply": "Thầy/cô có thể giải thích thêm về cách mà không gian nén này hoạt động không?",
+      "state": {
+        "knowledge": {
+          "Latent space": "unclear"
+        },
+        "probes": {
+          "Latent space": 1
+        },
+        "streak": {
+          "Latent space": 0
+        }
+      }
+    },
+    {
+      "id": "V3_08",
+      "criterion": "probe_truoc_khi_bao_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [
+          "Steps là số bước khử nhiễu — Slide 62 nói về 'Sampling steps: số bước trong quá trình khử nhiễu'."
+        ],
+        "wrong_points": [
+          "để càng nhiều thì ảnh càng đẹp vô hạn — Slide 62 chỉ đề cập rằng 'Càng nhiều càng tốt hơn nhưng lâu hơn', không khẳng định ảnh sẽ đẹp vô hạn."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Sampling steps: số bước trong quá trình khử nhiễu. Càng nhiều càng tốt hơn nhưng lâu hơn."
+          }
+        ],
+        "slide": 62,
+        "quote": "Sampling steps: số bước trong quá trình khử nhiễu. Càng nhiều càng tốt hơn nhưng lâu hơn.",
+        "note": "Em đã đối chiếu các mệnh đề trong claim với nội dung slide. Một số thông tin chưa chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng số bước khử nhiễu càng nhiều thì ảnh càng đẹp vô hạn.",
+      "mirror": "Thầy/cô giải thích rằng Steps là số bước khử nhiễu, và nếu số bước này tăng lên thì ảnh sẽ đẹp hơn. Có đúng ý thầy/cô không?",
+      "reply": "Nếu số bước khử nhiễu càng nhiều thì ảnh sẽ đẹp vô hạn, vậy có giới hạn nào cho việc khử nhiễu không?",
+      "state": {
+        "knowledge": {
+          "Steps": "misconception"
+        },
+        "probes": {
+          "Steps": 1
+        },
+        "streak": {
+          "Steps": 0
+        }
+      }
+    },
+    {
+      "id": "V3_09",
+      "criterion": "khong_lo_dap_an",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "CFG Scale là độ phân giải của ảnh. — Slide 62 nói rằng CFG scale kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, không phải độ phân giải của ảnh."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo"
+          }
+        ],
+        "slide": 62,
+        "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide và xác nhận rằng có sự khác biệt."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng CFG Scale là độ phân giải của ảnh.",
+      "mirror": "Thầy/cô nói rằng CFG Scale liên quan đến độ phân giải của ảnh. Có đúng ý thầy/cô không?",
+      "reply": "Nếu CFG Scale là độ phân giải của ảnh, thì nó có ảnh hưởng gì đến chất lượng ảnh không?",
+      "state": {
+        "knowledge": {
+          "CFG Scale": "misconception"
+        },
+        "probes": {
+          "CFG Scale": 1
+        },
+        "streak": {
+          "CFG Scale": 0
+        }
+      }
+    },
+    {
+      "id": "V3_10",
+      "criterion": "khong_lo_dap_an",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Em chưa nhận được nội dung giảng nào đủ rõ để đối chiếu với slide ạ."
+      },
+      "enforced": [
+        "mirror phản chiếu thiếu ý -> soạn lại cho đủ"
+      ],
+      "encourage": "Thầy/cô đã cố gắng tìm hiểu về VAE.",
+      "mirror": "Em không biết, chịu thôi ạ. Có đúng ý thầy/cô không ạ?",
+      "reply": "Thầy/cô có thể giải thích rõ hơn về vị trí của VAE trong quy trình học máy không?",
+      "state": {
+        "knowledge": {
+          "VAE": "unclear"
+        },
+        "probes": {
+          "VAE": 2
+        },
+        "streak": {
+          "VAE": 0
+        }
+      }
+    },
+    {
+      "id": "V3_11",
+      "criterion": "khong_lo_dap_an",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [
+        "mirror phản chiếu thiếu ý -> soạn lại cho đủ"
+      ],
+      "encourage": "Em rất muốn hiểu rõ về khái niệm sampler.",
+      "mirror": "Thầy/cô yêu cầu em giải thích về sampler và giảng cho thầy/cô nghe về nó. Có đúng ý thầy/cô không ạ?",
+      "reply": "Thầy/cô có thể giúp em hiểu rõ hơn về các loại sampler khác nhau và ứng dụng của chúng trong thực tế không?",
+      "state": {
+        "knowledge": {},
+        "probes": {
+          "Sampler": 1
+        },
+        "streak": {}
+      }
+    },
+    {
+      "id": "V3_12",
+      "criterion": "khong_lo_dap_an",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng em đã hiểu về LoRA.",
+      "mirror": "Thầy/cô nói rằng LoRA thì em hiểu rồi, và muốn chuyển sang phần khác. Có đúng ý thầy/cô không?",
+      "reply": "Em vẫn chưa hoàn toàn rõ về LoRA. Thầy/cô có thể giải thích thêm về cách hoạt động của nó không?",
+      "state": {
+        "knowledge": {
+          "LoRA": "unclear"
+        },
+        "probes": {
+          "LoRA": 1
+        },
+        "streak": {
+          "LoRA": 0
+        }
+      }
+    },
+    {
+      "id": "V3_13",
+      "criterion": "gioi_han_2_luot_hoi_van",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "evidence_check",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [
+        "đã hỏi vặn 2 lượt về khái niệm này -> dừng hỏi vặn, chốt bằng căn cứ slide"
+      ],
+      "encourage": "Thầy/cô nhấn mạnh rằng diffusion vẽ từng nét từ trái sang phải.",
+      "mirror": "Thầy/cô cho rằng ảnh giữa chừng là vẽ tuần tự và không có gì khác. Có đúng ý thầy/cô không?",
+      "reply": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này.",
+      "state": {
+        "knowledge": {
+          "Diffusion": "misconception"
+        },
+        "probes": {
+          "Diffusion": 2
+        },
+        "streak": {
+          "Diffusion": 0
+        }
+      }
+    },
+    {
+      "id": "V3_14",
+      "criterion": "gioi_han_2_luot_hoi_van",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Diffusion bắt đầu từ ảnh nhiễu hoàn toàn — Slide 44 nói rõ 'Khởi đầu từ ảnh nhiễu hoàn toàn: không còn thông tin nhận diện'.",
+          "khử nhiễu dần qua nhiều bước cho tới khi ra ảnh rõ — Slide 41 mô tả 'Quá trình lặp lại nhiều bước để dần khôi phục thông tin'."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 44,
+            "quote": "Khởi đầu từ ảnh nhiễu hoàn toàn: không còn thông tin nhận diện"
+          },
+          {
+            "slide": 41,
+            "quote": "Quá trình lặp lại nhiều bước để dần khôi phục thông tin"
+          }
+        ],
+        "slide": 44,
+        "quote": "Khởi đầu từ ảnh nhiễu hoàn toàn: không còn thông tin nhận diện",
+        "note": "Em đã đối chiếu các mệnh đề với nội dung slide và xác nhận rằng các thông tin đều đúng."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô đã làm rõ rằng Diffusion bắt đầu từ ảnh nhiễu hoàn toàn và khử nhiễu dần qua nhiều bước.",
+      "mirror": "Diffusion là một quá trình bắt đầu từ ảnh nhiễu hoàn toàn và qua nhiều bước khử nhiễu dần để ra được ảnh rõ. Có đúng ý thầy/cô không?",
+      "reply": "Vậy nếu bắt đầu từ ảnh nhiễu hoàn toàn, thì quá trình khử nhiễu này diễn ra như thế nào và có bao nhiêu bước cần thiết để đạt được ảnh rõ?",
+      "state": {
+        "knowledge": {
+          "Diffusion": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Diffusion": 1
+        }
+      }
+    },
+    {
+      "id": "V3_15",
+      "criterion": "gioi_han_2_luot_hoi_van",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "Sampler thì chọn cái nào cũng ra ảnh y hệt nhau. — Slide 49 nói rằng 'Seed điều khiển Tensor ngẫu nhiên này, cho phép tái tạo kết quả giống nhau khi chung seed', điều này chỉ ra rằng việc chọn seed giống nhau mới cho ra ảnh giống nhau, không phải là 'cái nào cũng ra ảnh y hệt nhau'."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 49,
+            "quote": "Seed điều khiển Tensor ngẫu nhiên này, cho phép tái tạo kết quả giống nhau khi chung seed"
+          }
+        ],
+        "slide": 49,
+        "quote": "Seed điều khiển Tensor ngẫu nhiên này, cho phép tái tạo kết quả giống nhau khi chung seed",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide và thấy có sự khác biệt."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng Sampler thì chọn cái nào cũng ra ảnh y hệt nhau.",
+      "mirror": "Thầy/cô nói rằng khi sử dụng Sampler, dù chọn lựa như thế nào thì kết quả vẫn cho ra những bức ảnh giống nhau. Có đúng ý thầy/cô không?",
+      "reply": "Điều này có thể dẫn đến việc tại sao lại có sự đồng nhất trong các bức ảnh khi sử dụng Sampler?",
+      "state": {
+        "knowledge": {
+          "Diffusion": "understood",
+          "Sampler": "misconception"
+        },
+        "probes": {
+          "Diffusion": 2,
+          "Sampler": 1
+        },
+        "streak": {
+          "Diffusion": 1,
+          "Sampler": 0
+        }
+      }
+    },
+    {
+      "id": "V3_16",
+      "criterion": "citation_chinh_xac",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "CFG Scale kiểm soát mức độ mô hình tuân theo prompt của mình. — Slide 62 nêu rõ 'CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn'."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo"
+          }
+        ],
+        "slide": 62,
+        "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo",
+        "note": "Em đã đối chiếu và xác nhận rằng ý của thầy/cô là đúng với nội dung trong slide."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng CFG Scale kiểm soát mức độ mô hình tuân theo prompt.",
+      "mirror": "CFG Scale là một yếu tố điều chỉnh mức độ mà mô hình sẽ tuân theo yêu cầu trong prompt. Có đúng ý thầy/cô không?",
+      "reply": "Thầy/cô có thể giải thích rõ hơn về cách mà CFG Scale ảnh hưởng đến kết quả đầu ra của mô hình không?",
+      "state": {
+        "knowledge": {
+          "CFG Scale": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "CFG Scale": 1
+        }
+      }
+    },
+    {
+      "id": "V3_17",
+      "criterion": "citation_chinh_xac",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "ComfyUI là giao diện dạng node — Slide 67 nói rõ \"Node-based GUI (Giao diện dựa trên các node) cho stable diffusion\".",
+          "mình nối các khối lại thành luồng xử lý — Slide 67 đề cập đến việc \"quản lý và chỉnh sửa các quy trình xử lý ảnh bằng cách kết nối các node chức năng\"."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 67,
+            "quote": "ComfyUI – Giao Diện Node-Based Hiện Đại Cho Stable Diffusion ● Node-based GUI (Giao diện dựa trên các node) cho stable diffusion ● Cho phép người dùng quản lý và chỉnh sửa các quy trình xử lý ảnh bằng cách kết nối các node chức năng"
+          }
+        ],
+        "slide": 67,
+        "quote": "ComfyUI – Giao Diện Node-Based Hiện Đại Cho Stable Diffusion ● Node-based GUI (Giao diện dựa trên các node) cho stable diffusion ● Cho phép người dùng quản lý và chỉnh sửa các quy trình xử lý ảnh bằng cách kết nối các node chức năng",
+        "note": "Em đã đối chiếu và xác nhận rằng ý kiến của thầy/cô về ComfyUI là chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng ComfyUI là giao diện dạng node.",
+      "mirror": "ComfyUI là giao diện dạng node, và chúng ta có thể nối các khối lại thành một luồng xử lý. Có đúng ý thầy/cô không?",
+      "reply": "Thầy/cô có thể giải thích thêm về cách các khối này tương tác với nhau trong luồng xử lý không?",
+      "state": {
+        "knowledge": {
+          "ComfyUI": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "ComfyUI": 1
+        }
+      }
+    },
+    {
+      "id": "V3_18",
+      "criterion": "citation_chinh_xac",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng seed phải luôn đặt bằng 42 để có ảnh đẹp nhất.",
+      "mirror": "Thầy/cô cho rằng seed cần phải luôn đặt bằng 42 để đảm bảo chất lượng ảnh tốt nhất.",
+      "reply": "Có phải thầy/cô nghĩ rằng nếu thay đổi giá trị seed thì ảnh sẽ không đẹp bằng khi seed là 42 không?",
+      "state": {
+        "knowledge": {
+          "Seed": "unclear"
+        },
+        "probes": {
+          "Seed": 1
+        },
+        "streak": {
+          "Seed": 0
+        }
+      }
+    },
+    {
+      "id": "V3_19",
+      "criterion": "citation_chinh_xac",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "trigger words là từ đặc biệt dùng để ghi nhớ nhân vật đó — Slide 81 khẳng định 'Trigger words: từ đặc biệt dùng để ghi nhớ nhân vật'."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 81,
+            "quote": "Trigger words: từ đặc biệt dùng để ghi nhớ nhân vật"
+          }
+        ],
+        "slide": 81,
+        "quote": "Trigger words: từ đặc biệt dùng để ghi nhớ nhân vật",
+        "note": "Em đã đối chiếu và xác nhận rằng ý kiến của thầy/cô về trigger words là chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng trigger words là từ đặc biệt dùng để ghi nhớ nhân vật khi train LoRA.",
+      "mirror": "Theo như thầy/cô, trigger words là những từ đặc biệt giúp ghi nhớ nhân vật trong quá trình train LoRA. Có đúng như vậy không?",
+      "reply": "Vậy tại sao lại cần sử dụng trigger words trong quá trình train LoRA cho nhân vật?",
+      "state": {
+        "knowledge": {
+          "trigger words": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "trigger words": 1
+        }
+      }
+    },
+    {
+      "id": "V3_20",
+      "criterion": "nhan_biet_thieu_evidence",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô đã nói rằng LoRA là kỹ thuật tinh chỉnh nhẹ cho mô hình.",
+      "mirror": "LoRA là một kỹ thuật giúp tinh chỉnh nhẹ mô hình mà không cần phải train lại toàn bộ. Có đúng ý thầy/cô không?",
+      "reply": "Vậy tại sao lại không cần phải train lại toàn bộ mô hình khi sử dụng LoRA?",
+      "state": {
+        "knowledge": {
+          "LoRA": "unclear"
+        },
+        "probes": {
+          "LoRA": 1
+        },
+        "streak": {
+          "LoRA": 0
+        }
+      }
+    },
+    {
+      "id": "V3_21",
+      "criterion": "nhan_biet_thieu_evidence",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng Stable Diffusion có 890 triệu tham số trong phần U-Net.",
+      "mirror": "Thầy/cô nói rằng trong Stable Diffusion, phần U-Net có đúng 890 triệu tham số. Có đúng ý thầy/cô không?",
+      "reply": "Tại sao thầy/cô lại khẳng định số tham số này là chính xác?",
+      "state": {
+        "knowledge": {
+          "Stable Diffusion": "unclear"
+        },
+        "probes": {
+          "Stable Diffusion": 1
+        },
+        "streak": {
+          "Stable Diffusion": 0
+        }
+      }
+    },
+    {
+      "id": "V3_22",
+      "criterion": "nhan_biet_thieu_evidence",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [
+        "AI chào mở phiên dù thầy/cô đã giảng -> ép về lượt phản chiếu + hỏi vặn",
+        "mirror phản chiếu thiếu ý -> soạn lại cho đủ"
+      ],
+      "encourage": "",
+      "mirror": "Thầy/cô hỏi bài kiểm tra cuối kỳ của môn này sẽ thi vào ngày nào. Có đúng ý thầy/cô không ạ?",
+      "reply": "Thầy/cô có thể giảng cho em về ComfyUI được không ạ? Em chưa hiểu rõ về khái niệm này.",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      }
+    },
+    {
+      "id": "V3_23",
+      "criterion": "nhan_biet_thieu_evidence",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Em chưa nhận được nội dung giảng nào đủ rõ để đối chiếu với slide ạ."
+      },
+      "enforced": [],
+      "encourage": "Cảm ơn thầy/cô đã chia sẻ về khái niệm latent.",
+      "mirror": "Thầy/cô nói rằng 'latent' là cái đó đó, nhưng chưa rõ nội dung cụ thể của khái niệm này. Có đúng ý thầy/cô không?",
+      "reply": "Thầy/cô có thể giải thích rõ hơn về 'latent space' là gì và tại sao nó lại quan trọng không?",
+      "state": {
+        "knowledge": {},
+        "probes": {
+          "Latent space": 1
+        },
+        "streak": {}
+      }
+    },
+    {
+      "id": "V3_24",
+      "criterion": "phan_loai_dung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Negative prompt là nơi mình liệt kê những thứ KHÔNG muốn xuất hiện trong ảnh — Slide 62 nói rõ \"Negative prompt: yếu tố không muốn xuất hiện trong ảnh\"."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh"
+          }
+        ],
+        "slide": 62,
+        "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh",
+        "note": "Em đã đối chiếu và xác nhận rằng ý kiến của thầy/cô về negative prompt là chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng negative prompt là nơi liệt kê những thứ không muốn xuất hiện trong ảnh.",
+      "mirror": "Thầy/cô giải thích rằng negative prompt giúp mô hình tránh sinh ra những thứ không mong muốn trong ảnh. Có đúng ý thầy/cô không?",
+      "reply": "Vậy nếu mô hình vẫn sinh ra những thứ mà mình đã liệt kê trong negative prompt, thì điều gì có thể xảy ra?",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 1
+        }
+      }
+    },
+    {
+      "id": "V3_25",
+      "criterion": "phan_loai_dung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Sampler thì liên quan tới cách chạy mô hình gì đó. — Slide 71 nói về Sampler là thành phần quan trọng trong quá trình khuyếch tán ngược, liên quan đến cách chạy mô hình."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 71,
+            "quote": "● Nối với Sampler: xử lý quá trình khuyếch tán ngược"
+          }
+        ],
+        "slide": 71,
+        "quote": "● Nối với Sampler: xử lý quá trình khuyếch tán ngược",
+        "note": "Em đã đối chiếu ý của thầy/cô với nội dung slide và thấy rằng có sự liên quan giữa Sampler và cách chạy mô hình."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "lời giảng đúng nhưng còn cụt -> hạ 'Sampler' xuống 'chưa rõ'"
+      ],
+      "encourage": "Thầy/cô vừa nhắc đến mối liên quan của Sampler với cách chạy mô hình.",
+      "mirror": "Thầy/cô nói rằng Sampler thì liên quan tới cách chạy mô hình gì đó. Có đúng ý thầy/cô không?",
+      "reply": "Thầy/cô có thể giải thích rõ hơn về vai trò cụ thể của Sampler trong việc chạy mô hình không?",
+      "state": {
+        "knowledge": {
+          "Sampler": "unclear"
+        },
+        "probes": {
+          "Sampler": 1
+        },
+        "streak": {
+          "Sampler": 0
+        }
+      }
+    },
+    {
+      "id": "V3_26",
+      "criterion": "phan_loai_dung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "Latent space chính là thư mục chứa ảnh kết quả trên ổ cứng. — Slide 46 mô tả rằng latent space là nơi giảm kích thước và mã hóa ảnh gốc thành tensor, không phải là thư mục chứa ảnh trên ổ cứng."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 46,
+            "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng"
+          }
+        ],
+        "slide": 46,
+        "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide. Kết quả cho thấy ý kiến không chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng latent space là thư mục chứa ảnh kết quả trên ổ cứng.",
+      "mirror": "Latent space được thầy/cô định nghĩa là thư mục chứa ảnh kết quả trên ổ cứng. Có đúng ý thầy/cô không?",
+      "reply": "Nếu latent space chỉ là một thư mục, vậy nó có vai trò gì trong quá trình học máy hay không?",
+      "state": {
+        "knowledge": {
+          "Latent space": "misconception"
+        },
+        "probes": {
+          "Latent space": 1
+        },
+        "streak": {
+          "Latent space": 0
+        }
+      }
+    },
+    {
+      "id": "V3_27",
+      "criterion": "phan_loai_dung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Steps là số bước khử nhiễu. — Slide 62 đề cập đến 'sampling steps: số bước trong quá trình khử nhiễu'."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Sampling steps: số bước trong quá trình khử nhiễu. Càng nhiều càng tốt hơn nhưng lâu hơn"
+          }
+        ],
+        "slide": 62,
+        "quote": "Sampling steps: số bước trong quá trình khử nhiễu. Càng nhiều càng tốt hơn nhưng lâu hơn",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide và xác nhận rằng có thông tin phù hợp."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "lời giảng đúng nhưng còn cụt -> hạ 'Steps' xuống 'chưa rõ'"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng Steps là số bước khử nhiễu.",
+      "mirror": "Thầy/cô định nghĩa Steps là số bước khử nhiễu. Có đúng ý thầy/cô không?",
+      "reply": "Vậy số bước khử nhiễu này có ảnh hưởng như thế nào đến kết quả cuối cùng không?",
+      "state": {
+        "knowledge": {
+          "Steps": "unclear"
+        },
+        "probes": {
+          "Steps": 1
+        },
+        "streak": {
+          "Steps": 0
+        }
+      }
+    },
+    {
+      "id": "V3_28",
+      "criterion": "cau_hoi_thich_ung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "Latent space là thư mục chứa ảnh trên ổ cứng. — Slide 46 mô tả rằng latent space là nơi mà VAE mã hóa ảnh gốc thành tensor nhỏ hơn, không phải là thư mục chứa ảnh."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 46,
+            "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng"
+          }
+        ],
+        "slide": 46,
+        "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide. Kết quả cho thấy ý kiến không chính xác."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô đã định nghĩa latent space là thư mục chứa ảnh trên ổ cứng.",
+      "mirror": "Latent space được thầy/cô mô tả là một thư mục chứa ảnh trên ổ cứng. Có đúng ý thầy/cô không?",
+      "reply": "Nếu latent space là thư mục chứa ảnh, vậy tại sao nó lại được gọi là 'latent', có ý nghĩa gì khác không?",
+      "state": {
+        "knowledge": {
+          "Latent space": "misconception"
+        },
+        "probes": {
+          "Latent space": 1
+        },
+        "streak": {
+          "Latent space": 0
+        }
+      }
+    },
+    {
+      "id": "V3_29",
+      "criterion": "cau_hoi_thich_ung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Negative prompt liệt kê thứ mình không muốn có trong ảnh — Slide 62 có nói \"Negative prompt: yếu tố không muốn xuất hiện trong ảnh\"."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh"
+          }
+        ],
+        "slide": 62,
+        "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh",
+        "note": "Em đã đối chiếu và xác nhận rằng ý kiến của thầy/cô là đúng với nội dung trong slide."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng negative prompt liệt kê những thứ không muốn có trong ảnh để mô hình tránh sinh ra.",
+      "mirror": "Thầy/cô giải thích rằng negative prompt là danh sách các yếu tố mà mình không muốn xuất hiện trong hình ảnh, nhằm giúp mô hình không tạo ra chúng. Có đúng ý thầy/cô không?",
+      "reply": "Nếu negative prompt chỉ liệt kê những thứ không muốn có, vậy thì làm thế nào để mô hình biết được những yếu tố nào là cần thiết để tạo ra hình ảnh?",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 1
+        }
+      }
+    },
+    {
+      "id": "V3_30",
+      "criterion": "cau_hoi_thich_ung",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "transfer",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành transfer"
+      ],
+      "encourage": "Thầy/cô đã giải thích rõ lý do tách biệt negative prompt ra khỏi prompt chính.",
+      "mirror": "Thầy/cô nói rằng mô hình xử lý phủ định trong prompt chính rất kém, nên việc tách ra sẽ giúp tín hiệu rõ ràng hơn. Có đúng ý thầy/cô không?",
+      "reply": "Nếu mô hình xử lý phủ định kém, vậy tại sao không thể cải thiện nó thay vì phải tách ra như vậy?",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 3
+        }
+      }
+    },
+    {
+      "id": "V3_31",
+      "criterion": "khen_cu_the",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "ComfyUI dùng các node nối với nhau — Slide 67 nói rõ \"Node-based GUI (Giao diện dựa trên các node) cho stable diffusion\".",
+          "mỗi node làm một việc trong luồng sinh ảnh — Slide 69 mô tả rằng \"Mỗi node thực hiện được đoạn code (tương tự các hàm)\"."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 67,
+            "quote": "Node-based GUI (Giao diện dựa trên các node) cho stable diffusion"
+          },
+          {
+            "slide": 69,
+            "quote": "Mỗi node thực hiện được đoạn code (tương tự các hàm)"
+          }
+        ],
+        "slide": 67,
+        "quote": "Node-based GUI (Giao diện dựa trên các node) cho stable diffusion",
+        "note": "Em đã đối chiếu và xác nhận các thông tin trong claim đều đúng với nội dung slide."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng ComfyUI sử dụng các node để nối với nhau trong luồng sinh ảnh.",
+      "mirror": "ComfyUI sử dụng các node nối với nhau, và mỗi node sẽ thực hiện một nhiệm vụ cụ thể trong quá trình sinh ảnh. Có đúng ý thầy/cô không?",
+      "reply": "Vậy các node này có thể thực hiện những nhiệm vụ gì trong luồng sinh ảnh?",
+      "state": {
+        "knowledge": {
+          "ComfyUI": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "ComfyUI": 1
+        }
+      }
+    },
+    {
+      "id": "V3_32",
+      "criterion": "khen_cu_the",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "opening",
+      "next_question_type": "clarification",
+      "evidence": null,
+      "enforced": [],
+      "encourage": "",
+      "mirror": "",
+      "reply": "Thầy/cô có thể giảng cho em về ComfyUI được không ạ? Em chưa biết gì về khái niệm này.",
+      "state": {
+        "knowledge": {},
+        "probes": {},
+        "streak": {}
+      }
+    },
+    {
+      "id": "V3_33",
+      "criterion": "teach_again",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "teach_again",
+      "next_question_type": "transfer",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [
+        "mirror phản chiếu thiếu ý -> soạn lại cho đủ",
+        "mọi khái niệm đã hiểu -> chuyển sang mời giảng lại toàn bộ (bước 8)",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành transfer"
+      ],
+      "encourage": "Thầy/cô đã trình bày rõ về cách mà Negative prompt giúp liệt kê những thứ không mong muốn trong ảnh.",
+      "mirror": "Em đã nắm được cả hai cái đó rồi, thầy/cô có hỏi còn gì nữa không ạ?",
+      "reply": "Vậy nếu model xử lý phủ định kém, thì có cách nào khác để cải thiện chất lượng ảnh không ạ?",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood",
+          "CFG Scale": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 3,
+          "CFG Scale": 3
+        }
+      }
+    },
+    {
+      "id": "V3_34",
+      "criterion": "phan_tich_dung_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [
+          "CFG Scale kiểm soát mức độ model bám theo prompt — Slide 62 nêu rõ \"CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn\"."
+        ],
+        "wrong_points": [
+          "cứ kéo càng cao thì ảnh càng đẹp — Slide 62 chỉ nói rằng \"càng cao thì càng tuân theo\", không khẳng định rằng ảnh sẽ đẹp hơn."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo."
+          }
+        ],
+        "slide": 62,
+        "quote": "CFG scale: Kiểm soát mức độ mà mô hình nên tuân theo yêu cầu của bạn, cầng cao thì càng tuân theo.",
+        "note": "Em đã đối chiếu các mệnh đề với nội dung slide, và có một mệnh đề đúng và một mệnh đề sai."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô vừa nói rằng CFG Scale kiểm soát mức độ model bám theo prompt.",
+      "mirror": "Thầy/cô cũng cho rằng khi kéo CFG Scale càng cao thì ảnh sẽ càng đẹp. Có đúng ý thầy/cô không?",
+      "reply": "Vậy nếu kéo CFG Scale quá cao thì có thể ảnh hưởng gì đến kết quả không?",
+      "state": {
+        "knowledge": {
+          "CFG Scale": "misconception"
+        },
+        "probes": {
+          "CFG Scale": 1
+        },
+        "streak": {
+          "CFG Scale": 0
+        }
+      }
+    },
+    {
+      "id": "V3_35",
+      "criterion": "phan_tich_dung_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "wrong",
+        "correct_points": [],
+        "wrong_points": [
+          "Latent space là thư mục trên ổ cứng để lưu ảnh sau khi model vẽ xong. — Slide mô tả rằng latent space là không gian ẩn nơi mã hóa ảnh gốc thành tensor nhỏ hơn, không phải là thư mục trên ổ cứng."
+        ],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 46,
+            "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng"
+          }
+        ],
+        "slide": 46,
+        "quote": "Latent space: ○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent space), giữ lại các đặc trưng quan trọng",
+        "note": "Em đã đối chiếu ý kiến của thầy/cô với nội dung slide và thấy rằng ý kiến này không chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'wrong' -> đặt trạng thái misconception"
+      ],
+      "encourage": "Thầy/cô đã nói rằng latent space là thư mục trên ổ cứng để lưu ảnh sau khi model vẽ xong.",
+      "mirror": "Thầy/cô định nghĩa latent space là một thư mục trên ổ cứng, nơi lưu trữ các ảnh mà model đã tạo ra. Có đúng ý thầy/cô không?",
+      "reply": "Vậy thầy/cô có thể giải thích thêm về vai trò của latent space trong quá trình tạo ra những bức ảnh đó không?",
+      "state": {
+        "knowledge": {
+          "Latent space": "misconception"
+        },
+        "probes": {
+          "Latent space": 1
+        },
+        "streak": {
+          "Latent space": 0
+        }
+      }
+    },
+    {
+      "id": "V3_36",
+      "criterion": "phan_tich_dung_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "why",
+      "evidence": {
+        "verdict": "correct",
+        "correct_points": [
+          "Negative prompt là nơi liệt kê những thứ mình không muốn xuất hiện trong ảnh. — Slide 62 có nói \"Negative prompt: yếu tố không muốn xuất hiện trong ảnh\"."
+        ],
+        "wrong_points": [],
+        "missing_points": [],
+        "citations": [
+          {
+            "slide": 62,
+            "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh"
+          }
+        ],
+        "slide": 62,
+        "quote": "Negative prompt: yếu tố không muốn xuất hiện trong ảnh",
+        "note": "Em đã đối chiếu và xác nhận rằng ý kiến của thầy/cô là chính xác."
+      },
+      "enforced": [
+        "đối chiếu slide cho verdict 'correct' -> đặt trạng thái understood",
+        "loại câu hỏi không khớp trạng thái khái niệm -> đổi thành why"
+      ],
+      "encourage": "Thầy/cô đã giải thích rằng negative prompt là danh sách những thứ không muốn có trong ảnh.",
+      "mirror": "Thầy/cô nói rằng negative prompt là nơi liệt kê những thứ mình không muốn xuất hiện trong ảnh. Có đúng ý thầy/cô không?",
+      "reply": "Vậy thầy/cô có thể cho em biết thêm về cách sử dụng negative prompt trong việc tạo ra hình ảnh không?",
+      "state": {
+        "knowledge": {
+          "Negative prompt": "understood"
+        },
+        "probes": {},
+        "streak": {
+          "Negative prompt": 1
+        }
+      }
+    },
+    {
+      "id": "V3_37",
+      "criterion": "phan_tich_dung_sai",
+      "pass": true,
+      "fails": [],
+      "judge": null,
+      "stage": "mirror_probe",
+      "next_question_type": "clarification",
+      "evidence": {
+        "verdict": "insufficient_evidence",
+        "slide": null,
+        "quote": null,
+        "citations": [],
+        "correct_points": [],
+        "wrong_points": [],
+        "missing_points": [],
+        "note": "Tài liệu hiện tại không đủ bằng chứng để xác nhận ý này."
+      },
+      "enforced": [],
+      "encourage": "Thầy/cô vừa nói rằng ComfyUI chạy nhanh hơn Automatic1111 khoảng 37% trên card RTX 4090.",
+      "mirror": "ComfyUI có hiệu suất nhanh hơn Automatic1111 khoảng 37% khi sử dụng card RTX 4090. Có đúng ý thầy/cô không?",
+      "reply": "Vậy tại sao lại có sự khác biệt về hiệu suất giữa ComfyUI và Automatic1111 trên cùng một phần cứng?",
+      "state": {
+        "knowledge": {
+          "ComfyUI": "unclear"
+        },
+        "probes": {
+          "ComfyUI": 1
+        },
+        "streak": {
+          "ComfyUI": 0
+        }
+      }
+    }
+  ]
+}

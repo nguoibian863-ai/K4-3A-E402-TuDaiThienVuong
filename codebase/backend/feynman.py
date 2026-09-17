@@ -10,6 +10,21 @@ from prompts import get_prompt
 FEEDBACK_TYPES = {"deeper_question", "real_scenario", "point_out_gap", "hint"}
 UNDERSTANDING = {"good", "partial", "weak"}
 
+MAX_TURNS = 16  # phiên dài vẫn giữ đủ ngữ cảnh gần, tránh model trôi ý vì lịch sử quá dài
+REPLY_TEMPERATURE = 0.4  # đủ tự nhiên nhưng không tùy hứng bỏ qua lời giảng vừa nghe
+SUMMARY_TEMPERATURE = 0.2
+
+
+def _to_turns(history: list[dict]) -> list[dict]:
+    """Đổi lịch sử phiên Feynman thành message thật: teacher = người dùng, student = AI."""
+    turns = []
+    for item in history or []:
+        if not isinstance(item, dict):
+            continue
+        role = "assistant" if item.get("role") == "student" else "user"
+        turns.append({"role": role, "content": item.get("content")})
+    return turns
+
 
 def _validate_reply(data: dict) -> bool:
     return (
@@ -35,9 +50,16 @@ def _validate_summary(data: dict) -> bool:
 
 
 def student_reply(concept: str, evidence: list[dict], history: list[dict], message: str) -> dict:
-    payload = {"concept": concept, "evidence": evidence, "history": history, "message": message}
+    message = (message or "").strip()
+    payload = {"concept": concept, "evidence": evidence, "session_start": not message}
+    # Lời giảng mới nhất là message CUỐI CÙNG gửi lên model -> model phải đáp đúng câu đó
+    turns = _to_turns(history)[-MAX_TURNS:]
+    if message:
+        turns.append({"role": "user", "content": message})
     try:
-        raw_response, parsed = call_llm(get_prompt("feynman_reply"), payload, temperature=0.3)
+        raw_response, parsed = call_llm(
+            get_prompt("feynman_reply"), payload, temperature=REPLY_TEMPERATURE, turns=turns
+        )
     except Exception:
         return {
             "reply": "Em chưa nghe rõ (AI không phản hồi). Thầy/cô thử gửi lại giúp em nhé.",
@@ -60,9 +82,12 @@ def student_reply(concept: str, evidence: list[dict], history: list[dict], messa
 
 
 def session_summary(concept: str, evidence: list[dict], history: list[dict]) -> dict:
-    payload = {"concept": concept, "evidence": evidence, "history": history}
+    payload = {"concept": concept, "evidence": evidence}
     try:
-        raw_response, parsed = call_llm(get_prompt("feynman_summary"), payload)
+        raw_response, parsed = call_llm(
+            get_prompt("feynman_summary"), payload,
+            temperature=SUMMARY_TEMPERATURE, turns=_to_turns(history),
+        )
     except Exception:
         parsed = None
     if parsed is None or not _validate_summary(parsed):

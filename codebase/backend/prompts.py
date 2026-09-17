@@ -6,7 +6,11 @@
 from pathlib import Path
 
 PROMPTS_PATH = Path(__file__).parent / "prompts.md"
-REQUIRED_PROMPTS = ("explain", "ranking", "feynman_reply", "feynman_summary", "chat")
+REQUIRED_PROMPTS = (
+    "explain", "ranking", "feynman_reply", "feynman_summary", "chat",
+    "feynman_v3_reply", "feynman_v3_rubric", "feynman_v3_evidence", "feynman_v3_judge",
+    "feynman_v3_mirror",
+)
 
 
 def _load_sections() -> dict[str, str]:

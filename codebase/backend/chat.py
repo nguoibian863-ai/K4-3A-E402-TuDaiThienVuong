@@ -54,6 +54,20 @@ def _saved_list_reply(context: dict) -> dict:
         "links": links,
     }
 
+MAX_TURNS = 10
+TEMPERATURE = 0.3  # bám ngữ cảnh đã lưu, không tự nghĩ ra hướng trả lời khác
+
+
+def _to_turns(history: list[dict]) -> list[dict]:
+    """Đổi lịch sử chat thành message thật để model trả lời đúng mạch hội thoại."""
+    turns = []
+    for item in history or []:
+        if not isinstance(item, dict):
+            continue
+        role = "assistant" if item.get("role") == "assistant" else "user"
+        turns.append({"role": role, "content": item.get("content")})
+    return turns
+
 
 def _fallback(reason: str) -> dict:
     return {
@@ -65,9 +79,11 @@ def _fallback(reason: str) -> dict:
 
 
 def chat_reply(context: dict, history: list[dict], message: str) -> dict:
-    payload = {"context": context, "history": history[-10:], "message": message}
+    payload = {"context": context}
+    # Câu vừa gửi là message cuối cùng -> model đáp đúng câu đó thay vì trôi sang ý khác
+    turns = _to_turns(history)[-MAX_TURNS:] + [{"role": "user", "content": message}]
     try:
-        _, parsed = call_llm(get_prompt("chat"), payload, temperature=0)
+        _, parsed = call_llm(get_prompt("chat"), payload, temperature=TEMPERATURE, turns=turns)
     except Exception:
         return _fallback("AI không phản hồi")
 

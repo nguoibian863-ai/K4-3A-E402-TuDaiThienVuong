@@ -4,3 +4,4 @@ supabase
 openai
 python-dotenv
 pydantic
+pypdf  # rút text slide từ PDF cho bước 5 (extract_slides.py)

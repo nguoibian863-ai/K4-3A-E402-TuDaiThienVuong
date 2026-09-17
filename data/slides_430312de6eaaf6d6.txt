@@ -1,0 +1,1372 @@
+=== SLIDE 1 ===
+Prompt Engineering
+Buổi 3: Mô hình tạo sinh ảnh và video
+TS. Đặng Tuấn Linh – Trường CNTT&TT- Đại học Bách khoa Hà Nội
+1
+
+=== SLIDE 2 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Mục lục
+• Tổng quan
+• Prompt trong các ứng dụng sinh ảnh hiện đại
+• Stable diffusion
+• Giao diện người dùng cho stable diffusion
+• Sinh video
+2
+
+=== SLIDE 3 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Prompt
+• Prompt (lời nhắc) chứa 1 hoặc các thành phần:
+• Instruction - hướng dẫn/mô tả nhiêm vụ
+• Context – ngữ cảnh
+• Input - đầu vào/câu hỏi
+• Output – yêu cầu kết quả
+• Ví dụ:
+Phân loại văn bản thành trung tính, tích cực hoặc
+tiêu cực
+Văn bản: Tôi nghĩ đồ ăn ổn.
+Cảm xúc:
+3
+
+=== SLIDE 4 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+ChatGPT trong Phân Tích và Sinh Ảnh
+4
+Phân Tích Ảnh:
+• Người dùng có thể tải lên hình ảnh để nhận phân tích
+thông minh: mô tả các yếu tố trong ảnh, xác định đối
+tượng, và dự đoán ngữ cảnh
+• Tích hợp phân tích ngôn ngữ hình ảnh, sử dụng prompt
+để khai thác thông tin chi tiết hoặc chỉnh sửa hình ảnh
+phù hợp với nội dung mong muốn
+• Ứng dụng: Phân tích nội dung truyền thông, tạo
+metadata cho ảnh, kiểm tra và chỉnh sửa hình ảnh tự
+động
+Tạo Ảnh:
+• Người dùng có thể viết các prompts mô tả chi tiết về đối
+tượng, cảnh vật, phong cách nghệ thuật, hoặc yêu cầu
+cụ thể để nhận hình ảnh sinh động và chân thực
+• Tích hợp DALL-E 3 giúp cải thiện chất lượng hình ảnh và
+đáp ứng các yêu cầu phức tạp hơn
+• Ứng dụng: Tạo hình ảnh nghệ thuật, minh họa sách, mô
+phỏng ý tưởng thiết kế
+
+=== SLIDE 5 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Mục lục
+• Tổng quan
+• Prompt trong các ứng dụng sinh ảnh hiện đại
+• Stable diffusion
+• Giao diện người dùng cho stable diffusion
+• Sinh video
+5
+
+=== SLIDE 6 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sinh Ảnh với DALLE-3
+DALL-E 3:
+• Một trong những mô hình tiên tiến nhất của OpenAI, giúp chuyển hóa ý tưởng
+thành hình ảnh chi tiết và chính xác dựa trên prompt
+• Khám phá khả năng sáng tạo mạnh mẽ: từ cảnh vật, nhân vật đến các tác
+phẩm nghệ thuật mang phong cách độc đáo
+Học cách viết prompt hiệu quả:
+• Tìm cách tối ưu hóa, miêu tả rõ ràng để đạt được hình ảnh mong muốn:
+• Miêu tả chi tiết: bối cảnh, màu sắc, nghệ thuật
+• Sử dụng ngữ cảnh: ví dụ đặt vai trò “bạn là Da vincy/ bạn là nhà thiết kế nội
+thất”
+• Khắc phục lỗi: tinh chỉnh prompt để tránh đầu ra không phù hợp
+Ứng dụng thực tiễn:
+• Nghệ thuật và thiết kế: Concept art, minh họa sáng tạo.
+• Truyền thông: Hình ảnh quảng cáo sáng tạo, cá nhân hóa nội dung
+• Nghiên cứu: Truyền đạt ý tưởng phức tạp bằng hình ảnh
+6
+
+=== SLIDE 7 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử Dụng DALL-E 3
+7
+• Truy cập ChatGPT hoặc công cụ Copilot/Designer của Microsoft
+• Nhập vào prompt chi tiết
+• Chỉnh sửa prompt nếu kết quả chưa đúng
+
+=== SLIDE 8 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Câu Lệnh Prompt Đầu Tiên
+•Prompt Đơn Giản:
+• Ví dụ: “Tạo ra bức ảnh con vịt đội mũ”
+• Dùng để thử nghiệm tính năng ChatGPT
+tích hợp DALLE-3
+•Kết quả:
+• DALLE-3 tạo ra hình ảnh chú vịt đúng theo
+mô tả, với chi tiết rõ ràng, màu sắc tươi
+sáng
+• Hình ảnh có chất lượng cao, chi tiết tự
+nhiên, giảm thiểu các lỗi phổ biến như
+méo hình hoặc không đồng nhất về đối
+tượng
+• Không kiểm soát được đầu ra bức ảnh
+→ nên điều chỉnh prompt
+8
+
+=== SLIDE 9 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Cách Tối Ưu Prompt: Thêm Thông Tin Chi Tiết (1)
+• Prompt ngắn gọn và rõ ràng, nhưng phải đầy đủ để đảm bảo DALL-E3 có thể hiểu đúng yêu cầu;
+tránh sử dụng các từ mơ hồ như “đẹp”, “ngầu” vì có thể có cách hiểu khác nhau với mỗi người
+• Thêm yếu tố vai trò để định hình phong cách nghệ thuật
+• “Vẽ một bức tranh theo phong cách của Monet, miêu tả một khu vườn đầy nắng với hồ sen”
+• “Bạn là một nhà thiết kế nội thất, tạo một căn phòng hiện đại với tông màu trắng và gỗ sồi”
+• Cung cấp đầy đủ chi tiết hình ảnh sát với yêu cầu:
+• Đối tượng chính (người, vật)
+• Bối cảnh (rừng, biển, đô thị)
+• Thời gian (sáng, trưa, tối)
+• Ví dụ: “Một bữa ăn sáng ngoài trời tại một quán cà phê phong cách Paris cổ điển”
+9
+
+=== SLIDE 10 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Cách Tối Ưu Prompt: Thêm Thông Tin Chi Tiết (2)
+• Nêu rõ địa điểm trong ảnh, kết hợp yếu tố thời gian và bối cảnh
+• “Tháp Eiffel rực sáng dưới ánh đèn buổi tối, bầu trời đầy sao”
+• “Một ngôi làng nhỏ ven biển Nhật Bản vào mùa xuân với hoa anh đào đang nở”
+• Yếu tố thời gian ảnh hưởng đến ánh sáng, màu sắc, và cảm xúc cho hình ảnh:
+• Buổi sáng: Tươi mới, thanh bình, ánh sáng dịu nhẹ
+• Buổi trưa: Năng động, rõ nét, ánh sáng mạnh
+• Buổi chiều/hoàng hôn: Lãng mạn, ấm áp, ánh sáng vàng cam rực rỡ
+• Buổi tối: Bí ẩn, yên tĩnh, ánh sáng yếu hoặc đèn neon rực sáng."
+• Ví dụ:
+• Buổi sáng: “Một cánh đồng hoa ẩn mình trong ánh sáng sương mờ buổi sớm.”
+• Buổi chiều: “Hoàng hôn đỏ rực trên cánh đồng cỏ xanh”
+10
+
+=== SLIDE 11 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Cách Tối Ưu Prompt: Thêm Thông Tin Chi Tiết (3)
+• Thêm yếu tố sáng tạo với màu sắc và phong cách nghệ thuật:
+• Phong cách sơn dầu: “Một bức tranh phong cách sơn dầu của Van Gogh về cánh đồng hoa hướng dương”
+• Phong cách hoạt hình: “Một chú mèo dễ thương đang ăn kem, vẽ theo phong cách anime”
+• Thêm ứng dụng thực tế:
+• Thêm cụm từ “Sinh bức ảnh để….”
+• Minh họa ý tưởng thiết kế
+• Tạo nội dung quảng cáo hoặc giáo dục
+• Phát triển concept art cho game hoặc phim
+• …
+11
+
+=== SLIDE 12 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Viết Prompt Hiệu Quả
+• Prompt Đơn Giản:
+• “Tạo một bức ảnh về một con vịt đội mũ"
+• Làm quen với việc sinh ảnh, tuy nhiên prompt thiếu
+chi tiết nên tạo hình ảnh không đúng như mong đợi
+về bối cảnh, phong cách nghệ thuậ…
+• Prompt Chi Tiết Hơn:
+• Giúp định hình rõ phong cách và bối cảnh làm hình
+ảnh sinh ra sát với ý tưởng hơn
+• "Bạn là Leonardo di ser Da Vinci, một nghệ sĩ nổi
+tiếng ở Ý. Hãy tạo bức ảnh con vịt đội mũ đi bộ
+trước Tháp Eiffel. Hình ảnh nên có cảm giác huyền
+bí và sử dụng tông màu tím hoặc xanh lam. Hiển thị
+con vịt từ phía sau "
+• Kết quả sau khi chỉnh sửa prompt: Hình ảnh được
+tạo ra định hình rõ phong cách, màu sắc, và bối cảnh
+12
+
+=== SLIDE 13 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Giải Pháp Thay Thế ChatGPT
+13
+Các công cụ khác Microsoft Desginer/ Copilot giúp tạo ảnh
+
+=== SLIDE 14 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Chú Ý: Tận Dụng Kỹ Thuật Hiệu Quả khi Viết Prompt
+● Tận dụng kỹ thuật đã học để tạo prompt chi tiết và chính xác, giúp sinh ảnh đúng yêu cầu
+của bạn.
+● “Thêm các bước gợi ý khi xây dựng promt
+● Bạn là Leonardo di ser Da Vinci, một nghệ sĩ nổi tiếng ở Ý. Hãy tạo bức ảnh con vịt đội
+mũ đi bộ trước Tháp Eiffel. Hình ảnh nên có cảm giác huyền bí và sử dụng tông màu tím
+hoặc xanh lam. Hiển thị con vịt từ phía sau. Đề nghị đặt một vài câu hỏi cho tôi để giúp
+bạn sinh ra bức ảnh tốt hơn”
+14
+
+=== SLIDE 15 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Chú ý: Quá Chi Tiết Có Thể Sai
+15
+Prompt chứa quá nhiều chi tiết (con vịt/ con cú) có thể bị diễn giải sai hoặc thêm yếu tố không cần thiết.Ví dụ:
+Trong hình minh họa, prompt yêu cầu mô tả quá chi tiết đã khiến AI thêm con cú vào Tháp Eiffel
+• Nên sắp xếp thông tin: Đối tượng chính → bối cảnh → màu sắc phong cách; tránh thêm các yếu tố không
+liên quan, phụ
+
+=== SLIDE 16 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Chú ý: Quá Chi Tiết Có Thể Sai
+16
+
+=== SLIDE 17 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Chỉnh Sửa Prompt
+● Tập trung vào việc tối ưu hóa ý tưởng thiết kế bằng cách sửa đổi hình ảnh qua các yêu
+cầu cụ thể trong Prompt
+17
+
+=== SLIDE 18 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Chỉnh Sửa Prompt
+● Tập trung vào việc tối ưu hóa ý tưởng thiết kế bằng cách sửa đổi hình ảnh qua các yêu
+cầu cụ thể trong Prompt
+18
+
+=== SLIDE 19 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tạo Hình Ảnh với Tỷ Lệ Khung Hình và Bố Cục Cụ Thể
+● Prompt không chỉ mô tả nội
+dung mà còn có thể chỉ định tỷ
+lệ khung hình cụ thể để tạo hình
+ảnh phù hợp với mục đích sử
+dụng như poster, banner hoặc
+minh họa.
+● Ví dụ “Tạo một hình ảnh góc
+rộng 16:10 chân thực của một
+ngôi nhà trong một cảnh quan
+gồ ghề. Sử dụng màu nâu và
+xanh đậm”
+○ 16:10: Định rõ tỷ lệ khung
+hình, tối ưu hóa không gian
+hình ảnh
+○ Cảnh quan gồ ghề: Gợi ý địa
+hình cụ thể, kết hợp với màu
+sắc thiên nhiên
+○ Màu nâu và xanh đậm: Định
+hướng màu sắc, tạo cảm giác
+mộc mạc, tự nhiên
+19
+Hình ảnh được tạo ra đúng tỷ lệ 16:10, thể hiện ngôi nhà gỗ trong khung cảnh gồ ghề với gam màu chủ đạo là nâu và xanh
+
+=== SLIDE 20 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tạo Hình Ảnh Vector
+● Vector: định dạng hình ảnh dựa trên các đường
+thẳng và hình học, lý tưởng cho logo, icon, hoặc
+các minh họa sáng tạo
+○ Dễ dàng thay đổi kích thước mà không bị giảm
+chất lượng
+○ Phù hợp thiết kế chuyên nghiệp hoặc minh họa kỹ
+thuật số
+● Ví dụ “Tạo một hình ảnh vector minh họa nhóm học
+sinh học lập trình. Họ đang sử dụng máy tính, làm
+việc trong không gian lớp học hiện đại với bàn ghế và
+màn hình. Màu sắc tươi sáng, sử dụng các tông màu
+chuyên nghiệp (xanh dương, vàng). Nền trắng tinh
+gọn”
+○ Nhóm học sinh học lập trình: Định nghĩa đối tượng
+chính và bối cảnh
+○ Sử dụng máy tính: Gợi ý thêm chi tiết cụ thể để làm rõ
+hoạt động
+○ Màu sắc tươi sáng, sử dụng tông màu chuyên nghiệp:
+Đảm bảo hình ảnh vừa nổi bật vừa phù hợp với môi
+trường giáo dục hoặc công việc
+○ Nền trắng: Tăng độ tập trung vào đối tượng và làm hình
+ảnh tinh tế hơn
+20
+
+=== SLIDE 21 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sinh Ảnh và Nội Dung Minh Họa Cho Blog (1)
+● Ảnh giúp thu hút người đọc
+● Sinh ảnh sát chủ đề bài viết
+● Sinh nội dung cho Blog:
+○ Bạn là một blogger du lịch giàu kinh
+nghiệm. Hãy viết một blog về một
+chuyến đi đẹp mà bạn vừa hoàn
+thành. Mô tả thời tiết, phong cảnh
+và lý do tại sao nơi này rất đáng để
+ghé thăm. Bài viết nên dài khoảng
+300 từ và hướng đến một đối tượng
+người đọc trẻ trung, nhiệt huyết
+21
+
+=== SLIDE 22 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sinh Ảnh và Nội Dung Minh Họa Cho Blog (2)
+● Không cần prompt trực tiếp sinh ảnh
+● Giúp người đọc dễ dàng hình dung
+khung cảnh
+● Hình ảnh sinh ra:
+○ Một con đường uốn lượn qua rừng
+cây, ánh sáng tự nhiên chiếu rọi làm
+nổi bật khung cảnh xanh mát
+○ Các chi tiết như chùa cổ và hoa dại
+tạo nên không gian hòa hợp giữa
+thiên nhiên và văn hóa
+22
+
+=== SLIDE 23 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sinh Ảnh và Nội Dung Minh Họa Cho Blog (2)
+● Không cần prompt trực tiếp sinh ảnh
+● Prompt được điều chỉnh theo phản hồi:
+“tôi muốn nhìn thấy cả cảnh biển nữa”
+● Hình ảnh sau điều chỉnh:
+○ Hình ảnh được mở rộng thêm khung
+cảnh biển với màu sắc hài hòa, bầu trời
+xanh và các con tàu xa xa, mang lại cảm
+giác bao quát sống động hơn
+23
+
+=== SLIDE 24 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tùy Chỉnh Văn Bản Trong Ảnh Sinh Ra (1)
+● Hướng dẫn thêm và tùy chỉnh
+văn bản trong hình ảnh được
+sinh ra
+● Sinh ảnh có ký hiệu “stop”
+24
+
+=== SLIDE 25 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tùy Chỉnh Văn Bản Trong Ảnh Sinh Ra (2)
+● Việc thêm văn bản dài hoặc chi tiết vào hình ảnh sinh ra có thể dẫn đến sai lệch về mặt hiển
+thị, cấu trúc, hoặc phông chữ. Điều này đặc biệt xảy ra khi AI xử lý các ký tự phức tạp hoặc
+ngôn ngữ không phổ biến
+25
+Văn bản bị chia nhỏ thành các phần không liền mạch. Một số
+ký tự bị bóp méo hoặc không đúng kiểu font mong muốn.
+Văn bản không hiển thị đầy đủ hoặc sai định
+dạng, có các chi tiết thừa không mong muốn.
+
+=== SLIDE 26 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sinh Hình Ảnh Từ Các Mô Tả Mơ Hồ
+● Tạo ảnh vector từ những mô tả không rõ
+ràng, tập trung vào tinh chỉnh màu sắc,
+định dạng và ngữ cảnh để đạt được hình
+ảnh phù hợp
+● Ví dụ: “Sinh ra cho tôi một biểu tượng
+vector thể hiện khái niệm kéo và thả tập
+tin trên máy tính. Biểu tượng nên có màu
+sắc nhưng vẫn phù hợp sử dụng trong
+ngữ cảnh chuyên nghiệp. Định dạng biểu
+tượng phải được đặt trên nền trắng”
+● Tinh chỉnh: ”nền màu trắng cơ mà”
+● Các cách cải thiện:
+○ Tăng tính cụ thể prompt "Đảm bảo nền
+hoàn toàn trắng (#FFFFFF) mà không có
+tông màu khác.”
+○ Phản hồi tinh chỉnh
+○ Chỉnh sửa hậu kỳ bằng công cụ đồ họa
+26
+
+=== SLIDE 27 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tạo Hình Ảnh Đồng Nhất Theo Phong Cách Cụ Thể
+● Sinh ra ảnh có chung phong
+cách thiết kế, nhưng thay
+đổi nội dung để phù hợp
+với ngữ cảnh sử dụng khác
+● Ví dụ: “Sinh ra biểu tượng
+có cùng phong cách như
+trên nhưng mô tả việc sử
+dụng bàn phím gõ hiển thị
+ra màn hình”
+● Kết quả: Ảnh giữ nguyên
+màu sắc và bố cục từ hình
+trước đó tuy nhiên có các
+chi tiết mới
+27
+
+=== SLIDE 28 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Phân Tích Nội Dung Hình Ảnh Tải Lên
+● Có thể phân tích nội dung
+hình ảnh tải lên
+● Ví dụ: “Tóm tắt lại nội dung
+bức ảnh”
+○ Cung cấp cái nhìn tổng
+quan về bức ảnh
+28
+
+=== SLIDE 29 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tự Động Xây Dựng Website Dựa Trên Input Hình Ảnh
+29
+● Công nghệ phân tích hình ảnh và
+tự động chuyển đổi sang mã
+HTML giúp rút ngắn thời gian xây
+dựng giao diện website, đặc biệt
+hữu ích trong việc mô phỏng ý
+tưởng từ hình ảnh hoặc bản thiết
+kế
+○ Upload file mockup thiết kế
+○ Hệ thống phân tích cấu trúc hình ảnh,
+nhận diện các thành phần như text, nút
+bấm, hình ảnh…
+○ Tự động tạo mã HTML/CSS tương ứng
+● Ví dụ: “Bạn là một lập trình viên và
+người thiết kế web có kinh
+nghiệm. Đính kèm là một bản phác
+thảo của một trang web - hãy cho
+tôi mã nguồn html để xây dựng
+trang web đó”
+
+=== SLIDE 30 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tự Động Xây Dựng Website Dựa Trên Input Hình Ảnh
+● Công nghệ phân tích hình ảnh và
+tự động chuyển đổi sang mã HTML
+giúp rút ngắn thời gian xây dựng
+giao diện website, đặc biệt hữu ích
+trong việc mô phỏng ý tưởng từ
+hình ảnh hoặc bản thiết kế
+○ Upload file mockup thiết kế
+○ Hệ thống phân tích cấu trúc hình ảnh,
+nhận diện các thành phần như text, nút
+bấm, hình ảnh…
+○ Tự động tạo mã HTML/CSS tương ứng
+● Ví dụ: “Bạn là một lập trình viên và
+người thiết kế web có kinh nghiệm.
+Đính kèm là một bản phác thảo
+của một trang web - hãy cho tôi
+mã nguồn html để xây dựng trang
+web đó”
+30
+
+=== SLIDE 31 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Midjourney – Dịch Vụ Tạo Ảnh Chất Lượng Cao (Trả Phí)
+● Dịch vụ chuyên tạo hình ảnh từ
+prompt
+● midjourney.com
+● Sử dung discord để nhập prompt
+● Người dung có thể tải xuống
+hoặc tùy chỉnh thêm
+31
+
+=== SLIDE 32 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử Dụng midjourney
+32
+1. Đăng nhập Discord (tạo tài khoản/ đăng
+nhập)
+2. Tham gia Midjourney Discord server
+3. Đăng ký gói dịch vụ (không có gói free)
+4. Sinh ảnh bằng câu lệnh: /imagine + mô
+tả (promp
+
+=== SLIDE 33 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử Dụng midjourney
+33
+1. Đăng nhập Discord (tạo tài khoản/ đăng
+nhập)
+2. Tham gia Midjourney Discord server
+3. Đăng ký gói dịch vụ (không có gói free)
+4. Sinh ảnh bằng câu lệnh: /imagine + mô
+tả (promp
+
+=== SLIDE 34 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Mục lục
+• Tổng quan
+• Prompt trong các ứng dụng sinh ảnh hiện đại
+• Stable diffusion
+• Giao diện người dùng cho stable diffusion
+• Sinh video
+34
+
+=== SLIDE 35 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Có gì cần chú ý với những bức hình này?
+→ Đều được sinh ra bởi stable diffusion
+35
+
+=== SLIDE 36 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Mô hình của trí tưởng tượng
+Tại sao chúng ta cần quan tâm?
+Có thể áp dung trong nhiều lĩnh vực khác
+nhau: hội họa, điện ảnh, y học…
+”một chú mèo dễ
+thương ở trong sa mạc
+theo phong cách của
+Van Gogh"
+36
+
+=== SLIDE 37 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion
+● Công cụ cho phép nhập vào dòng chữ (prompt) và sinh ra ảnh
+37
+https://stable-diffusion-art.com/how-stable-diffusion-work
+
+=== SLIDE 38 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Diffusion model
+● Mô hình khuyếch tán (diffusion model) thuộc lớp bài toán học sâu
+● Sinh ảnh giống với dữ liệu đã được học trong huấn luyện
+○ Ví dụ học các ảnh về chó và mèo → sinh ra ảnh chó và mèo
+38
+
+=== SLIDE 39 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Forward difussion (1)
+● Quá trình thêm nhiễu vào ảnh gốc (mèo và chó) từng bước để tạo ra ảnh nhiễu
+hoàn toàn
+● Mô hình học cách chuyển đổi từ dữ liệu có cấu trúc sang trạng thái nhiễu hoàn
+toàn
+39
+Forward diffusion chuyển ảnh sang trạng thái nhiễu hoàn toàn
+• ODE (Ordinary Differential Equation) - Phương
+trình vi phân thường
+• Mô tả sự thay đổi mà không có yếu tố ngẫu
+nhiên
+• Ứng dụng: Mô tả quá trình biến đổi có thể dự
+đoán của ảnh, được xác định rõ ràng , trong
+điều kiện ổn định, dễ kiểm soát
+• SDE (Stochastic Differential Equation) - Phương
+trình vi phân ngẫu nhiên
+• Thêm yếu tố ngẫu nhiễn: Mô hình dưới dạng
+nhiễu trắng hoặc biến ngẫu nhiên
+• Ứng dụng: mô tả quá trình khuyếch tán nơi mỗi
+bước của quá trình thêm một mức độ ngẫu nhiên
+nhất định → hệ thống không hoàn toàn dự đoán
+được
+
+=== SLIDE 40 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Forward diffusion (2)
+● Quá trình thêm nhiễu ngẫu nhiên từng bước vào ảnh gốc
+● Ảnh sau khi thêm nhiễu hoàn toàn không thể nhận diện được là chó hay mèo
+● Giống như giọt mực nhỏ vào cốc nước: khi khuếch tán hòan toàn, không biết
+giọt mực ở đâu nữa
+40
+
+=== SLIDE 41 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Reverse diffusion
+● Loại bỏ nhiễu từ ảnh ngẫu nhiên để tái tạo ảnh có cấu trúc (như chó hoặc mèo)
+● Quá trình lặp lại nhiều bước để dần khôi phục thông tin
+● Cơ chế hoạt động:
+○ Mỗi bước, mô hình dự đoán lượng nhiễu trong ảnh và loại bỏ nhiễu này
+→ ảnh thu được tương tự dữ liệu huấn luyện
+41
+Reverse diffusion loại bỏ nhiễu từ ảnh ngẫu nhiên qua nhiều bước để tái tạo lại ảnh có ý nghĩa
+
+=== SLIDE 42 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Cách huấn luyện (1)
+● Để mô hình có thể khôi phục ảnh từ nhiễu (reverse diffusion): cần phải biết bao
+nhiêu nhiễu đã thêm vào ảnh trong forward từ diffusion → Mục tiêu là mô hình có
+thể dự đoán được lượng nhiễu này
+○ Nếu ta trừ đi lượng nhiễu đã được thêm vào, có thể sinh ra ảnh gốc (chó hay mèo)
+● Các bước huấn luyện
+○ Lấy ảnh huấn luyện: ảnh gốc (chó hay mèo)
+○ Sinh nhiễu ngẫu nhiên
+○ Thêm nhiễu vào ảnh gốc
+○ Huấn luyện mô hình dự đoán lượng nhiễu
+■ Đầu vào: ảnh bị nhiễu
+■ Đầu ra: lượng nhiễu đã thêm vào (ground truth)
+■ Điều chỉnh mô hình để giảm hàm loss → Tìm trọng số (weight) tối ưu
+■ Mục tiêu: đưa ảnh vào thì mô hình có khả năng dự đoán được chính xác lượng nhiễu đã
+thêm vào
+42
+
+=== SLIDE 43 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Cách huấn luyện (2)
+● Thêm nhiễu vào ảnh qua từng bước
+● Sau khi huấn luyện, mô hình học được cách dự đoán lượng nhiễu đã thêm vào ảnh
+43
+Quá trình thêm nhiễu qua bốn bước làm ảnh trở nên nhiễu hoàn toàn, qua quá
+trình huấn luyện, mô hình có thể đoán được lượng nhiễu thêm vào
+
+=== SLIDE 44 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng diffusion model để tái tạo ảnh
+● Khởi đầu từ ảnh nhiễu hoàn toàn: không còn thông tin nhận diện
+● Quá trình reverse diffusion:
+○ Mô hình dự đoán lượng nhiễu cần loại bỏ tại mỗi bước
+○ Loại bỏ dần lượng nhiễu dự đoán, thực hiện qua nhiều bước
+● Kết quả cuối cùng: ảnh được tái tạo
+44
+Minh họa quá trình reverse diffusion: loại bỏ nhiễu từng bước để tái tạo ảnh
+
+=== SLIDE 45 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Vấn đề của diffusion model
+● Không có điều kiện ràng buộc → khó kiểm soát nội dung đầu ra
+● Tốc độ xử lý chậm vì cần xử lý từng điểm ảnh (pixel) qua nhiều bước
+45
+● Ảnh kích thước 512×512×3 →
+784432 giá trị
+● Nếu sử dụng 1000 bước →
+784432×1000 = 784432000 phép
+tính → khối lượng tính toán khổng lồ
+Ảnh minh họa không gian pixel: mỗi kênh màu có
+kích thước cụ thể và cần xử lý từng điểm ảnh
+
+=== SLIDE 46 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion (control speed)
+● Latent space:
+○ Giảm kích thước: VAE mã hóa ảnh gốc thành tensor nhỏ hơn (latent
+space), giữ lại các đặc trưng quan trọng
+○ Nhanh hơn: Kích thước latent space chỉ 4×64×64 = 16348 (nhỏ hơn 48
+lần so với kích thước gốc 3 ×512×512)
+○ Tiết kiệm tài nguyên: xử lý trong latent space giảm yêu cầu về bộ nhớ và
+thời gian xử lý
+○ Quy trình
+■ Encode ảnh gốc sang latent space
+■ Xử lý trong latent space (thêm/loại bỏ nhiễu)
+■ Decode từ latent space thành ảnh đầu ra
+46
+VAE mã hóa và giải mã ảnh gốc, giúp xử lý
+nhanh hơn trong latent space
+
+=== SLIDE 47 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion model (Control results)
+● Cho phép đưa vào prompt để điều khiển kết quả sinh ảnh
+○ Text prompt: mô tả của người dùng
+○ Tokenizer: phân tách prompt thành các token riêng biệt
+○ Embedding: biễu diễn token dưới dạng vector nhiều chiều để mô tả ngữ nghĩa
+→ tạo thành ma trận embedding
+○ Text transformer: mô hình phân tích ngữ cảnh giữa các từ trong prompt để
+hiểu ý nghĩa tổng thể
+○ Noise predictor: sử dụng thông tin từ prompt điều chỉnh quá trình reverse
+diffusion; đảm bảo lượng nhiễu được loại bỏ tại mỗi bước phản ánh đúng nội
+dung của prompt → đầu ra phù hợp với mô tả của người dùng
+47
+Quy trình xử lý prompt trong Stable diffusion từ text prompt đến noise predictor
+
+=== SLIDE 48 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion model (Control results)
+● Ý nghĩa:
+○ Kiểm soát nội dung đầu ra: người dùng có thể định hướng rõ ràng nội dung
+và phong cách ảnh thông qua prompt
+○ Linh hoat và đa dạng: linh hoạt thay đổi, mô tả các nội dung phức tạp hơn để
+tạo ra ảnh sáng tạo
+○ Tương tác trực quan: người dùng chỉ cần mô tả bằng ngôn ngữ tự nhiên,
+không cần hiểu rõ chi tiết bên trong
+48
+Quy trình xử lý prompt trong Stable diffusion từ text prompt đến noise predictor
+
+=== SLIDE 49 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Text2image – Ý tưởng
+● Đầu vào:
+○ Prompt
+■ Cung cấp bởi người dùng, mô tả nội dung cần
+sinh ra
+○ Tensor khởi tạo ngẫu nhiên trong không gian ẩn
+latent space (ví dụ kích thước 4 ×64×64)
+■ Đại diện cho một ảnh chữ nhiễu, sẽ được giảm
+nhiễu (denoising) từng bước tạo ra ảnh cuối cùng
+■ Seeed điều khiển Tensor ngẫu nhiên này, cho
+phép tái tạo kết quả giống nhau khi chung seed
+● Hoạt động:
+○ Kết hợp tensor ngẫu nhiên và prompt
+■ Tensor ngẫu nhiên và prompt được đưa vào
+Noise Predictor
+■ Prompt hướng dẫn Noise Predictor điều chỉnh
+tensor để phù hợp với nội dung miêu tả
+● Noise predictor sử dụng cross-attention để kết
+hợp thông tin từ prompt và tensor
+● Quá trình được lặp lại qua nhiều bước cho đến
+khi tensor trở thành ảnh cuối cùng phù hợp với
+prompt
+49
+T ensor ngẫu nhiên được sinh ra trong latent space
+Hoạt động của Text2image
+
+=== SLIDE 50 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Text2image – Quy trình lặp giảm nhiễu
+● Lấy tensor ngẫu nhiên:
+○ Tensor khởi tạo ngẫu nhiên được sinh ra trong không gian ẩn (latent space)
+○ Tensor này đại diện cho hình ảnh ban đầu chứaa toàn bộ nhiễu
+● Quá trình giảm nhiễu
+○ Noise predictor được sử dụng để ước lượng nhiễu trong tensor hiện tại
+○ Tensor được thay đổi bằng cách trừ đi lượng nhiễu đã được dự đoán trong tensor hiện tại
+● Số vòng lặp
+○ Có thể từ 15-20 lần hoặc nhiều hơn, mỗi lần làm giảm dần nhiễu trong tensor
+○ Mỗi bước lặp giúp tensor tiệm cận đến trạng thái ít nhiễu hơn → ảnh hoàn chỉnh
+50
+T ensor được xử lý trong mỗi vòng lặp để giảm nhiễu
+Quy trình được xử lý nhiều lần để đảm
+bảo ảnh đầu ra phù hợp với prompt
+
+=== SLIDE 51 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Text2image: Tái tạo ảnh
+● Latent image:
+○ Tensor cuối sau N bước giảm nhiễu,
+chứa thông tin hình ảnh ở dạng nén,
+chưa phải ảnh thật
+● Decoder:
+○ Chuyển đổi tensor thành ảnh thực tế
+trong không gian pixel
+○ Thông tin về màu sắc, ánh sáng, và
+cấu trúc hình ảnh được khôi phục từ
+dữ liệu trong latent space
+● Kết quả:
+○ Ảnh tạo ra phù hợp với nội dung của
+prompt đầu vào
+51
+Quá trình chuyển đổi từ latent image sang
+ảnh trong không gian pixel
+Ví dụ ảnh được sinh ra
+
+=== SLIDE 52 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Image2image
+● Quy trình
+○ Ảnh đầu vào → Encoder → Tensor (latent space)
+○ Thêm nhiễu vào tensor để điều chỉnh độ khác biệt so với ảnh gốc đầu vào
+● Điều chỉnh nhiễu thêm vào
+○ Kiểm soát mức độ nhiễu, xác định mức độ khác biệt giữa ảnh đầu vào và
+ảnh đầu ra
+■ Nhiễu nhẹ: ảnh đầu ra chỉ có thay đổi nhỏ với ảnh đầu vào
+■ Nhiễu mạnh: ảnh đầu ra khác biệt so với ảnh đầu vào
+52
+
+=== SLIDE 53 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Image2image – Sử dụng Noise Predictor
+● Đầu vào:
+○ Latent image chứa thông tin ảnh ban đầu sau khi thêm nhiễu
+○ Text prompt hướng dẫn quá trình giảm nhiễu
+● Noise predictor
+○ Dự đoán nhiễu cần loại bỏ trong tensor hiện tại
+● Quy trình
+○ Dự đoán nhiễu → cập nhật tensor → lặp lại N lần nhất định → tensor
+(latent image) đầu ra
+53
+
+=== SLIDE 54 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Image2image – Sử dụng Decoder tạo ảnh mới
+● Latent image cuối cùng
+○ Đầu ra quá trình giảm nhiễu thông qua N bước lặp
+○ Chứa các đặc điểm để tạo ra hình ảnh cuối cùng
+● Decoder
+○ Giải mã từ latent space (tensor) sang pixel space (ảnh thực tế)
+○ Thông tin về màu sắc, chi tiết bề mặt, ánh sáng và cấu trúc hình ảnh được
+tái tạo
+● Ảnh đầu ra
+○ Hình ảnh cuối cùng được tạo ra từ ảnh đầu vào và thông tin trong text
+prompt
+54
+
+=== SLIDE 55 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Depth2image
+● Mục đích: tạo hình ảnh dựa trên thông tin độ sâu (depth) và các đặc tính của hình ảnh gốc
+● Quy trình:
+○ Dùng Encoder để chuyển hình ảnh đầu vào sang không gian ẩn (latent
+space)
+■ Hình gốc được mã hóa thành tensor trong latent space giúp giảm kích thước và tập
+trung vào các đặc trưng quan trọng
+○ Dùng MiDaS để trích xuất thông tin depth
+■ MiDaS là mô hình chuyên dùng để tạo bản đồ độ sâu (depth map) từ hình ảnh đầu
+vào
+■ Depth map cung cấp thông tin về khoảng cách về cấu trúc không gian, hỗ trợ điều
+kiện hóa quá trình xử lý
+55
+Mã hóa hình ảnh đầu vào
+thành latent image
+Sử dụng MiDaS để tạo
+bản đồ độ sâu
+
+=== SLIDE 56 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Depth2image
+● Quy trình (tiếp)
+○ Thêm nhiễu vào latent image
+■ Latent image được cộng thêm nhiễu qua N bước
+● Tạo ra sự thay đổi cho latent image, chuẩn bị cho
+giai đoạn khử nhiễu
+○ Noise predictor:
+■ Đầu vào
+● Latent image đã thêm nhiễu
+● Depth mapth tính bởi MiDaS cung cấp thông tin
+về cấu trúc và khoảng cách
+● Text prompt để hướng dẫn nội dung ảnh mong
+muốn
+■ Đầu ra: nhiễu cần loại bỏ
+○ Cập nhật latent image
+■ Latent image mới = latent image cũ – nhiễu tính từ
+noise predictor
+○ Lặp lại quá trình tính nhiễu từ noise predictor
+và cập nhật latet image N lần
+56
+
+=== SLIDE 57 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Depth2image
+● Quy trình (tiếp)
+○ Sử dụng decoder để chuyển latent image tính được sau N bước trở thành
+ảnh đầu ra trong không gian pixel
+57
+
+=== SLIDE 58 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Mục lục
+• Tổng quan
+• Prompt trong các ứng dụng sinh ảnh hiện đại
+• Stable diffusion
+• Giao diện người dùng cho stable diffusion
+• Sinh video
+58
+
+=== SLIDE 59 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion WebUI (AUTOMATIC 1111)
+● Stable-diffusion không có giao diện người dùng mặc định, viết code, khó tiếp cận với
+người không thiên về lập trình → cần có GUI
+● Một trong những GUI phổ biến, dễ tiếp cận nhất: AUTOMATIC1111
+○ Sử dụng: thương mai hóa:
+○ https://www.thinkdiffusion.com https://www.shakker.ai
+○ Google Colab/ Cài đặt trên máy tính
+59
+
+=== SLIDE 60 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC1111 (1)
+● Text-to-image tab: khi khởi động
+● https://github.com/AUTOMATIC1111/stable -diffusion-webui
+60
+
+=== SLIDE 61 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC1111 (2)
+● Các cấu hình quan trọng
+○ Stable Diffusion Checkpoint: Lựa chọn
+mô hình muốn sử dung, ví dụ v1.5 base
+model
+■ Nhiều models khác nhau, cần chú ý lựa
+chọn
+○ Prompt: Mô tả hình ảnh muốn tạo
+○ Width và height: Kích cỡ ảnh đầu ra
+○ Batch size: số lượng ảnh sinh ra mỗi lần
+chay
+○ Ấn generate để sinh ảnh
+61
+
+=== SLIDE 62 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC1111 (3)
+● Các cấu hình khác
+○ Negative prompt: yếu tố không muốn
+xuất hiện trong ảnh
+○ Sampling method: thuật toán cho quá
+trình khử nhiễu
+○ Sampling steps: số bước trong quá trình
+khử nhiễu. Càng nhiều càng tốt hơn
+nhưng lâu hơn
+○ Batch count: số lần chạy quy trình
+(pipeline) tạo ảnh
+○ Batch size: số lượng ảnh sinh ra mỗi
+pipeline → số lượng ảnh: batch count ×
+batch size
+○ CFG scale: Kiểm soát mức độ mà mô
+hình nên tuân theo yêu cầu của bạn,
+cầng cao thì càng tuân theo
+■ 1: bỏ qua
+■ 30: tuân nghiêm ngặt
+○ Seed: tạo tensor ngẫu nhiên trong latent
+space, thường đặt là -1
+62
+
+=== SLIDE 63 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC 1111 (4)
+● Sinh ảnh trong thinkfusion
+● Có thể download ảnh
+63
+
+=== SLIDE 64 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC 1111 (5)
+Vào trang web shakker.ai
+Sign in
+64
+
+=== SLIDE 65 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC 1111 (6)
+Trang chủ của Shakker.ai
+Chọn A1111 WebUI
+65
+
+=== SLIDE 66 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng AUTOMATIC 1111 (7)
+● Sinh ảnh sử dụng AUTOMATIC 1111 trong shakker.ai
+66
+
+=== SLIDE 67 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+ComfyUI – Giao Diện Node-Based Hiện Đại Cho Stable Diffusion
+● Node-based GUI (Giao diện dựa trên các node) cho stable diffusion
+● Cho phép người dùng quản lý và chỉnh sửa các quy trình xử lý ảnh bằng cách kết nối
+các node chức năng
+● Sử dụng:
+○ Thương mại hóa: Think diffusion/ Shakker AI
+○ ComfyUI notebook: Google colab/ local
+● So sánh với AUTOMATIC1111
+○ Ưu điểm:
+■ Cấu hình linh hoạt hơn
+■ Dễ quan sát được workflow
+■ Dễ chia sẻ : Lưu và chia sẻ workflow đưới dạng file, giúp tái sử dụng hoặc cộng tác
+○ Nhược điểm:
+■ Giao diện phức tạp, không nhất quán: các workflow khác nhau yêu cầu cấu hình node riêng
+■ Quá chi tiết: yêu cầu hiểu rõ cách kết nối các node và cấu trúc bên trong
+67
+
+=== SLIDE 68 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Giao Diện ComfyUI (1)
+• Tùy chỉnh các tham số
+trong mỗi node (chọn
+model, steps,...)
+• Các workflow khác nhau
+gồm các node khác nhau
+68
+
+=== SLIDE 69 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Giao Diện ComfyUI (2)
+● Node:
+○ Khối hình chữ nhật (ví dụ “load
+checkpoint”)
+○ Mỗi node thực hiện được đoạn
+code (tương tự các hàm)
+○ Cần ba thành phần
+■ Input: các đoạn text và dấu
+chấm bên trái (có các kết nối đi
+vào)
+■ Output: các đoạn text và dấu
+chấm bên phải (có các kết nối đi
+ra)
+■ Tham số (parameter): các trường
+nằm giữa khối hình chữ nhật
+● Edge: Các kết nối giữa đầu ra và đầu vào
+của các khối
+69
+
+=== SLIDE 70 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sinh ảnh thông thường
+nhập nội
+dung tấm
+ảnh
+Chọn size ảnh
+70
+Sử dụng ComfyUI (1)- Text-to-image
+
+=== SLIDE 71 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng ComfyUI (2) Text-to-image
+● Lựa chọn model
+○ Lựa chọn stable diffusion model
+ở Load checkpoint node
+○ Ba thành phần
+■ MODEL:
+● Mô hình dự đoán nhiễu trong
+không gian ẩn (latent space)
+● Nối với Sampler: xử lý quá trình
+khuyếch tán ngược
+■ CLIP:
+● Mô hình ngôn ngữ xử lý prompt
+thành không gian vector mà mô
+hình hiểu được
+● Nối với prompt (CLIP Text
+Encode) để xử lý
+■ VAE:
+● Chuyển đổi giữa hình ảnh và
+không gian ẩn
+● Chỉ sử dụng VAE để giải mã hình
+ảnh từ không gian ẩn sang không
+gian pixel trong bước cuối của text-
+to-image
+71
+
+=== SLIDE 72 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng ComfyUI (3) Text-to-image
+● CLIP Text Encode: Nhập prompt và
+negative prompt
+○ Text được encode sang token và
+embeddings
+■ Sử dụng mô hình ngôn ngữ CLIP của
+OpenAI
+○ Prompt và negative prompt được xác
+định bởi CONDITIONING
+72
+
+=== SLIDE 73 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng ComfyUI (4) Text-to-image
+● Empty latent space
+○ Text-to-image: bắt đầu từ latent
+space
+○ Kích thước của hình ảnh trong
+không gian ẩn (kích thước ảnh thu
+được): width/height
+○ Batch size: số ảnh tạo ra trong mỗi
+lần chạy
+73
+
+=== SLIDE 74 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng ComfyUI (5) Text-to-image
+● Ksampler
+○ Thành phần quan trọng: khử nhiễu để
+tạo hình ảnh phù hợp với prompt
+○ Các tham số quan trọng
+■ seed: Giá trị ngẫu nhiên điều khiển
+việc sinh latent space
+■ control_after_generate: cách thay đổi
+seed sau mỗi lần tạo: nhận giá trị ngẫu
+nhiên/ tăng 1/ giảm 1/ hay giữ
+nguyên
+■ step: số bước thực hiện
+■ cfg: kiểm tra độ mạnh của prompt
+■ sampler_name: thuật toán khử nhiễu
+■ scheduler: Kiểm soát mức độ nhiễu
+thay đổi ở mỗi bước.
+■ denoise: Kiểm soát lượng nhiễu ban
+đầu cần loại bỏ trong quá trình khử
+nhiễu. 1 nghĩa là loại bỏ hoàn toàn.
+74
+
+=== SLIDE 75 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng ComfyUI (6) Text-to-image
+● VAE Decode
+○ Tạo ra hình ảnh từ không gian ẩn
+○ Latent: Hình ảnh trong latent
+space chứa thông tin được nén
+của hình ảnh thực, nhận từ
+Ksampler
+○ VAE: Dùng để giãi mã để chuyển
+từ latent space sang pixel space
+○ Image: Ảnh đầu ra thu được
+75
+
+=== SLIDE 76 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử dụng ComfyUI (7) Text-to-image
+● Sinh ảnh dùng shakker AI
+76
+
+=== SLIDE 77 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tìm kiếm các workflow
+77
+Click here
+Sử Dụng ComfyUI (8)
+
+=== SLIDE 78 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Sử Dụng ComfyUI (9)
+Các chức năng cơ bản
+Load workflow từ local
+Tìm kiếm
+các node
+theo chức
+năng
+Run
+78
+
+=== SLIDE 79 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (1)
+Trang chủ của Shakker.ai
+Chọn Train a
+LoRA
+79
+
+=== SLIDE 80 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Giao diện train LoRA
+Chọn model theo mục đích train
+Các tham
+số để train
+(tham khảo
+các nguồn
+uy tín)
+Upload ảnh
+80
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (2)
+
+=== SLIDE 81 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Train LoRA cho 1 nhân vật
+• Crop size: đưa về các size
+quen thuộc (1024x1025,
+768x1216,...)
+• Tagger algorithm: làm
+caption cho ảnh training
+(optinal)
+• Trigger words: từ đặc biệt
+dùng để ghi nhớ nhân vật
+81
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (3)
+
+=== SLIDE 82 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Train LoRA cho 1 nhân vật
+Start training
+82
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (4)
+
+=== SLIDE 83 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Training hoàn tất
+Ảnh sample
+mỗi epoch
+với prompt:
+a soccer
+player in
+red shirt
+83
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (6)
+
+=== SLIDE 84 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+vào historyChọn 1 trong 6
+checkpoint rồi Publish
+Publish LoRA vừa train 84
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (7)
+
+=== SLIDE 85 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Publish LoRA vừa train
+Tên LoRA
+85
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (8)
+
+=== SLIDE 86 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Tìm kiếm
+LoRA vừa
+publish
+Ấn vào để
+sử dụng
+86
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (9)
+
+=== SLIDE 87 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Kết quả
+prompt
+87
+(Mở Rộng) TRAIN LORA VỚI SHAKKER (10)
+
+=== SLIDE 88 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+88
+(Mở Rộng) Kling.ai
+
+=== SLIDE 89 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+89
+(Mở Rộng) Kling.ai
+
+=== SLIDE 90 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Mục lục
+• Tổng quan
+• Prompt trong các ứng dụng sinh ảnh hiện đại
+• Stable diffusion
+• Giao diện người dùng cho stable diffusion
+• Sinh video
+90
+
+=== SLIDE 91 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+SORA
+● Mô hình sinh video từ text được đưa ra bởi OpenAI ( https://openai.com/index/sora/ )
+91
+
+=== SLIDE 92 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+SORA
+● Đặc điểm
+○ Có khả năng hiểu các mô tả phức tạp, ngôn ngữ và ngữ cảnh → tạo ra
+video với nội dung và phong cách khớp yêu cầu người dùng
+○ Tạo ra được video độ dài lên đến 1 phút mà vẫn đảm bảo chất lượng hình
+ảnh cao
+○ Tạo nhiều góc quay và các chuyển động khác nhau
+○ Ứng dụng trong nhiều lĩnh vực
+92
+
+=== SLIDE 93 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable video diffusion (1)
+● Có thể sử dụng trên hugging face để sinh video
+○ https://huggingface.co/spaces/multimodalart/stable-video-diffusion
+● Tải ảnh lên để sinh video dựa trên bức ảnh đã tải
+● Tạo video dài hơn: lấy frame cuối của video đã sinh ra
+93
+
+=== SLIDE 94 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion video (2)
+● Tùy chọn nâng cao (Advanced
+options)
+○ Seed: giá trị ban đầu tạo
+ngẫu nhiên để sinh
+■ Fix: kết quả nhất quán
+○ Motion bucket id: điều chỉnh
+mức độ chuyển động được
+thêm vào ảnh
+■ Thấp: ít chuyển động
+■ Cao: tăng chuyển động
+○ Frame per second (FPS): số
+khung hình trong mỗi giây
+94
+
+=== SLIDE 95 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Stable diffusion video (3)
+● Ví dụ:
+95
+
+=== SLIDE 96 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Trang chủ RunwayML
+click here
+96
+Sử dụng RunwayML (1)
+
+=== SLIDE 97 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+97
+Upload ảnh
+và nội
+dung video
+Sử dụng RunwayML (2)
+
+=== SLIDE 98 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+98
+Sử dụng RunwayML (3)
+
+=== SLIDE 99 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Upload ảnh
+và nội
+dung video
+99
+Sử dụng RunwayML (4)
+
+=== SLIDE 100 ===
+TRƯỜNG CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG
+School of Information and Communication Technology
+Kết quả 100
+Sử dụng RunwayML (5)

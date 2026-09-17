@@ -16,6 +16,8 @@ from chat import chat_reply
 from db import get_client
 from explain import explain as explain_highlight
 from feynman import session_summary, student_reply
+import feynman_v3
+from slides import load_slides
 from prompts import check_prompts
 from ranking import compute_base_group, rank
 
@@ -319,6 +321,43 @@ def feynman_summary(body: FeynmanSummaryIn):
     result = session_summary(body.concept, _evidence(items), body.history)
     result["current_rating"] = _current_rating(items)
     return result
+
+
+class FeynmanV3ReplyIn(BaseModel):
+    session_id: str
+    lesson_id: str = Field(min_length=1)
+    concept: str
+    history: list[dict] = []
+    message: str = ""
+    state: dict = {}
+
+
+@app.post("/feynman/v3/reply")
+def feynman_v3_reply(body: FeynmanV3ReplyIn):
+    """Lộ trình 8 bước (plan.md). Song song với /feynman/reply, không thay thế."""
+    db = get_client()
+    _, _, items = _latest_concept_context(db, body.session_id, body.lesson_id, body.concept)
+    result = feynman_v3.student_reply(
+        body.concept, _evidence(items), load_slides(body.lesson_id),
+        body.history, body.message, body.state,
+    )
+    result["current_rating"] = _current_rating(items)
+    return result
+
+
+class FeynmanV3RubricIn(BaseModel):
+    lesson_id: str = Field(min_length=1)
+    concept: str
+    explanation_1: str = Field(min_length=1)
+    explanation_2: str = Field(min_length=1)
+
+
+@app.post("/feynman/v3/rubric")
+def feynman_v3_rubric(body: FeynmanV3RubricIn):
+    """Mục 5.2 — chấm lời giảng lần 1 so với lần 2 trên cùng rubric."""
+    return feynman_v3.rubric_score(
+        body.concept, load_slides(body.lesson_id), body.explanation_1, body.explanation_2,
+    )
 
 
 @app.post("/corrections")

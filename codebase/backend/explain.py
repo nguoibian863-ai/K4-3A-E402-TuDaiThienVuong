@@ -9,6 +9,20 @@ from prompts import get_prompt
 
 VALID_STATUS = {"answered", "out_of_scope", "insufficient_context"}
 
+MAX_TURNS = 12
+TEMPERATURE = 0.3  # bám đoạn bôi đen và câu hỏi vừa gửi, không tự chuyển chủ đề
+
+
+def _to_turns(history: list[dict] | None) -> list[dict]:
+    """Đổi lịch sử [{question, answer}] thành message thật (hỏi = user, đáp = assistant)."""
+    turns = []
+    for item in history or []:
+        if not isinstance(item, dict):
+            continue
+        turns.append({"role": "user", "content": item.get("question")})
+        turns.append({"role": "assistant", "content": item.get("answer")})
+    return turns
+
 
 def validate_output(data: dict) -> bool:
     if not isinstance(data, dict):
@@ -36,15 +50,14 @@ def explain(highlight: str, question: str, lesson: str = "", history: list[dict]
             "used_fallback": False,
         }
 
-    payload = {
-        "lesson": lesson,
-        "highlight": highlight,
-        "history": history or [],
-        "question": question,
-    }
+    payload = {"lesson": lesson, "highlight": highlight}
+    # Câu hỏi mới đứng cuối chuỗi hội thoại -> model trả lời đúng câu đó, hiểu cả ý nối tiếp
+    turns = _to_turns(history)[-MAX_TURNS:] + [{"role": "user", "content": question}]
 
     try:
-        raw_response, parsed = call_llm(get_prompt("explain"), payload)
+        raw_response, parsed = call_llm(
+            get_prompt("explain"), payload, temperature=TEMPERATURE, turns=turns
+        )
     except Exception:
         result = fallback_output()
         result["raw_response"] = None

@@ -293,7 +293,22 @@
                     <small id="p2-chat-status">Hỏi AI hôm nay cần ôn gì để bắt đầu</small>
                   </div>
                 </div>
-                <div class="ai-mode-tag" id="p2-mode-tag">Ôn tập</div>
+                <div class="chat-header-right">
+                  <label class="v3-toggle" id="v3-toggle-wrap" title="Lộ trình 8 bước: mirror → hỏi vặn → đối chiếu slide → knowledge state">
+                    <input type="checkbox" id="v3-toggle" checked>
+                    <span>Lộ trình 8 bước</span>
+                  </label>
+                  <div class="ai-mode-tag" id="p2-mode-tag">Ôn tập</div>
+                </div>
+              </div>
+
+              <!-- Bước 6: knowledge state, chỉ hiện ở lộ trình 8 bước -->
+              <div class="ks-panel" id="ks-panel" hidden>
+                <div class="ks-panel-head">
+                  <span>Trạng thái kiến thức</span>
+                  <small id="ks-next-q"></small>
+                </div>
+                <div class="ks-list" id="ks-list"></div>
               </div>
 
               <div class="p2-messages" id="p2-messages"></div>

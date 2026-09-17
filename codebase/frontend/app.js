@@ -920,6 +920,34 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedConcept = null;
   let feynmanHistory = []; // [{role: 'teacher' | 'student', content}]
 
+  // Lộ trình 8 bước (plan.md). Chạy song song với phiên Feynman cũ, bật/tắt bằng công tắc.
+  const v3Toggle = document.getElementById('v3-toggle');
+  const ksPanel = document.getElementById('ks-panel');
+  const ksList = document.getElementById('ks-list');
+  const ksNextQ = document.getElementById('ks-next-q');
+  // Mặc định BẬT: đây là lộ trình có đối chiếu slide + phân tích đúng/sai.
+  // Bỏ tích để quay về phiên dạy lại cũ (chỉ hỏi vặn, không có căn cứ).
+  let useV3 = v3Toggle ? v3Toggle.checked : true;
+  let v3State = {}; // {knowledge, probes, streak} — server trả về, client giữ giữa các lượt
+
+  const ksMeta = {
+    understood: { icon: '✓', label: 'hiểu', cls: 'ks-ok' },
+    unclear: { icon: '⏳', label: 'chưa rõ', cls: 'ks-mid' },
+    misconception: { icon: '✗', label: 'đang nhầm', cls: 'ks-bad' },
+  };
+  const verdictMeta = {
+    correct: { label: 'Khớp slide', cls: 'ev-ok' },
+    incomplete: { label: 'Đúng nhưng thiếu', cls: 'ev-mid' },
+    wrong: { label: 'Lệch với slide', cls: 'ev-bad' },
+    insufficient_evidence: { label: 'Không đủ bằng chứng', cls: 'ev-none' },
+  };
+  const nextQMeta = {
+    clarification: 'làm rõ',
+    why: 'hỏi vì sao',
+    challenge: 'thử thách',
+    transfer: 'chuyển giao',
+  };
+
   function scrollChatToBottom() {
     p2Messages.scrollTop = p2Messages.scrollHeight;
   }
@@ -1011,6 +1039,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function exitFeynmanMode() {
     selectedConcept = null;
     feynmanHistory = [];
+    v3State = {};
+    if (ksPanel) ksPanel.hidden = true;
     setMode('review');
   }
 
@@ -1199,13 +1229,213 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ---------- Lộ trình 8 bước: render knowledge state + phần đối chiếu slide ----------
+  function renderKnowledgeState(nextQuestionType) {
+    const knowledge = (v3State && v3State.knowledge) || {};
+    const names = Object.keys(knowledge);
+    ksPanel.hidden = !useV3 || names.length === 0;
+    if (ksPanel.hidden) return;
+    ksList.textContent = '';
+    // Đang nhầm lên trước, đã hiểu xuống cuối — nhìn phát biết còn vướng chỗ nào
+    const order = { misconception: 0, unclear: 1, understood: 2 };
+    names.sort((a, b) => order[knowledge[a]] - order[knowledge[b]] || a.localeCompare(b));
+    for (const name of names) {
+      const meta = ksMeta[knowledge[name]];
+      if (!meta) continue;
+      const row = document.createElement('div');
+      row.className = `ks-item ${meta.cls}`;
+      const icon = document.createElement('span');
+      icon.className = 'ks-icon';
+      icon.textContent = meta.icon;
+      const text = document.createElement('span');
+      text.className = 'ks-name';
+      text.textContent = name;
+      const tag = document.createElement('span');
+      tag.className = 'ks-tag';
+      tag.textContent = meta.label;
+      row.append(icon, text, tag);
+      ksList.appendChild(row);
+    }
+    ksNextQ.textContent = nextQuestionType
+      ? `câu hỏi tiếp theo: ${nextQMeta[nextQuestionType] || nextQuestionType}`
+      : '';
+  }
+
+  function buildEvidenceCard(evidence) {
+    const meta = verdictMeta[evidence.verdict] || verdictMeta.insufficient_evidence;
+    const card = document.createElement('div');
+    card.className = `ev-card ${meta.cls}`;
+
+    const head = document.createElement('div');
+    head.className = 'ev-head';
+    const badge = document.createElement('span');
+    badge.className = 'ev-badge';
+    badge.textContent = `📄 ${meta.label}`;
+    head.appendChild(badge); // link trang nằm ở từng dẫn chứng bên dưới, không lặp ở đây
+    card.appendChild(head);
+
+    // Phân tích đúng / sai, mỗi mục đã kèm lý do ngay trong câu
+    const addPoints = (items, cls, label) => {
+      if (!items || !items.length) return;
+      const block = document.createElement('div');
+      block.className = `ev-points ${cls}`;
+      const title = document.createElement('div');
+      title.className = 'ev-points-title';
+      title.textContent = label;
+      block.appendChild(title);
+      const list = document.createElement('ul');
+      for (const point of items) {
+        const li = document.createElement('li');
+        li.textContent = point;
+        list.appendChild(li);
+      }
+      block.appendChild(list);
+      card.appendChild(block);
+    };
+    addPoints(evidence.correct_points, 'ev-points-ok', '✓ Phần đã đúng');
+    addPoints(evidence.wrong_points, 'ev-points-bad', '✗ Phần chưa chính xác');
+    addPoints(evidence.missing_points, 'ev-points-miss', '○ Ý quan trọng còn thiếu');
+
+    // Dẫn chứng: mỗi trích dẫn đã được backend đối chiếu từng chữ với slide gốc
+    const citations = evidence.citations && evidence.citations.length
+      ? evidence.citations
+      : (evidence.quote ? [{ slide: evidence.slide, quote: evidence.quote }] : []);
+    if (citations.length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'ev-cites';
+      const title = document.createElement('div');
+      title.className = 'ev-points-title';
+      title.textContent = `📎 Dẫn chứng trong slide (${citations.length})`;
+      wrap.appendChild(title);
+      for (const cite of citations) {
+        const row = document.createElement('div');
+        row.className = 'ev-cite';
+        if (cite.slide) {
+          const link = document.createElement('button');
+          link.className = 'ev-slide-link';
+          link.textContent = `Trang ${cite.slide}`;
+          link.addEventListener('click', () => goToSlideFromReview(cite.slide));
+          row.appendChild(link);
+        }
+        const quote = document.createElement('blockquote');
+        quote.className = 'ev-quote';
+        quote.textContent = cite.quote;
+        row.appendChild(quote);
+        wrap.appendChild(row);
+      }
+      card.appendChild(wrap);
+    }
+
+    if (evidence.note) {
+      const note = document.createElement('div');
+      note.className = 'ev-note';
+      note.textContent = evidence.note;
+      card.appendChild(note);
+    }
+    return card;
+  }
+
+  function buildEnforcedBox(enforced) {
+    const box = document.createElement('details');
+    box.className = 'enforced-box';
+    const summary = document.createElement('summary');
+    summary.textContent = `🔒 Hệ thống đã chỉnh ${enforced.length} chỗ trong câu trả lời của AI`;
+    box.appendChild(summary);
+    const list = document.createElement('ul');
+    for (const line of enforced) {
+      const item = document.createElement('li');
+      item.textContent = line;
+      list.appendChild(item);
+    }
+    box.appendChild(list);
+    return box;
+  }
+
+  async function requestStudentReplyV3(message) {
+    const bubble = addChatMessage('ai', { text: 'Đang suy nghĩ...', loading: true, author: 'AI (Học viên)' });
+    try {
+      const result = await apiPost('/feynman/v3/reply', {
+        session_id: SESSION_ID,
+        lesson_id: lessonId,
+        concept: selectedConcept,
+        history: feynmanHistory,
+        message,
+        state: v3State,
+      });
+      bubble.classList.remove('msg-loading');
+      bubble.textContent = '';
+
+      // Bước 2 ENCOURAGE — một dòng nhỏ, bám nội dung vừa nghe
+      if (result.encourage) {
+        const enc = document.createElement('div');
+        enc.className = 'v3-encourage';
+        enc.textContent = result.encourage;
+        bubble.appendChild(enc);
+      }
+      // Bước 3 MIRROR — tách khỏi câu hỏi để thấy rõ AI đang phản chiếu gì
+      if (result.mirror) {
+        const mir = document.createElement('div');
+        mir.className = 'v3-mirror';
+        mir.textContent = result.mirror;
+        bubble.appendChild(mir);
+      }
+      // Bước 4 PROBE (hoặc kết luận khi đã chốt)
+      const main = document.createElement('div');
+      main.className = 'v3-reply';
+      main.textContent = result.reply;
+      bubble.appendChild(main);
+
+      // Bước 5 EVIDENCE CHECK
+      if (result.evidence) bubble.appendChild(buildEvidenceCard(result.evidence));
+      if (result.enforced && result.enforced.length) {
+        bubble.appendChild(buildEnforcedBox(result.enforced));
+      }
+
+      if (result.used_fallback) return; // lượt lỗi: không ghi vào lịch sử, không cập nhật state
+      v3State = result.state || v3State;
+      if (message) feynmanHistory.push({ role: 'teacher', content: message });
+      feynmanHistory.push({ role: 'student', content: result.reply });
+      renderKnowledgeState(result.next_question_type); // bước 6 + bước 7
+      scrollChatToBottom();
+    } catch (err) {
+      console.warn('Gọi /feynman/v3/reply thất bại', err);
+      bubble.textContent = 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.';
+      bubble.classList.remove('msg-loading');
+    }
+  }
+
+  // Một cửa duy nhất cho cả hai lộ trình — các chỗ gọi không cần biết đang bật cái nào
+  function askStudent(message) {
+    return useV3 ? requestStudentReplyV3(message) : requestStudentReply(message);
+  }
+
+  if (v3Toggle) {
+    v3Toggle.addEventListener('change', () => {
+      useV3 = v3Toggle.checked;
+      v3State = {};
+      renderKnowledgeState(null);
+      if (p2Mode === 'feynman') {
+        addChatMessage('system', {
+          text: useV3
+            ? '🔄 Đã bật lộ trình 8 bước — phiên bắt đầu lại từ đầu'
+            : '🔄 Đã tắt lộ trình 8 bước — quay về phiên dạy lại thường',
+        });
+        feynmanHistory = [];
+        setBusy(true);
+        askStudent('').finally(() => setBusy(false));
+      }
+    });
+  }
+
   async function startFeynmanSession(concept) {
     selectedConcept = concept;
     feynmanHistory = [];
+    v3State = {};
+    renderKnowledgeState(null);
     setMode('feynman');
     addChatMessage('system', { text: `👨‍🏫 Bắt đầu dạy lại "${concept}" — bạn là Giáo viên, AI là Học viên` });
     setBusy(true);
-    await requestStudentReply('');
+    await askStudent('');
     setBusy(false);
     renderQuickActions();
     p2Input.focus();
@@ -1325,7 +1555,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (p2Mode === 'feynman') {
       addChatMessage('user', { text, author: 'Bạn (Giáo viên)' });
       setBusy(true);
-      await requestStudentReply(text);
+      await askStudent(text);
       setBusy(false);
       renderQuickActions();
       p2Input.focus();
