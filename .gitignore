@@ -17,12 +17,11 @@ env/
 node_modules/
 npm-debug.log*
 
-# ===== Slide bài giảng có bản quyền (của giảng viên, không phải data pack hackathon) =====
-# Repo public → không đưa nguyên slide lên. Dùng nút "📄 Tải slide PDF" trên giao diện để mở file.
-Buoi3_PromptEngineering_v2_compressed.pdf
+# ===== Slide bài giảng có bản quyền =====
 codebase/frontend/lecture-pdf-data.js
 
-# ===== Kết quả test / file tạm =====
+# ===== Temp files =====
+data/slides_content_clean.txt
 *.tmp
 *.log
 test-results/
