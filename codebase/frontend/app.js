@@ -9,6 +9,11 @@
 const API_BASE = window.VLEARN_API_BASE || 'http://localhost:8000';
 const SESSION_ID = 'demo-session-1';
 let lessonName = 'Chưa tải slide';
+// Mã bộ slide đang mở = 16 ký tự hex đầu của SHA-256 file PDF. Mọi ghi chú / câu hỏi /
+// tiến độ đều gắn mã này để đổi sang slide khác không bị trộn dữ liệu theo số trang.
+let lessonId = null;
+const DEFAULT_DECK_NAME = 'Buoi3_PromptEngineering_v2_compressed';
+const LAST_DECK_KEY = 'vlearn:lastDeckId';
 
 // Backend không phản hồi -> hiện rỗng, không bịa data giả để tránh nhầm với data thật.
 const FALLBACK_ACTIVITIES = [];
@@ -33,7 +38,8 @@ async function apiGet(path) {
 }
 
 async function saveActivity(payload) {
-  const body = { session_id: SESSION_ID, lesson: lessonName, ...payload };
+  if (!lessonId) return false;
+  const body = { session_id: SESSION_ID, lesson: lessonName, lesson_id: lessonId, ...payload };
   try {
     await apiPost('/activities', body);
     reviewStale = true;
@@ -46,9 +52,86 @@ async function saveActivity(payload) {
 
 async function submitCorrection(concept, action, newRating) {
   try {
-    await apiPost('/corrections', { session_id: SESSION_ID, concept, action, new_rating: newRating ?? null });
+    await apiPost('/corrections', {
+      session_id: SESSION_ID,
+      lesson_id: lessonId,
+      concept,
+      action,
+      new_rating: newRating ?? null,
+    });
   } catch (err) {
     console.warn('submitCorrection: backend không phản hồi.', err);
+  }
+}
+
+// ---- Mã bộ slide + lưu slide đã tải lên trong trình duyệt (IndexedDB) ----
+async function computeLessonId(bytes) {
+  if (window.crypto && crypto.subtle) {
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest).slice(0, 8), (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  // Dự phòng khi trình duyệt không có crypto.subtle: FNV-1a 64-bit (khác mã SHA-256)
+  let h = 0xcbf29ce484222325n;
+  for (let i = 0; i < bytes.length; i++) {
+    h ^= BigInt(bytes[i]);
+    h = (h * 0x100000001b3n) & 0xffffffffffffffffn;
+  }
+  return `fnv${h.toString(16).padStart(16, '0')}`;
+}
+
+function openDeckDb() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('vlearn-decks', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('decks', { keyPath: 'id' });
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function putStoredDeck(id, name, bytes) {
+  try {
+    const db = await openDeckDb();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction('decks', 'readwrite');
+      tx.objectStore('decks').put({ id, name, bytes, savedAt: Date.now() });
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  } catch (err) {
+    console.warn('Không lưu được slide vào IndexedDB (link mở tab mới sẽ không có slide này).', err);
+  }
+}
+
+async function getStoredDeck(id) {
+  try {
+    const db = await openDeckDb();
+    const record = await new Promise((resolve, reject) => {
+      const req = db.transaction('decks', 'readonly').objectStore('decks').get(id);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    });
+    db.close();
+    return record;
+  } catch (err) {
+    console.warn('Không đọc được slide từ IndexedDB.', err);
+    return null;
+  }
+}
+
+function readLastDeckId() {
+  try {
+    return localStorage.getItem(LAST_DECK_KEY);
+  } catch (err) {
+    return null;
+  }
+}
+
+function writeLastDeckId(id) {
+  try {
+    localStorage.setItem(LAST_DECK_KEY, id);
+  } catch (err) {
+    // chế độ riêng tư / chặn storage: bỏ qua, chỉ mất tính năng nhớ bộ slide
   }
 }
 
@@ -292,14 +375,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function loadPdf(data, name) {
+  // persist: cất slide vào IndexedDB để tab mới (link "📖 Trang X") mở lại đúng bộ slide
+  async function loadPdf(data, name, { persist = false } = {}) {
+    let newLessonId;
     try {
-      pdfDoc = await pdfjsLib.getDocument({ data }).promise;
+      newLessonId = await computeLessonId(data);
+      // pdf.js có thể chuyển (detach) buffer sang worker -> đưa bản sao
+      pdfDoc = await pdfjsLib.getDocument({ data: data.slice() }).promise;
     } catch (err) {
       console.warn('Load PDF failed', err);
       showToast('⚠️ Không mở được file PDF này.');
       return false;
     }
+    if (persist) await putStoredDeck(newLessonId, name, data);
+    writeLastDeckId(newLessonId);
+    const lessonChanged = newLessonId !== lessonId;
+    lessonId = newLessonId;
     lessonName = name.replace(/\.pdf$/i, '');
     slideLessonTitle.textContent = lessonName;
     pdfEmptyState.style.display = 'none';
@@ -307,14 +398,24 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPageNo = 0; // ép setCurrentPage(1) chạy dù đang là giá trị mặc định
     await buildPageWraps();
     setCurrentPage(1);
+    if (lessonChanged) onLessonChanged();
     return true;
+  }
+
+  // Đổi sang bộ slide khác: dữ liệu học (nhật ký, danh sách ôn, chat) phải theo bộ slide mới
+  function onLessonChanged() {
+    reviewStale = true;
+    currentHighlightText = '';
+    hideLiveActionBar();
+    loadActivities();
+    resetPhase2Chat();
   }
 
   pdfFileInput.addEventListener('change', async () => {
     const file = pdfFileInput.files[0];
     if (!file) return;
     const data = new Uint8Array(await file.arrayBuffer());
-    const ok = await loadPdf(data, file.name);
+    const ok = await loadPdf(data, file.name, { persist: true });
     if (ok) showToast(`📄 Đã mở "${lessonName}" (${pdfDoc.numPages} trang). Bôi đen chỗ cần lưu ý!`);
   });
 
@@ -333,17 +434,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
   }
 
-  if (typeof LECTURE_PDF_BASE64 !== 'undefined') {
-    loadPdf(base64ToUint8Array(LECTURE_PDF_BASE64), 'Buoi3_PromptEngineering_v2_compressed').then((ok) => {
-      if (!ok) return;
-      if (pendingSlideJump) {
-        jumpToSlide(pendingSlideJump);
-        showToast(`📖 Đang xem lại Trang ${pendingSlideJump}`);
-        pendingSlideJump = null;
-      } else {
-        showToast(`📄 Đã tải sẵn slide bài giảng (${pdfDoc.numPages} trang). Bôi đen chỗ cần lưu ý!`);
-      }
-    });
+  let pendingDeckId = null; // mã bộ slide trong link "#slide=N&deck=..."
+
+  // Mở trang: ưu tiên bộ slide trong link, rồi bộ slide dùng lần trước, cuối cùng slide mặc định
+  async function loadInitialDeck() {
+    const wantedId = pendingDeckId || readLastDeckId();
+    let ok = false;
+    if (wantedId) {
+      const stored = await getStoredDeck(wantedId);
+      if (stored) ok = await loadPdf(stored.bytes, stored.name);
+    }
+    if (!ok && typeof LECTURE_PDF_BASE64 !== 'undefined') {
+      ok = await loadPdf(base64ToUint8Array(LECTURE_PDF_BASE64), DEFAULT_DECK_NAME);
+    }
+    if (!ok) return;
+
+    if (pendingDeckId && pendingDeckId !== lessonId) {
+      showToast('⚠️ Trình duyệt này chưa có bộ slide của link. Bấm "📄 Tải slide PDF" để mở đúng file rồi thử lại.');
+      pendingSlideJump = null;
+      return;
+    }
+    if (pendingSlideJump) {
+      jumpToSlide(pendingSlideJump);
+      showToast(`📖 Đang xem lại Trang ${pendingSlideJump} — ${lessonName}`);
+      pendingSlideJump = null;
+    } else {
+      showToast(`📄 Đã mở "${lessonName}" (${pdfDoc.numPages} trang). Bôi đen chỗ cần lưu ý!`);
+    }
   }
 
   let resizeTimer = null;
@@ -657,8 +774,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadActivities() {
+    if (!lessonId) {
+      renderActivityLog([]);
+      return;
+    }
     try {
-      const items = await apiGet(`/sessions/${SESSION_ID}/activities`);
+      const items = await apiGet(`/sessions/${SESSION_ID}/activities?lesson_id=${encodeURIComponent(lessonId)}`);
       renderActivityLog(items);
     } catch (err) {
       console.warn('loadActivities: dùng data giả vì backend không phản hồi.', err);
@@ -919,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setBusy(true);
     const loading = addChatMessage('ai', { text: 'Đang phân tích ghi chú và câu hỏi buổi học...', loading: true });
     try {
-      const data = await apiPost(`/sessions/${SESSION_ID}/review`, {});
+      const data = await apiPost(`/sessions/${SESSION_ID}/review`, { lesson_id: lessonId });
       reviewStale = false;
       loading.closest('.msg-row').remove();
       addCardMessage(buildReviewCard(data));
@@ -939,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Mở slide ở tab mới (giữ nguyên khung chat ôn tập ở tab hiện tại)
   function goToSlideFromReview(slideNo) {
-    const url = `${window.location.href.split('#')[0]}#slide=${slideNo}`;
+    const url = `${window.location.href.split('#')[0]}#slide=${slideNo}&deck=${lessonId}`;
     window.open(url, '_blank', 'noopener');
   }
 
@@ -949,6 +1070,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const result = await apiPost('/feynman/reply', {
         session_id: SESSION_ID,
+        lesson_id: lessonId,
         concept: selectedConcept,
         history: feynmanHistory,
         message,
@@ -1074,6 +1196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const result = await apiPost('/feynman/summary', {
         session_id: SESSION_ID,
+        lesson_id: lessonId,
         concept: selectedConcept,
         history: feynmanHistory,
       });
@@ -1132,7 +1255,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubble = addChatMessage('ai', { text: 'Đang xem lại quá trình học của bạn...', loading: true });
     let result = null;
     try {
-      result = await apiPost('/chat', { session_id: SESSION_ID, message: text, history: p2ChatHistory });
+      result = await apiPost('/chat', {
+        session_id: SESSION_ID,
+        lesson_id: lessonId,
+        message: text,
+        history: p2ChatHistory,
+      });
     } catch (err) {
       console.warn('Gọi /chat thất bại', err);
       bubble.textContent = 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.';
@@ -1162,6 +1290,13 @@ document.addEventListener('DOMContentLoaded', () => {
   p2Input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleP2Send();
   });
+
+  function resetPhase2Chat() {
+    p2Messages.innerHTML = '';
+    p2ChatHistory = [];
+    exitFeynmanMode();
+    if (simScreenAfterClass.classList.contains('active')) onEnterPhase2();
+  }
 
   // Vào Giai đoạn 2: chỉ chào, chờ người dùng tự hỏi (không tự gửi "hôm nay ôn gì")
   function onEnterPhase2() {
@@ -1193,17 +1328,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3200);
   }
 
-  // Initial load: hiện slide đầu tiên + Nhật ký buổi học (Bước 5) đọc từ backend
-
-  loadActivities();
-
-  // Deep-link qua URL hash: #afterclass (Giai đoạn 2), #slide=10 (mở slide trang 10)
-  const slideHash = window.location.hash.match(/^#slide=(\d+)$/);
+  // Deep-link qua URL hash: #afterclass (Giai đoạn 2), #slide=10&deck=<mã bộ slide>
+  const slideHash = window.location.hash.match(/^#slide=(\d+)(?:&deck=([\w-]+))?$/);
   if (slideHash) {
     switchSimPhase('inclass');
     pendingSlideJump = Number(slideHash[1]);
+    pendingDeckId = slideHash[2] || null;
   } else if (window.location.hash === '#afterclass') {
     switchSimPhase('afterclass');
   }
+
+  // Mở slide; nhật ký buổi học tự tải theo bộ slide sau khi có lessonId
+  loadInitialDeck();
 
 });

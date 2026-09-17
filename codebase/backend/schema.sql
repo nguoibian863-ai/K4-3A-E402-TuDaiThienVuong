@@ -4,7 +4,8 @@
 create table if not exists activities (
   id uuid primary key default gen_random_uuid(),
   session_id text not null,          -- buổi học
-  lesson text not null,
+  lesson text not null,              -- tên bài giảng (hiển thị)
+  lesson_id text,                    -- mã bộ slide: 16 ký tự đầu SHA-256 file PDF
   slide int not null,
   type text not null check (type in ('question', 'note', 'bookmark', 'progress')),
   highlight text,
@@ -17,6 +18,7 @@ create table if not exists activities (
 create table if not exists review_runs (          -- mỗi lần chạy Bước 7
   id uuid primary key default gen_random_uuid(),
   session_id text not null,
+  lesson_id text,
   model text,
   input jsonb not null,
   raw_response text,
@@ -34,5 +36,5 @@ create table if not exists corrections (           -- "Không đúng" hoặc ch�
   created_at timestamptz default now()
 );
 
-create index if not exists idx_activities_session on activities(session_id);
-create index if not exists idx_review_runs_session on review_runs(session_id, created_at desc);
+create index if not exists idx_activities_session_lesson on activities(session_id, lesson_id);
+create index if not exists idx_review_runs_session_lesson on review_runs(session_id, lesson_id, created_at desc);

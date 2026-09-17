@@ -8,7 +8,7 @@ load_dotenv()
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 from chat import chat_reply
 from db import get_client
@@ -34,6 +34,7 @@ app.add_middleware(
 class ActivityIn(BaseModel):
     session_id: str
     lesson: str
+    lesson_id: str = Field(min_length=1)  # mã bộ slide — tránh trộn ghi chú giữa các slide khác nhau
     slide: int
     type: Literal["question", "note", "bookmark", "progress"]
     highlight: Optional[str] = None
@@ -78,25 +79,31 @@ def create_activity(activity: ActivityIn):
 
 
 @app.get("/sessions/{session_id}/activities")
-def list_activities(session_id: str):
+def list_activities(session_id: str, lesson_id: str):
     db = get_client()
     rows = (
         db.table("activities")
         .select("*")
         .eq("session_id", session_id)
+        .eq("lesson_id", lesson_id)
         .order("created_at", desc=True)
         .execute()
     )
     return rows.data
 
 
+class ReviewIn(BaseModel):
+    lesson_id: str = Field(min_length=1)
+
+
 @app.post("/sessions/{session_id}/review")
-def review_session(session_id: str):
+def review_session(session_id: str, body: ReviewIn):
     db = get_client()
     rows = (
         db.table("activities")
         .select("*")
         .eq("session_id", session_id)
+        .eq("lesson_id", body.lesson_id)
         .in_("type", ["question", "note"])  # bookmark / progress không phải nội dung cần ôn
         .execute()
     )
@@ -125,6 +132,7 @@ def review_session(session_id: str):
         db.table("review_runs")
         .select("final_output")
         .eq("session_id", session_id)
+        .eq("lesson_id", body.lesson_id)
         .eq("used_fallback", False)
         .order("created_at", desc=True)
         .limit(1)
@@ -149,6 +157,7 @@ def review_session(session_id: str):
         db.table("review_runs")
         .insert({
             "session_id": session_id,
+            "lesson_id": body.lesson_id,
             "model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
             "input": {"lesson": lesson, "items": items},
             "raw_response": raw_response,
@@ -164,6 +173,7 @@ def review_session(session_id: str):
 
 class ChatIn(BaseModel):
     session_id: str
+    lesson_id: str = Field(min_length=1)
     message: str
     history: list[dict] = []
 
@@ -175,6 +185,7 @@ def chat_endpoint(body: ChatIn):
         db.table("activities")
         .select("*")
         .eq("session_id", body.session_id)
+        .eq("lesson_id", body.lesson_id)
         .order("created_at", desc=True)
         .limit(200)
         .execute()
@@ -214,17 +225,19 @@ def chat_endpoint(body: ChatIn):
 
 class CorrectionIn(BaseModel):
     session_id: str
+    lesson_id: str = Field(min_length=1)
     concept: str
     action: Literal["reject_adjustment", "re_rate"]
     new_rating: Optional[int] = None
 
 
-def _latest_concept_context(db, session_id: str, concept: str):
-    """Lấy lần chạy B7 gần nhất + mục của khái niệm (từ input đã lưu trong review_runs)."""
+def _latest_concept_context(db, session_id: str, lesson_id: str, concept: str):
+    """Lấy lần chạy B7 gần nhất CỦA BỘ SLIDE NÀY + mục của khái niệm (từ input đã lưu)."""
     last_run = (
         db.table("review_runs")
         .select("*")
         .eq("session_id", session_id)
+        .eq("lesson_id", lesson_id)
         .order("created_at", desc=True)
         .limit(1)
         .execute()
@@ -259,6 +272,7 @@ def _current_rating(items: list[dict]):
 
 class FeynmanReplyIn(BaseModel):
     session_id: str
+    lesson_id: str = Field(min_length=1)
     concept: str
     history: list[dict] = []
     message: str = ""
@@ -267,7 +281,7 @@ class FeynmanReplyIn(BaseModel):
 @app.post("/feynman/reply")
 def feynman_reply(body: FeynmanReplyIn):
     db = get_client()
-    _, _, items = _latest_concept_context(db, body.session_id, body.concept)
+    _, _, items = _latest_concept_context(db, body.session_id, body.lesson_id, body.concept)
     result = student_reply(body.concept, _evidence(items), body.history, body.message)
     result["current_rating"] = _current_rating(items)
     return result
@@ -275,6 +289,7 @@ def feynman_reply(body: FeynmanReplyIn):
 
 class FeynmanSummaryIn(BaseModel):
     session_id: str
+    lesson_id: str = Field(min_length=1)
     concept: str
     history: list[dict] = []
 
@@ -282,7 +297,7 @@ class FeynmanSummaryIn(BaseModel):
 @app.post("/feynman/summary")
 def feynman_summary(body: FeynmanSummaryIn):
     db = get_client()
-    _, _, items = _latest_concept_context(db, body.session_id, body.concept)
+    _, _, items = _latest_concept_context(db, body.session_id, body.lesson_id, body.concept)
     result = session_summary(body.concept, _evidence(items), body.history)
     result["current_rating"] = _current_rating(items)
     return result
@@ -291,7 +306,7 @@ def feynman_summary(body: FeynmanSummaryIn):
 @app.post("/corrections")
 def create_correction(correction: CorrectionIn):
     db = get_client()
-    run, entry, items = _latest_concept_context(db, correction.session_id, correction.concept)
+    run, entry, items = _latest_concept_context(db, correction.session_id, correction.lesson_id, correction.concept)
 
     if correction.action == "re_rate" and correction.new_rating is not None:
         note_ids = [it["id"] for it in items if it.get("type") == "note"]
@@ -303,6 +318,7 @@ def create_correction(correction: CorrectionIn):
             db.table("activities").insert({
                 "session_id": correction.session_id,
                 "lesson": first.get("lesson") or "",
+                "lesson_id": correction.lesson_id,
                 "slide": first.get("slide") or 0,
                 "type": "note",
                 "highlight": correction.concept,
