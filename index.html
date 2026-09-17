@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLearn Smart Workflow - Học trên lớp & Ôn tập cá nhân hóa cùng AI</title>
+  <meta name="description" content="Mockup UI tương tác cho workflow Học trên lớp - Ghi chú thông minh - Dạy lại cho AI - Ôn tập cá nhân hóa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top App Navigation / Banner -->
+  <header class="main-header">
+    <div class="header-content">
+      <div class="brand-badge">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10"></path>
+            <path d="M6 10h10"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">VLearn <strong>Smart Learning</strong></span>
+          <span class="hackathon-tag">Batch 04 · Lớp 3A · E402</span>
+        </div>
+      </div>
+
+      <!-- Mode View Toggle -->
+      <div class="view-switcher" role="tablist">
+        <button id="btn-mode-diagram" class="switch-btn active" role="tab" aria-selected="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+          </svg>
+          Sơ đồ Quy trình (Workflow Board)
+        </button>
+        <button id="btn-mode-sim" class="switch-btn" role="tab" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Mô phỏng Thực tế (Live Simulation)
+        </button>
+      </div>
+
+      <!-- Stage Quick Switcher -->
+      <div class="stage-nav">
+        <button id="nav-stage-1" class="stage-pill active" data-target="stage1">
+          <span class="stage-num">1</span>
+          <span>Trong lớp</span>
+        </button>
+        <button id="nav-stage-2" class="stage-pill" data-target="stage2">
+          <span class="stage-num">2</span>
+          <span>Sau buổi học</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title Section -->
+  <div class="page-title-banner">
+    <div class="container">
+      <h1 class="main-title">
+        Workflow: Học trên lớp – Ghi chú thông minh – Dạy lại cho AI – Ôn tập cá nhân hóa
+      </h1>
+      <p class="main-subtitle">
+        Biến những khoảnh khắc "chưa hiểu" thành dữ liệu học tập có giá trị, giúp bạn hiểu sâu hơn và nhớ lâu hơn.
+      </p>
+    </div>
+  </div>
+
+  <main class="main-container">
+
+    <!-- ================================================================= -->
+    <!-- VIEW 1: WORKFLOW BOARD (Bố cục chuẩn xác theo sơ đồ đề bài)       -->
+    <!-- ================================================================= -->
+    <div id="view-diagram" class="view-panel active">
+
+      <!-- GIAI ĐOẠN 1: TRONG LỚP -->
+      <section id="diagram-stage-1" class="stage-card stage-in-class">
+        <div class="stage-header">
+          <div class="stage-title-wrap">
+            <div class="stage-icon-box in-class">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+            </div>
+            <div>
+              <span class="stage-label">GIAI ĐOẠN 1: TRONG LỚP</span>
+              <span class="stage-subdesc">(Học và xử lý ngay những điểm chưa hiểu)</span>
+            </div>
+          </div>
+          <div class="stage-badge in-class">Học đến đâu, ghi nhận đến đó</div>
+        </div>
+
+        <div class="steps-grid steps-stage-1">
+
+          <!-- BƯỚC 1: Mở slide bài học -->
+          <div class="step-card" id="step-1-card">
+            <div class="step-head">
+              <span class="step-index">1</span>
+              <div class="step-meta">
+                <h3 class="step-title">Mở slide bài học</h3>
+                <p class="step-desc">Học viên học trên VLearn như bình thường.</p>
+              </div>
+            </div>
+            <div class="step-preview mini-slide-box">
+              <div class="mini-app-bar">
+                <span class="mini-app-title">VLearn</span>
+                <span class="mini-dots">● ● ●</span>
+              </div>
+              <div class="mini-slide-body">
+                <div class="mini-sidebar">
+                  <div class="mini-thumb"></div>
+                  <div class="mini-thumb active"></div>
+                  <div class="mini-thumb"></div>
+                </div>
+                <div class="mini-slide-content">
+                  <span class="slide-subject">Transformer</span>
+                  <div class="slide-text-preview">
+                    <strong>1.2 Query, Key, Value</strong>
+                    <p>Self-attention computes the attention weights between tokens using Query, Key, and Value matrices.</p>
+                  </div>
+                  <span class="slide-counter">12 / 30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 2: Bôi đen đoạn cần thao tác -->
+          <div class="step-card highlight-step" id="step-2-card">
+            <div class="step-head">
+              <span class="step-index active-index">2</span>
+              <div class="step-meta">
+                <h3 class="step-title">Bôi đen đoạn cần thao tác</h3>
+                <p class="step-desc">Bôi đen text, công thức hoặc khái niệm cần tìm hiểu.</p>
+              </div>
+            </div>
+            <div class="step-preview selection-box">
+              <div class="selection-text-block">
+                <span class="topic-tag">1.2 Query, Key, Value</span>
+                <p class="highlighted-text" id="demo-highlight-text">
+                  Self-attention computes the attention weights between tokens using Query, Key, and Value matrices.
+                  <span class="cursor-pointer">👆</span>
+                </p>
+              </div>
+
+              <!-- Thanh thao tác bước 2: Hỏi đáp & Ghi chú -->
+              <div class="step-2-action-bar" id="step2-action-bar">
+                <button class="act-btn btn-qa" id="trigger-step-3" title="Bấm để mở Bước 3">
+                  <div class="act-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <div class="act-text">
+                    <strong>Hỏi đáp</strong>
+                    <small>Giải thích ngay</small>
+                  </div>
+                </button>
+
+                <button class="act-btn btn-note" id="trigger-step-4" title="Bấm để mở Bước 4">
+                  <div class="act-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </div>
+                  <div class="act-text">
+                    <strong>Ghi chú</strong>
+                    <small>Lưu & đánh giá</small>
+                  </div>
+                </button>
+              </div>
+              <div class="action-hint">💡 Bấm <strong>Hỏi đáp</strong> để xem Bước 3, hoặc <strong>Ghi chú</strong> để xem Bước 4</div>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 3: Hỏi đáp (Khi không hiểu) -->
+          <div class="step-card preview-step" id="step-3-card">
+            <div class="step-head">
+              <span class="step-index">3</span>
+              <div class="step-meta">
+                <div class="step-title-row">
+                  <h3 class="step-title">Hỏi đáp (khi không hiểu)</h3>
+                  <span class="trigger-tag tag-qa">Kích hoạt từ Hỏi đáp</span>
+                </div>
+                <p class="step-desc">Đặt câu hỏi về đoạn đã bôi đen. AI giải thích ngay theo ngữ cảnh slide.</p>
+              </div>
+            </div>
+            <div class="step-preview ai-explain-card" id="ai-explain-content">
+              <div class="ai-card-header">
+                <div class="ai-avatar">🤖</div>
+                <span class="ai-title">AI Explain</span>
+                <span class="ai-live-badge">Context: Slide 12</span>
+              </div>
+              <div class="ai-card-body">
+                <p class="ai-summary">
+                  "Query (Q), Key (K) và Value (V) là ba ma trận được sử dụng để tính toán mức độ chú ý giữa các token trong self-attention. Q dùng để tìm, K dùng để so khớp và V chứa thông tin sẽ được tổng hợp..."
+                </p>
+                <details class="ai-expandable" open>
+                  <summary>
+                    <span>💡 Ví dụ minh họa (Ẩn dụ thư viện)</span>
+                  </summary>
+                  <div class="expand-content">
+                    Hãy tưởng tượng bạn vào thư viện: <strong>Query</strong> là yêu cầu tìm sách của bạn ("Học Deep Learning"), <strong>Key</strong> là nhãn đề tài dán trên gáy sách để thủ thư so khớp, còn <strong>Value</strong> chính là nội dung kiến thức trong cuốn sách bạn rút ra.
+                  </div>
+                </details>
+              </div>
+              <div class="ai-card-footer">
+                <span class="feedback-txt">Hữu ích?</span>
+                <div class="feedback-btns">
+                  <button class="icon-thumb active" id="btn-thumb-up" title="Hữu ích">👍</button>
+                  <button class="icon-thumb" id="btn-thumb-down" title="Chưa hữu ích">👎</button>
+                </div>
+                <button class="btn-quick-save" id="btn-save-ai-to-note">➕ Lưu vào Ghi chú</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 4: Ghi chú (vừa lưu, vừa phục vụ ôn tập) -->
+          <div class="step-card preview-step" id="step-4-card">
+            <div class="step-head">
+              <span class="step-index">4</span>
+              <div class="step-meta">
+                <div class="step-title-row">
+                  <h3 class="step-title">Ghi chú (vừa lưu, phục vụ ôn)</h3>
+                  <span class="trigger-tag tag-note">Kích hoạt từ Ghi chú</span>
+                </div>
+                <p class="step-desc">Sau khi bấm "Ghi chú", chọn 1 trong 2 cách lưu tùy mục đích.</p>
+              </div>
+            </div>
+            <div class="step-preview note-modal-preview">
+              <div class="note-box-header">
+                <div class="note-box-title">
+                  <span class="note-icon">📝</span>
+                  <strong>Ghi chú đoạn này</strong>
+                </div>
+                <button class="mini-close-btn" title="Đóng preview">✕</button>
+              </div>
+              <div class="quote-pill">
+                "Self-attention computes the attention weights between tokens..."
+              </div>
+              <textarea id="mock-note-input" class="mock-textarea" rows="2" placeholder="Nhập ghi chú của bạn...">Chưa hiểu rõ bản chất 3 ma trận Q, K, V khác nhau thế nào</textarea>
+              <div class="char-count">62/500</div>
+
+              <!-- Hai lựa chọn lưu -->
+              <div class="save-choices-grid">
+                <!-- Cách 1 -->
+                <div class="save-choice-card choice-link">
+                  <div class="choice-head">
+                    <span class="choice-icon">🔗</span>
+                    <strong class="choice-title">Lưu để quay lại slide</strong>
+                  </div>
+                  <p class="choice-sub">(Chỉ tạo link đến slide)</p>
+                  <p class="choice-desc">Lưu nhanh, chỉ để trỏ đến slide này sau.</p>
+                  <button class="btn-choice btn-choice-link" id="btn-save-slide-link">Lưu link slide</button>
+                </div>
+
+                <!-- Cách 2 -->
+                <div class="save-choice-card choice-learn selected">
+                  <div class="choice-head">
+                    <span class="choice-icon">📊</span>
+                    <strong class="choice-title">Lưu vào học tập</strong>
+                  </div>
+                  <p class="choice-sub">(& đánh giá mức độ hiểu)</p>
+                  <p class="choice-desc">Lưu vào hệ thống, dùng để phân tích và gợi ý ôn tập.</p>
+                  
+                  <div class="rating-picker">
+                    <div class="rating-label-row">
+                      <span>Mức độ hiểu hiện tại:</span>
+                      <strong id="rating-text-status" class="status-warning">2/5 (Chưa hiểu rõ)</strong>
+                    </div>
+                    <div class="rating-stars" id="rating-stars-container">
+                      <button class="rate-btn" data-val="1" title="Chưa hiểu">1</button>
+                      <button class="rate-btn active" data-val="2" title="Chưa hiểu rõ">2</button>
+                      <button class="rate-btn" data-val="3" title="Hiểu một phần">3</button>
+                      <button class="rate-btn" data-val="4" title="Khá tốt">4</button>
+                      <button class="rate-btn" data-val="5" title="Hiểu rõ">5</button>
+                    </div>
+                    <div class="rating-legend">
+                      <span>1: Chưa hiểu</span>
+                      <span>5: Hiểu rõ</span>
+                    </div>
+                  </div>
+
+                  <button class="btn-choice btn-choice-learn" id="btn-save-and-evaluate">
+                    <span class="btn-icon">💾</span> Lưu và đánh giá
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 5: Tiếp tục học -->
+          <div class="step-card" id="step-5-card">
+            <div class="step-head">
+              <span class="step-index">5</span>
+              <div class="step-meta">
+                <h3 class="step-title">Tiếp tục học</h3>
+                <p class="step-desc">Hệ thống tự động lưu lại các hoạt động vào Learning Activity.</p>
+              </div>
+            </div>
+            <div class="step-preview activity-log-box">
+              <div class="activity-header">
+                <span class="live-pulse"></span>
+                <strong>Nhật ký buổi học (tự động)</strong>
+              </div>
+              <ul class="activity-list" id="diagram-activity-list">
+                <li class="act-item">
+                  <span class="act-time">10:24</span>
+                  <div class="act-body">
+                    <span class="act-type badge-qa">🤖 Hỏi đáp</span>
+                    <p class="act-detail">"Tại sao cần Query, Key, Value?"</p>
+                  </div>
+                </li>
+                <li class="act-item">
+                  <span class="act-time">10:25</span>
+                  <div class="act-body">
+                    <span class="act-type badge-link">🔗 Ghi chú (link slide)</span>
+                    <p class="act-detail">Slide 12 - Query, Key, Value</p>
+                  </div>
+                </li>
+                <li class="act-item highlight-entry" id="log-entry-2-5">
+                  <span class="act-time">10:26</span>
+                  <div class="act-body">
+                    <span class="act-type badge-eval">📊 Ghi chú (đánh giá 2/5)</span>
+                    <p class="act-detail">"Chưa hiểu rõ, xem ví dụ thêm"</p>
+                  </div>
+                </li>
+                <li class="act-item">
+                  <span class="act-time">10:40</span>
+                  <div class="act-body">
+                    <span class="act-type badge-qa">🤖 Hỏi đáp</span>
+                    <p class="act-detail">"Multi-head attention là gì?"</p>
+                  </div>
+                </li>
+              </ul>
+              <div class="activity-more">... Hệ thống ghi nhận liên tục theo bài học</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sợi dây kết nối với Database -->
+        <div class="database-connector-bar">
+          <div class="db-badge">
+            <div class="db-icon">🗄️</div>
+            <div class="db-text">
+              <strong>Learning Activity Database</strong>
+              <small>Lưu: đoạn highlight, câu hỏi, ghi chú, link slide, mức độ hiểu, theo từng buổi học, từng bài, từng slide.</small>
+            </div>
+          </div>
+          <div class="data-flow-arrow">
+            <span class="flow-label">Dữ liệu được dùng để tạo lộ trình ôn tập và phiên dạy lại cho AI ➔</span>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- GIAI ĐOẠN 2: SAU BUỔI HỌC -->
+      <section id="diagram-stage-2" class="stage-card stage-after-class">
+        <div class="stage-header">
+          <div class="stage-title-wrap">
+            <div class="stage-icon-box after-class">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+              </svg>
+            </div>
+            <div>
+              <span class="stage-label">GIAI ĐOẠN 2: SAU BUỔI HỌC</span>
+              <span class="stage-subdesc">(Dạy lại cho AI và ôn tập cá nhân hóa)</span>
+            </div>
+          </div>
+          <div class="stage-badge after-class">Biến những gì đã học thành kiến thức thật sự của bạn</div>
+        </div>
+
+        <div class="steps-grid steps-stage-2">
+
+          <!-- BƯỚC 6: Hỏi AI: Hôm nay tôi cần ôn gì? -->
+          <div class="step-card" id="step-6-card">
+            <div class="step-head">
+              <span class="step-index after-index">6</span>
+              <div class="step-meta">
+                <h3 class="step-title">Hỏi AI: Hôm nay tôi cần ôn gì?</h3>
+                <p class="step-desc">Học viên mở VLearn và hỏi AI. AI dựa trên toàn bộ ghi chú và mức độ hiểu để gợi ý nội dung ôn.</p>
+              </div>
+            </div>
+            <div class="step-preview chat-prompt-preview">
+              <div class="chat-assistant-head">
+                <div class="assistant-avatar">🤖</div>
+                <strong>AI Assistant</strong>
+              </div>
+              <div class="prompt-box">
+                <input type="text" id="mock-query-input" value="Hôm nay tôi cần ôn gì?" readonly>
+                <button class="btn-send-prompt" id="btn-trigger-review-list" title="Gửi yêu cầu">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+              <div class="prompt-note">Bấm nút gửi để AI phân tích Database buổi học</div>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 7: AI tạo danh sách ôn tập -->
+          <div class="step-card" id="step-7-card">
+            <div class="step-head">
+              <span class="step-index after-index">7</span>
+              <div class="step-meta">
+                <h3 class="step-title">AI tạo danh sách ôn tập</h3>
+                <p class="step-desc">AI phân tích các ghi chú và mức độ hiểu để đề xuất nội dung cần ôn, ưu tiên phần chưa hiểu.</p>
+              </div>
+            </div>
+            <div class="step-preview review-list-preview">
+              <div class="review-box-title">
+                <strong>Nội dung cần ôn hôm nay</strong>
+              </div>
+              <div class="review-items-list">
+                <!-- Item 1: Ưu tiên cao -->
+                <div class="review-item priority-high" id="review-item-qkv">
+                  <span class="review-order order-1">1</span>
+                  <div class="review-info">
+                    <strong>Query, Key, Value</strong>
+                    <small>Bạn đánh giá: 2/5 (Chưa hiểu rõ)</small>
+                  </div>
+                  <span class="badge-priority badge-high">Ưu tiên cao</span>
+                </div>
+                <!-- Item 2: Cần xem lại -->
+                <div class="review-item priority-mid">
+                  <span class="review-order order-2">2</span>
+                  <div class="review-info">
+                    <strong>Multi-head Attention</strong>
+                    <small>Bạn đánh giá: 3/5 (Hiểu một phần)</small>
+                  </div>
+                  <span class="badge-priority badge-mid">Cần xem lại</span>
+                </div>
+                <!-- Item 3: Ôn nhẹ -->
+                <div class="review-item priority-low">
+                  <span class="review-order order-3">3</span>
+                  <div class="review-info">
+                    <strong>Positional Encoding</strong>
+                    <small>Bạn đánh giá: 4/5 (Khá tốt)</small>
+                  </div>
+                  <span class="badge-priority badge-low">Ôn nhẹ</span>
+                </div>
+              </div>
+              <button class="btn-start-feynman" id="btn-start-feynman">
+                <span>🎯 Bắt đầu dạy AI phần Query, Key, Value</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 8: Dạy lại kiến thức cho AI -->
+          <div class="step-card" id="step-8-card">
+            <div class="step-head">
+              <span class="step-index after-index">8</span>
+              <div class="step-meta">
+                <h3 class="step-title">Dạy lại kiến thức cho AI</h3>
+                <p class="step-desc">Bạn đóng vai "giáo viên" và giải thích lại các concept đã được gợi ý.</p>
+              </div>
+            </div>
+            <div class="step-preview roleplay-preview">
+              <div class="role-interaction">
+                <!-- User (Giáo viên) -->
+                <div class="role-bubble user-bubble">
+                  <div class="role-header">
+                    <span class="role-avatar">👨‍🏫</span>
+                    <strong>Bạn (giáo viên)</strong>
+                  </div>
+                  <p class="role-text">
+                    "Để mình giải thích về Query, Key, Value nhé..."
+                  </p>
+                </div>
+                <!-- AI (Học viên) -->
+                <div class="role-bubble ai-bubble">
+                  <div class="role-header">
+                    <span class="role-avatar">🤖</span>
+                    <strong>AI (học viên)</strong>
+                  </div>
+                  <p class="role-text">
+                    "Cảm ơn! Mình có vài câu hỏi:<br>
+                    1. Tại sao cần 3 ma trận?<br>
+                    2. Query khác Key ở điểm nào?"
+                  </p>
+                </div>
+              </div>
+              <div class="quick-teach-action">
+                <button class="btn-quick-reply" id="btn-demo-reply">💬 Nhấn để đóng vai trả lời AI</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 9: AI hỏi ngược và phản hồi -->
+          <div class="step-card" id="step-9-card">
+            <div class="step-head">
+              <span class="step-index after-index">9</span>
+              <div class="step-meta">
+                <h3 class="step-title">AI hỏi ngược & phản hồi</h3>
+                <p class="step-desc">AI đóng vai học viên: đặt câu hỏi, yêu cầu ví dụ, nêu tình huống, chỉ ra chỗ còn thiếu/sai.</p>
+              </div>
+            </div>
+            <div class="step-preview socratic-preview">
+              <div class="socratic-title">
+                <strong>Một số dạng phản hồi của AI:</strong>
+              </div>
+              <ul class="socratic-list">
+                <li class="socratic-item">
+                  <span class="soc-icon">🎯</span>
+                  <div>
+                    <strong>Đặt câu hỏi</strong> để bạn giải thích sâu hơn
+                  </div>
+                </li>
+                <li class="socratic-item">
+                  <span class="soc-icon">📊</span>
+                  <div>
+                    <strong>Đưa ra tình huống</strong> thực tế
+                  </div>
+                </li>
+                <li class="socratic-item">
+                  <span class="soc-icon">⚠️</span>
+                  <div>
+                    <strong>Chỉ ra chỗ hiểu sai</strong> (nếu có)
+                  </div>
+                </li>
+                <li class="socratic-item">
+                  <span class="soc-icon">💡</span>
+                  <div>
+                    <strong>Gợi ý</strong> khi bạn bị bí (không đưa đáp án)
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="arrow-divider">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <!-- BƯỚC 10: Kết thúc và cập nhật tiến độ -->
+          <div class="step-card" id="step-10-card">
+            <div class="step-head">
+              <span class="step-index after-index">10</span>
+              <div class="step-meta">
+                <h3 class="step-title">Kết thúc & cập nhật tiến độ</h3>
+                <p class="step-desc">AI tổng kết những gì bạn đã hiểu tốt và những phần cần xem lại. Cập nhật mức độ hiểu mới.</p>
+              </div>
+            </div>
+            <div class="step-preview summary-preview">
+              <div class="summary-head">
+                <span class="summary-badge">🏁 Tổng kết phiên ôn</span>
+              </div>
+              <div class="summary-section good-section">
+                <div class="sec-title">
+                  <span class="check-icon">✅</span>
+                  <strong>Đã hiểu tốt</strong>
+                </div>
+                <ul class="sec-list">
+                  <li>Khái niệm cơ bản Q, K, V</li>
+                  <li>Cách tính attention score</li>
+                </ul>
+              </div>
+              <div class="summary-section review-section">
+                <div class="sec-title">
+                  <span class="warn-icon">🔄</span>
+                  <strong>Cần xem lại</strong>
+                </div>
+                <ul class="sec-list">
+                  <li>Tại sao cần 3 ma trận Q, K, V</li>
+                  <li>Ứng dụng trong mô hình lớn</li>
+                </ul>
+              </div>
+              <div class="score-progress-update">
+                <span>Cập nhật đánh giá:</span>
+                <strong class="score-transition">2/5 ➔ <span class="score-new">4/5</span> ✨</strong>
+              </div>
+              <button class="btn-back-review" id="btn-back-review-list">Quay lại danh sách ôn tập</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FOOTER KẾT QUẢ -->
+      <footer class="results-footer">
+        <div class="results-container">
+          <div class="results-header">
+            <div class="results-icon">🎯</div>
+            <h2 class="results-title">KẾT QUẢ</h2>
+          </div>
+          <div class="results-grid">
+            <div class="result-pill">
+              <span class="pill-check">✔</span>
+              <span>Dễ dàng xử lý chỗ chưa hiểu ngay trong lớp</span>
+            </div>
+            <div class="result-pill">
+              <span class="pill-check">✔</span>
+              <span>Ghi chú có cấu trúc, phục vụ ôn tập</span>
+            </div>
+            <div class="result-pill">
+              <span class="pill-check">✔</span>
+              <span>Học chủ động hơn qua việc dạy lại cho AI</span>
+            </div>
+            <div class="result-pill">
+              <span class="pill-check">✔</span>
+              <span>Tiết kiệm thời gian và nhớ lâu hơn</span>
+            </div>
+          </div>
+          <div class="slogan-badge">
+            <em>Học ít hơn nhưng hiểu sâu hơn!</em>
+          </div>
+        </div>
+      </footer>
+
+    </div><!-- End #view-diagram -->
+
+
+    <!-- ================================================================= -->
+    <!-- VIEW 2: LIVE SIMULATION (Mô phỏng app thực tế có người dùng thật)  -->
+    <!-- ================================================================= -->
+    <div id="view-sim" class="view-panel">
+      
+      <div class="sim-container">
+        <!-- Stage Tabs in Simulation -->
+        <div class="sim-phase-nav">
+          <button class="sim-phase-btn active" id="sim-tab-inclass">
+            <span class="phase-badge">Giai đoạn 1</span>
+            <strong>📚 Trong lớp: Học slide & Xử lý ngay điểm khó</strong>
+          </button>
+          <button class="sim-phase-btn" id="sim-tab-afterclass">
+            <span class="phase-badge">Giai đoạn 2</span>
+            <strong>🌙 Sau buổi học: Ôn tập & Dạy lại cho AI (Feynman)</strong>
+          </button>
+        </div>
+
+        <!-- SIMULATION PHASE 1: VLearn Lecture Room -->
+        <div id="sim-screen-inclass" class="sim-screen active">
+          
+          <div class="vlearn-classroom-layout">
+            <!-- Left Lecture Thumbnails -->
+            <aside class="lecture-sidebar">
+              <div class="sidebar-top">
+                <span class="vlearn-logo">VLearn</span>
+                <span class="course-code">AI-20k</span>
+              </div>
+              <div class="slides-thumb-list">
+                <div class="thumb-card">
+                  <span class="thumb-no">10</span>
+                  <div class="thumb-wire">Attention Mechanism</div>
+                </div>
+                <div class="thumb-card">
+                  <span class="thumb-no">11</span>
+                  <div class="thumb-wire">Scaled Dot-Product</div>
+                </div>
+                <div class="thumb-card current">
+                  <span class="thumb-no">12</span>
+                  <div class="thumb-wire">Query, Key, Value</div>
+                  <span class="active-dot"></span>
+                </div>
+                <div class="thumb-card">
+                  <span class="thumb-no">13</span>
+                  <div class="thumb-wire">Multi-head Attention</div>
+                </div>
+                <div class="thumb-card">
+                  <span class="thumb-no">14</span>
+                  <div class="thumb-wire">Positional Encoding</div>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Center Slide Presentation Stage -->
+            <main class="slide-stage">
+              <div class="slide-stage-header">
+                <div class="breadcrumb">
+                  <span>Bài 4: Deep Learning for NLP</span> ➔ <strong>Transformer Architecture</strong>
+                </div>
+                <div class="slide-pagination">
+                  <button class="nav-page-btn" title="Slide trước">◀</button>
+                  <span class="page-current">Slide <strong>12</strong> / 30</span>
+                  <button class="nav-page-btn" title="Slide sau">▶</button>
+                </div>
+              </div>
+
+              <!-- Real Slide Frame -->
+              <div class="actual-slide-canvas" id="slide-canvas">
+                <div class="slide-watermark">VLearn LMS · Khóa K4</div>
+                <h2 class="slide-heading">1.2 Query, Key, Value trong Transformer</h2>
+                
+                <p class="slide-lead">
+                  Trong cơ chế Self-Attention, mỗi token vector đầu vào được chiếu qua 3 không gian biểu diễn khác nhau thông qua các trọng số học được $W^Q, W^K, W^V$:
+                </p>
+
+                <!-- Highlightable Text Container -->
+                <div class="interactive-highlight-zone" id="selectable-text-zone">
+                  <div class="highlight-text-content" id="slide-text-target">
+                    Self-attention computes the attention weights between tokens using Query, Key, and Value matrices.
+                  </div>
+
+                  <!-- Floating Action Bar at Step 2 -->
+                  <div class="live-action-popup" id="live-action-bar">
+                    <div class="popup-arrow"></div>
+                    <button class="popup-btn btn-qa-live" id="live-btn-qa">
+                      <span class="btn-icon">🤖</span>
+                      <div class="btn-labels">
+                        <strong>Hỏi đáp</strong>
+                        <small>Giải thích ngay</small>
+                      </div>
+                    </button>
+                    <div class="divider-v"></div>
+                    <button class="popup-btn btn-note-live" id="live-btn-note">
+                      <span class="btn-icon">📝</span>
+                      <div class="btn-labels">
+                        <strong>Ghi chú</strong>
+                        <small>Lưu & đánh giá</small>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="slide-diagram-visual">
+                  <div class="vector-box query-box">
+                    <span class="vec-label">Query (Q)</span>
+                    <span class="vec-desc">Vector tìm kiếm</span>
+                  </div>
+                  <span class="math-op">✕</span>
+                  <div class="vector-box key-box">
+                    <span class="vec-label">Key (K)</span>
+                    <span class="vec-desc">Vector tra cứu</span>
+                  </div>
+                  <span class="math-op">➔ Softmax ➔</span>
+                  <div class="vector-box val-box">
+                    <span class="vec-label">Value (V)</span>
+                    <span class="vec-desc">Vector nội dung</span>
+                  </div>
+                </div>
+
+                <div class="slide-tip-box">
+                  <span class="tip-icon">💡</span>
+                  <span><strong>Mẹo thực hành:</strong> Hãy thử bôi đen câu định nghĩa tiếng Anh ở trên để gọi trợ lý AI giải thích hoặc lưu ghi chú đánh giá độ hiểu!</span>
+                </div>
+              </div>
+
+              <!-- In-Slide Triggered Overlays (Step 3 & Step 4) -->
+              
+              <!-- STEP 3 DRAWER: AI EXPLAIN -->
+              <div class="live-drawer-explain" id="live-step-3-drawer">
+                <div class="drawer-header">
+                  <div class="ai-badge-group">
+                    <span class="ai-avatar-sm">🤖</span>
+                    <div>
+                      <h4>AI Explain (Bước 3)</h4>
+                      <small>Giải thích theo ngữ cảnh Slide 12</small>
+                    </div>
+                  </div>
+                  <button class="close-drawer-btn" id="close-step-3-drawer">✕</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="ai-speech-bubble">
+                    <p>
+                      <strong>Query (Q), Key (K) và Value (V)</strong> là ba ma trận được biến đổi từ từ gốc để tính toán mức độ chú ý giữa các token trong self-attention.
+                    </p>
+                    <ul class="key-points-list">
+                      <li><strong>Q (Query):</strong> Đại diện cho "thông tin mà từ hiện tại đang tìm kiếm".</li>
+                      <li><strong>K (Key):</strong> Đại diện cho "đặc trưng của từ khác" để so khớp mức độ liên quan.</li>
+                      <li><strong>V (Value):</strong> Chứa nội dung thông tin thực sự sẽ được tổng hợp lại theo trọng số attention.</li>
+                    </ul>
+                  </div>
+
+                  <div class="analogy-box">
+                    <div class="analogy-title">📖 Ví dụ ẩn dụ đời thường:</div>
+                    <p>
+                      Như việc tra cứu YouTube: Bạn gõ từ khóa tìm kiếm (<strong>Query</strong>), thuật toán so khớp từ khóa này với tiêu đề/tag các video (<strong>Key</strong>), và khi tìm thấy video phù hợp nhất, bạn sẽ xem toàn bộ nội dung video đó (<strong>Value</strong>).
+                    </p>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <div class="useful-section">
+                    <span>Bạn thấy hữu ích chứ?</span>
+                    <button class="btn-pill-thumb active">👍 Rất rõ</button>
+                    <button class="btn-pill-thumb">👎 Cần ví dụ khác</button>
+                  </div>
+                  <button class="btn-primary-action" id="drawer-save-to-notes-btn">
+                    📝 Chuyển sang Bước 4: Lưu ghi chú & đánh giá
+                  </button>
+                </div>
+              </div>
+
+              <!-- STEP 4 MODAL: GHI CHÚ ĐOẠN NÀY -->
+              <div class="live-modal-backdrop" id="live-step-4-modal">
+                <div class="live-modal-content">
+                  <div class="modal-head">
+                    <div class="modal-title-wrap">
+                      <span class="modal-icon">📝</span>
+                      <div>
+                        <h3>Ghi chú đoạn này (Bước 4)</h3>
+                        <small>Vừa lưu làm tư liệu, vừa phục vụ thuật toán ôn tập thông minh</small>
+                      </div>
+                    </div>
+                    <button class="close-modal-btn" id="close-step-4-modal">✕</button>
+                  </div>
+
+                  <div class="modal-body">
+                    <div class="quoted-reference">
+                      <span class="quote-sign">“</span>
+                      <p>Self-attention computes the attention weights between tokens using Query, Key, and Value matrices.</p>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="live-note-textarea">Ghi chú cá nhân của bạn:</label>
+                      <textarea id="live-note-textarea" rows="3" placeholder="Nhập suy nghĩ, thắc mắc hoặc ghi nhớ của bạn...">Chưa hiểu rõ bản chất 3 ma trận Q, K, V khác nhau thế nào, cần xem lại ví dụ</textarea>
+                      <div class="char-indicator">74/500 ký tự</div>
+                    </div>
+
+                    <div class="two-way-save-container">
+                      <div class="save-method-card" id="card-save-link">
+                        <div class="method-head">
+                          <span class="m-icon">🔗</span>
+                          <div>
+                            <strong>Lưu để quay lại slide</strong>
+                            <span class="m-sub">Chỉ tạo link đến slide</span>
+                          </div>
+                        </div>
+                        <p class="m-desc">Lưu nhanh, chỉ để bookmark trỏ đến slide 12 khi cần đọc lại.</p>
+                        <button class="btn-method btn-outline" id="btn-do-save-link">
+                          Lưu link slide
+                        </button>
+                      </div>
+
+                      <div class="save-method-card active" id="card-save-study">
+                        <div class="method-badge">Khuyên dùng</div>
+                        <div class="method-head">
+                          <span class="m-icon">📊</span>
+                          <div>
+                            <strong>Lưu vào học tập</strong>
+                            <span class="m-sub">& đánh giá mức độ hiểu</span>
+                          </div>
+                        </div>
+                        <p class="m-desc">Lưu vào hệ thống, dùng để phân tích và gợi ý ôn tập thông minh.</p>
+                        
+                        <div class="rating-selector-block">
+                          <span class="rating-title">Mức độ hiểu hiện tại:</span>
+                          <div class="star-group" id="live-star-group">
+                            <button class="star-btn" data-val="1">1</button>
+                            <button class="star-btn active" data-val="2">2</button>
+                            <button class="star-btn" data-val="3">3</button>
+                            <button class="star-btn" data-val="4">4</button>
+                            <button class="star-btn" data-val="5">5</button>
+                          </div>
+                          <div class="star-caption" id="live-star-caption">
+                            <span>1: Chưa hiểu</span>
+                            <strong class="curr-val-label">2/5 (Chưa hiểu rõ)</strong>
+                            <span>5: Hiểu rõ</span>
+                          </div>
+                        </div>
+
+                        <button class="btn-method btn-solid-accent" id="btn-do-save-study">
+                          💾 Lưu và đánh giá mức độ 2/5
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </main>
+
+            <!-- Right Activity Log (Step 5) -->
+            <aside class="activity-sidebar">
+              <div class="sidebar-header">
+                <div class="header-left">
+                  <span class="live-dot"></span>
+                  <h4>Nhật ký buổi học (Bước 5)</h4>
+                </div>
+                <span class="auto-tag">Tự động</span>
+              </div>
+              <p class="sidebar-sub">Ghi nhận liên tục mọi hoạt động học tập:</p>
+
+              <div class="live-activity-stream" id="live-activity-stream">
+                <div class="stream-card stream-qa">
+                  <div class="stream-time">10:24</div>
+                  <div class="stream-body">
+                    <span class="stream-tag tag-blue">🤖 Hỏi đáp</span>
+                    <p class="stream-msg">"Tại sao cần Query, Key, Value?"</p>
+                  </div>
+                </div>
+
+                <div class="stream-card stream-link">
+                  <div class="stream-time">10:25</div>
+                  <div class="stream-body">
+                    <span class="stream-tag tag-purple">🔗 Ghi chú (link slide)</span>
+                    <p class="stream-msg">Slide 12 - Query, Key, Value</p>
+                  </div>
+                </div>
+
+                <div class="stream-card stream-eval highlight-pulse" id="live-stream-2-5">
+                  <div class="stream-time">10:26</div>
+                  <div class="stream-body">
+                    <span class="stream-tag tag-amber">📊 Ghi chú (đánh giá 2/5)</span>
+                    <p class="stream-msg">"Chưa hiểu rõ, xem ví dụ thêm"</p>
+                  </div>
+                </div>
+
+                <div class="stream-card stream-qa">
+                  <div class="stream-time">10:40</div>
+                  <div class="stream-body">
+                    <span class="stream-tag tag-blue">🤖 Hỏi đáp</span>
+                    <p class="stream-msg">"Multi-head attention là gì?"</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Go to Phase 2 Prompt -->
+              <div class="shift-phase-card">
+                <div class="shift-icon">🌙</div>
+                <div class="shift-text">
+                  <strong>Đã kết thúc buổi học?</strong>
+                  <p>Dữ liệu đã sẵn sàng trong Database để bắt đầu phiên ôn tập cá nhân hóa.</p>
+                </div>
+                <button class="btn-shift-phase" id="btn-go-phase-2">
+                  Chuyển sang Giai đoạn 2 (Sau buổi học) ➔
+                </button>
+              </div>
+            </aside>
+          </div>
+
+        </div><!-- End #sim-screen-inclass -->
+
+
+        <!-- SIMULATION PHASE 2: After Class - Teach AI & Review -->
+        <div id="sim-screen-afterclass" class="sim-screen">
+          
+          <div class="afterclass-layout">
+            
+            <!-- Left Column: AI Review Recommendation (Steps 6 & 7) -->
+            <section class="afterclass-left">
+              
+              <!-- STEP 6: Ask AI -->
+              <div class="widget-card">
+                <div class="widget-header">
+                  <span class="widget-num">6</span>
+                  <div>
+                    <h4>Hỏi AI: Hôm nay tôi cần ôn gì?</h4>
+                    <small>Dựa trên toàn bộ ghi chú và mức độ hiểu từ buổi học</small>
+                  </div>
+                </div>
+                <div class="chat-input-sim">
+                  <input type="text" id="sim-ask-input" value="Hôm nay tôi cần ôn gì?" class="sim-query-field">
+                  <button class="btn-send-sim" id="btn-sim-send-ask">
+                    <span>Gửi</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- STEP 7: AI Review List -->
+              <div class="widget-card" id="sim-step-7-box">
+                <div class="widget-header">
+                  <span class="widget-num">7</span>
+                  <div>
+                    <h4>AI tạo danh sách ôn tập</h4>
+                    <small>Ưu tiên theo mức độ hiểu thấp nhất</small>
+                  </div>
+                </div>
+
+                <div class="review-plan-list">
+                  <!-- Item 1 -->
+                  <div class="plan-card priority-red active" id="plan-card-qkv">
+                    <div class="plan-left">
+                      <span class="plan-badge-no">1</span>
+                      <div class="plan-info">
+                        <strong>Query, Key, Value</strong>
+                        <span class="plan-rating">Bạn đánh giá: <span class="rating-pill red">2/5 (Chưa hiểu rõ)</span></span>
+                      </div>
+                    </div>
+                    <div class="plan-right">
+                      <span class="status-tag red">Ưu tiên cao</span>
+                      <button class="btn-choose-teach" id="btn-select-qkv">Đang chọn</button>
+                    </div>
+                  </div>
+
+                  <!-- Item 2 -->
+                  <div class="plan-card priority-yellow">
+                    <div class="plan-left">
+                      <span class="plan-badge-no">2</span>
+                      <div class="plan-info">
+                        <strong>Multi-head Attention</strong>
+                        <span class="plan-rating">Bạn đánh giá: <span class="rating-pill yellow">3/5 (Hiểu một phần)</span></span>
+                      </div>
+                    </div>
+                    <div class="plan-right">
+                      <span class="status-tag yellow">Cần xem lại</span>
+                    </div>
+                  </div>
+
+                  <!-- Item 3 -->
+                  <div class="plan-card priority-green">
+                    <div class="plan-left">
+                      <span class="plan-badge-no">3</span>
+                      <div class="plan-info">
+                        <strong>Positional Encoding</strong>
+                        <span class="plan-rating">Bạn đánh giá: <span class="rating-pill green">4/5 (Khá tốt)</span></span>
+                      </div>
+                    </div>
+                    <div class="plan-right">
+                      <span class="status-tag green">Ôn nhẹ</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="feynman-callout">
+                  <span class="callout-icon">💡</span>
+                  <span><strong>Phương pháp Feynman:</strong> Cách tốt nhất để nắm vững kiến thức là giải thích lại nó cho một người khác (ở đây là AI) hiểu!</span>
+                </div>
+              </div>
+
+            </section>
+
+            <!-- Center Column: Feynman Interactive Classroom (Steps 8 & 9) -->
+            <section class="afterclass-center">
+              
+              <div class="feynman-chat-panel">
+                <div class="chat-panel-header">
+                  <div class="roleplay-badge">
+                    <span class="icon">👨‍🏫</span>
+                    <div>
+                      <h4>Bước 8 & 9: Dạy lại kiến thức cho AI</h4>
+                      <small>Chủ đề: <strong>Query, Key, Value</strong> · Bạn là "Giáo viên" · AI là "Học viên"</small>
+                    </div>
+                  </div>
+                  <div class="ai-mode-tag">Phương pháp Socratic</div>
+                </div>
+
+                <!-- Chat Message Stream -->
+                <div class="feynman-messages" id="feynman-messages-container">
+                  <!-- User teacher message -->
+                  <div class="msg-row msg-teacher">
+                    <div class="msg-avatar">👨‍🏫</div>
+                    <div class="msg-content">
+                      <div class="msg-author">Bạn (Giáo viên)</div>
+                      <div class="msg-bubble">
+                        "Để mình giải thích về Query, Key, Value nhé! Trong Self-attention, mỗi từ sẽ được biểu diễn qua 3 ma trận Q, K, V để tính trọng số chú ý giữa các từ với nhau."
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- AI Student message -->
+                  <div class="msg-row msg-student">
+                    <div class="msg-avatar">🤖</div>
+                    <div class="msg-content">
+                      <div class="msg-author">AI (Học viên tò mò)</div>
+                      <div class="msg-bubble">
+                        "Cảm ơn thầy! Em hiểu ý tổng quan rồi, nhưng em vẫn còn 2 chỗ thắc mắc:
+                        <br><br>
+                        <strong>1. Tại sao nhất thiết phải cần đến 3 ma trận riêng biệt mà không dùng luôn 1 vector của từ?</strong><br>
+                        <strong>2. Query khác Key ở điểm nào khi so khớp?</strong>"
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Dynamically appended conversation will go here -->
+                </div>
+
+                <!-- Teacher Reply Interactive Panel -->
+                <div class="teacher-reply-panel">
+                  <div class="reply-presets-title">
+                    <span>Chọn câu trả lời của giáo viên để dạy AI:</span>
+                  </div>
+                  <div class="reply-options-list">
+                    <button class="btn-reply-option" id="btn-reply-1">
+                      🗣️ <em>"Vì 3 ma trận tách biệt các vai trò: Q là từ đi tìm, K là từ được tìm, V là thông tin mang theo..."</em>
+                    </button>
+                    <button class="btn-reply-option" id="btn-reply-2">
+                      🗣️ <em>"Nếu chỉ dùng 1 vector thì một từ so với chính nó luôn có điểm cao nhất, mô hình không học được ngữ cảnh phong phú..."</em>
+                    </button>
+                  </div>
+                  
+                  <div class="custom-reply-bar">
+                    <input type="text" id="custom-teach-input" placeholder="Hoặc nhập lời giải thích của bạn để dạy AI...">
+                    <button class="btn-send-custom" id="btn-send-teach">Giảng bài</button>
+                  </div>
+                </div>
+
+              </div>
+
+            </section>
+
+            <!-- Right Column: AI Feedback & Step 10 Summary -->
+            <section class="afterclass-right">
+              
+              <!-- STEP 9: Socratic feedback types -->
+              <div class="widget-card socratic-guide-card">
+                <div class="widget-header">
+                  <span class="widget-num">9</span>
+                  <div>
+                    <h4>AI hỏi ngược & phản hồi</h4>
+                    <small>4 dạng phản hồi thông minh</small>
+                  </div>
+                </div>
+                <div class="feedback-types-pills">
+                  <div class="fb-pill active">
+                    <span class="fb-icon">🎯</span>
+                    <strong>Đặt câu hỏi sâu hơn</strong>
+                  </div>
+                  <div class="fb-pill">
+                    <span class="fb-icon">📊</span>
+                    <strong>Tình huống thực tế</strong>
+                  </div>
+                  <div class="fb-pill">
+                    <span class="fb-icon">⚠️</span>
+                    <strong>Chỉ ra chỗ thiếu/sai</strong>
+                  </div>
+                  <div class="fb-pill">
+                    <span class="fb-icon">💡</span>
+                    <strong>Gợi ý khi bí</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 10: Session Conclusion & Mastery Update -->
+              <div class="widget-card summary-widget" id="sim-step-10-box">
+                <div class="widget-header">
+                  <span class="widget-num">10</span>
+                  <div>
+                    <h4>Kết thúc & Cập nhật tiến độ</h4>
+                    <small>Đánh giá năng lực sau phiên dạy</small>
+                  </div>
+                </div>
+
+                <div class="mastery-card">
+                  <div class="mastery-header">
+                    <span class="cup-icon">🏆</span>
+                    <strong>Tổng kết phiên dạy AI</strong>
+                  </div>
+
+                  <div class="mastery-group understand-well">
+                    <div class="group-title">
+                      <span class="icon">✅</span>
+                      <strong>Đã hiểu tốt:</strong>
+                    </div>
+                    <ul>
+                      <li>Khái niệm cơ bản ma trận Q, K, V</li>
+                      <li>Cách tính Attention Score bằng tích vô hướng</li>
+                    </ul>
+                  </div>
+
+                  <div class="mastery-group need-review">
+                    <div class="group-title">
+                      <span class="icon">🔄</span>
+                      <strong>Cần xem lại thêm:</strong>
+                    </div>
+                    <ul>
+                      <li>Ứng dụng thực tế trong mô hình kích thước lớn</li>
+                    </ul>
+                  </div>
+
+                  <div class="mastery-delta">
+                    <span class="delta-label">Cập nhật mức độ hiểu mới:</span>
+                    <div class="delta-numbers">
+                      <span class="old-score">2/5 (Chưa hiểu rõ)</span>
+                      <span class="arrow-right">➔</span>
+                      <span class="new-score">4/5 (Khá tốt) ✨</span>
+                    </div>
+                  </div>
+
+                  <button class="btn-return-plan" id="btn-finish-and-refresh">
+                    Quay lại danh sách ôn tập
+                  </button>
+                </div>
+              </div>
+
+            </section>
+
+          </div>
+
+        </div><!-- End #sim-screen-afterclass -->
+
+      </div>
+
+    </div><!-- End #view-sim -->
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
