@@ -1,0 +1,41 @@
+respondent_id,role,question_id,response_code,answer_summary,confidence,source_date
+R01,student,Q5,score_5,"Mức độ hiệu quả của self-explanation được đánh giá 5/5; cần tự giải thích để nhận ra chỗ còn hổng.",high,2026-09-17
+R01,student,Q6,open,"Học xong video thấy hiểu, nhưng làm lab thì mất phương hướng và không biết áp dụng đúng logic.",high,2026-09-17
+R01,student,Q7,never,"Chưa từng tự giải thích; học xong thường muộn nên không ai để hỏi hoặc giải thích lại.",medium,2026-09-17
+R01,student,Q8,copy_to_ai,"Copy báo lỗi vào ChatGPT/Claude để giải thích và sửa code cho mình.",high,2026-09-17
+R01,student,Q9,positive_but_worried,"Ý tưởng hay vì buộc mình nhớ logic, nhưng lo AI hỏi lan man hoặc không sửa lỗi sai đúng hướng.",high,2026-09-17
+R02,student,Q5,score_3,"Đánh giá 3/5; tự giải thích có ích nhưng chưa thấy rõ hiệu quả trong thực tế.",medium,2026-09-17
+R02,student,Q6,open,"Học về Overfitting và Regularization tưởng hiểu, nhưng khi thay đổi tham số L1/L2 trong quiz thì làm sai hết.",high,2026-09-17
+R02,student,Q7,internally_rehearse,"Mình hay nhẩm lại trong đầu khi chạy xe, nhưng gặp từ chuyên ngành là ấp úng phải xem lại tài liệu.",medium,2026-09-17
+R02,student,Q8,rewatch_and_note,"Dừng video, đọc lại transcript và note lại chỗ chưa hiểu rồi hỏi bạn trên group Zalo.",high,2026-09-17
+R02,student,Q9,positive_but_worried,"Sẽ rất tốt nếu AI giúp phát hiện điểm hổng, nhưng lo AI hỏi quá máy móc và tạo áp lực.",high,2026-09-17
+R03,student,Q5,score_2,"Đánh giá 2/5; cảm thấy tính năng này khá phiền và không chắc sẽ dùng thường xuyên.",medium,2026-09-17
+R03,student,Q6,open,"Lúc vibecode thấy code chạy được tưởng hiểu, nhưng khi đổi yêu cầu lab thì không biết test ở đâu.",medium,2026-09-17
+R03,student,Q7,never,"Chưa từng thử; học xong làm lab thôi, không muốn giải thích cho người khác vì thấy mệt.",low,2026-09-17
+R03,student,Q8,skip_then_retry,"Bỏ qua đoạn đó để học tiếp và quay lại sau khi xem đoạn khác; nếu không hiểu thì chọn phần dễ hơn.",medium,2026-09-17
+R03,student,Q9,low_interest,"Mình nghĩ mình sẽ lười dùng tính năng này và thích làm quiz hơn vì nhanh hơn.",medium,2026-09-17
+R04,student,Q5,score_5,"Đánh giá 5/5; tự giải thích giúp nhận ra điểm hổng và ứng dụng thực tế.",high,2026-09-17
+R04,student,Q6,open,"Bài về RAG tưởng hiểu cách chia chunk, nhưng khi đưa vào dự án thực tế dữ liệu bảng biểu bị cắt nát nên nhận ra chưa nắm rõ.",high,2026-09-17
+R04,student,Q7,occasional,"Có, thỉnh thoảng giải thích cho bạn học cùng, nhưng không thường xuyên vì chưa quen.",high,2026-09-17
+R04,student,Q8,read_official_docs,"Đọc tài liệu chính thức của thư viện và tìm thêm bài viết hướng dẫn khi document khó hiểu.",high,2026-09-17
+R04,student,Q9,positive,"Rất thích ý tưởng này; chỉ lo AI có đủ thông minh để nhận ra logic sai và giúp chỉnh sửa đúng hướng.",high,2026-09-17
+R05,student,Q5,score_4,"Đánh giá 4/5; cảm thấy tự đặt câu hỏi phản biện có ích nhưng cần một gợi ý hợp lý để không bị lạc hướng.",high,2026-09-17
+R05,student,Q6,open,"Khi làm lab, mình đọc readme tưởng hiểu nhưng sau khi làm xong lại không biết mình đang làm gì.",medium,2026-09-17
+R05,student,Q7,never,"Chưa từng; cảm thấy mình chưa đủ giỏi để dạy lại kiến thức cho người khác.",medium,2026-09-17
+R05,student,Q8,ask_mentor_or_friends,"Mình sẽ xem tài liệu và hỏi lab code lead hoặc bạn bè khi bế tắc.",high,2026-09-17
+R05,student,Q9,unclear,"Mình không chắc AI sẽ biết khi nào mình sai và có nhắc đúng chỗ hay chỉ đưa đáp án đúng.",medium,2026-09-17
+R06,student,Q5,score_5,"Đánh giá 5/5; khi phát biểu nhưng quên ý chính thì tự giải thích giúp nhớ lại logic bài học.",high,2026-09-17
+R06,student,Q6,open,"Hoảng khi phát biểu ở lớp vì quên ý chính dù đã xem lại trên VLearn trước đó.",high,2026-09-17
+R06,student,Q7,occasional,"Thỉnh thoảng mình giải thích cho bạn bè cùng lớp và tranh luận với nhau để kiểm tra mức hiểu.",high,2026-09-17
+R06,student,Q8,search_and_verify,"Thường tra cứu lại tài liệu, kiểm tra nguồn và xác nhận thông tin trước khi tiếp tục.",medium,2026-09-17
+R06,student,Q9,moderately_positive,"Cũng được, nhưng mình muốn biết workflow của dự án và AI có thể phát hiện điểm sai trong lời giải thích không.",medium,2026-09-17
+R07,student,Q5,score_4,"Đánh giá 4/5; self-explanation có tác dụng tốt khi kết hợp với việc rút kinh nghiệm sau mỗi buổi học.",high,2026-09-17
+R07,student,Q6,open,"Cảm thấy chưa đủ tập trung khi học nên sau đó rút kinh nghiệm để cải thiện cách học cho lần sau.",medium,2026-09-17
+R07,student,Q7,selective,"Mình chỉ giải thích khi đã chắc mình hiểu; nếu chưa rõ thì sẽ hỏi giảng viên hoặc bạn bè.",medium,2026-09-17
+R07,student,Q8,search_online,"Lên mạng hoặc dùng AI để tìm hiểu và xác nhận lại thông tin khi bế tắc.",high,2026-09-17
+R07,student,Q9,positive,"Trợ lý AI đó có thể phát hiện chỗ sai và giúp mình nhận ra phần chưa để ý tới.",high,2026-09-17
+R08,student,Q5,score_5,"Đánh giá 5/5; khi gặp câu hỏi biến thể thì chỉ cần giải thích lại mới thấy mình hiểu thật hay chỉ nhớ cách làm.",high,2026-09-17
+R08,student,Q6,open,"Có lần học xong một bài, làm đúng câu hỏi nhưng khi gặp biến thể hoặc phải giải thích vì sao đáp án đúng thì lại lúng túng.",high,2026-09-17
+R08,student,Q7,has_tried,"Có, mình từng tự giải thích lại mà không nhìn tài liệu. Khi nói thành lời, mình nhận ra phần nào còn hổng và không biết nối các khái niệm lại với nhau.",high,2026-09-17
+R08,student,Q8,read_and_reexplain,"Đọc lại vài lần, xem ví dụ, rồi tự diễn giải theo ngôn ngữ của mình; nếu chưa hiểu thì hỏi AI hoặc tìm tài liệu bổ sung.",high,2026-09-17
+R08,student,Q9,positive_but_concerned,"Mình nghĩ điều này rất hữu ích để phát hiện phần mình tưởng hiểu nhưng chưa thật sự hiểu, nhưng lo AI hỏi quá khó hoặc quá nhiều.",high,2026-09-17
