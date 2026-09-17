@@ -8,10 +8,10 @@
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Tạ Hoàng Vinh | 2A202602543 |  |  |
+| NGÔ ĐỨC CHUNG | 2A202602985 |  |  |
+| BÙI TIẾN CƯỜNG | 2A202602539 |  |  |
+| Phạm Quang Huy | 2A202602900 |  |  |
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 
