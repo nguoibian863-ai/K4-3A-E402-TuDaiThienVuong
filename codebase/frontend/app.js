@@ -769,8 +769,9 @@ document.addEventListener('DOMContentLoaded', () => {
       body.appendChild(msg);
       card.appendChild(timeEl);
       card.appendChild(body);
-      liveActivityStream.prepend(card);
+      liveActivityStream.appendChild(card); // backend trả mới nhất trước -> mới nhất ở trên cùng
     });
+    liveActivityStream.scrollTop = 0;
   }
 
   async function loadActivities() {
