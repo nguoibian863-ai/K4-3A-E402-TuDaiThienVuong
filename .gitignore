@@ -19,6 +19,7 @@ npm-debug.log*
 
 # ===== Slide bài giảng có bản quyền =====
 codebase/frontend/lecture-pdf-data.js
+Buoi3_PromptEngineering_v2_compressed.pdf
 
 # ===== Temp files =====
 data/slides_content_clean.txt

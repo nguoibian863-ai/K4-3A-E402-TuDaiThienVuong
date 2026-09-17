@@ -205,6 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let pdfDoc = null;
   let currentPageNo = 1; // trang đang xem nhiều nhất trên màn hình (chỉ để hiển thị)
   let pageEntries = []; // [{pageNo, wrap, canvas, textLayer, rendered}]
+  // Đoạn đã lưu (ghi chú / link slide / tiến độ) để tô màu lại ngay trên slide
+  let savedHighlights = []; // [{slide, highlight, type, note, rating}]
   let renderObserver = null;
   let visibilityObserver = null;
 
@@ -242,6 +244,101 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.warn('renderTextLayer failed', err);
     }
+    applySavedHighlights(entry);
+  }
+
+  const HIGHLIGHT_TYPES = new Set(['note', 'bookmark', 'progress']);
+
+  function highlightTitle(item) {
+    if (item.type === 'note') {
+      const note = item.note ? `: ${item.note}` : '';
+      return `📊 Ghi chú (hiểu ${item.rating}/5)${note}`;
+    }
+    if (item.type === 'bookmark') return '🔗 Đã lưu link slide';
+    return '📍 Đã học đến đây';
+  }
+
+  // Tô màu các đoạn đã lưu trên lớp chữ của 1 trang. So khớp bỏ qua khoảng trắng vì
+  // chữ bôi đen có thể trải qua nhiều span / xuống dòng của pdf.js.
+  function applySavedHighlights(entry) {
+    if (!entry.rendered) return;
+    const spans = Array.from(entry.textLayer.querySelectorAll('span[role="presentation"]'));
+    spans.forEach((span) => {
+      if (span.querySelector('mark')) span.textContent = span.textContent;
+    });
+
+    const items = savedHighlights.filter((it) => it.slide === entry.pageNo);
+    if (!items.length || !spans.length) return;
+
+    let flat = '';
+    const map = []; // vị trí trong flat -> [chỉ số span, chỉ số ký tự]
+    spans.forEach((span, si) => {
+      const text = span.textContent;
+      for (let ci = 0; ci < text.length; ci++) {
+        if (/\s/.test(text[ci])) continue;
+        flat += text[ci];
+        map.push([si, ci]);
+      }
+    });
+
+    // Mỗi ký tự có thể thuộc nhiều mục (vd vừa ghi chú vừa lưu tiến độ) -> gom theo ký tự
+    const marksBySpan = new Map(); // chỉ số span -> mảng (theo ký tự) các mục phủ lên
+    items.forEach((item) => {
+      const needle = (item.highlight || '').replace(/\s+/g, '');
+      if (!needle) return;
+      const at = flat.indexOf(needle);
+      if (at < 0) return;
+      for (let k = at; k < at + needle.length; k++) {
+        const [si, ci] = map[k];
+        if (!marksBySpan.has(si)) marksBySpan.set(si, []);
+        const perChar = marksBySpan.get(si);
+        (perChar[ci] = perChar[ci] || []).push(item);
+      }
+    });
+
+    marksBySpan.forEach((perChar, si) => {
+      const span = spans[si];
+      const text = span.textContent;
+      const keyAt = (ci) => (perChar[ci] || []).map((it) => it.type).sort().join(',');
+      // Khoảng trắng kẹp giữa 2 ký tự cùng loại tô thì tô luôn, để vệt màu liền không đứt theo từ
+      for (let ci = 0; ci < text.length; ci++) {
+        if (!/\s/.test(text[ci]) || !perChar[ci - 1]) continue;
+        let next = ci;
+        while (next < text.length && /\s/.test(text[next])) next++;
+        if (next < text.length && keyAt(next) === keyAt(ci - 1)) {
+          for (let k = ci; k < next; k++) perChar[k] = perChar[ci - 1];
+        }
+        ci = next - 1;
+      }
+      span.textContent = '';
+      let pos = 0;
+      while (pos < text.length) {
+        const key = keyAt(pos);
+        let end = pos + 1;
+        while (end < text.length && keyAt(end) === key) end++;
+        const chunk = text.slice(pos, end);
+        if (!key) {
+          span.appendChild(document.createTextNode(chunk));
+        } else {
+          const covering = perChar[pos];
+          const mark = document.createElement('mark');
+          const types = [...new Set(covering.map((it) => it.type))];
+          mark.className = ['saved-hl', ...types.map((t) => `saved-hl-${t}`)].join(' ');
+          mark.title = covering.map(highlightTitle).join('\n');
+          mark.textContent = chunk;
+          span.appendChild(mark);
+        }
+        pos = end;
+      }
+    });
+  }
+
+  function setSavedHighlights(items) {
+    const withText = (items || []).filter((it) => HIGHLIGHT_TYPES.has(it.type) && it.highlight);
+    // Tiến độ chỉ có ý nghĩa ở lần lưu mới nhất (backend trả mới nhất trước)
+    const latestProgress = withText.find((it) => it.type === 'progress');
+    savedHighlights = withText.filter((it) => it.type !== 'progress' || it === latestProgress);
+    pageEntries.forEach(applySavedHighlights);
   }
 
   function renderThumbList() {
@@ -692,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
       highlight: currentHighlightText,
     });
     if (ok) {
+      window.getSelection().removeAllRanges();
       loadActivities();
       showToast(`📍 Đã lưu tiến độ: học đến Trang ${currentHighlightPageNo}. Hỏi chatbot ở Giai đoạn 2 để quay lại đây.`);
     } else {
@@ -710,6 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
       note: noteContent,
       rating: currentLiveRating,
     });
+    window.getSelection().removeAllRanges();
     loadActivities();
     showToast(`💾 Đã lưu ghi chú & đánh giá ${currentLiveRating}/5 vào Learning Activity Database!`);
   });
@@ -777,14 +876,19 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadActivities() {
     if (!lessonId) {
       renderActivityLog([]);
+      setSavedHighlights([]);
       return;
     }
     try {
+      const requestedLessonId = lessonId;
       const items = await apiGet(`/sessions/${SESSION_ID}/activities?lesson_id=${encodeURIComponent(lessonId)}`);
+      if (requestedLessonId !== lessonId) return; // đã đổi bộ slide trong lúc chờ
       renderActivityLog(items);
+      setSavedHighlights(items);
     } catch (err) {
       console.warn('loadActivities: dùng data giả vì backend không phản hồi.', err);
       renderActivityLog(FALLBACK_ACTIVITIES);
+      setSavedHighlights([]);
     }
   }
 

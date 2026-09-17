@@ -33,6 +33,14 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def no_stale_frontend(request, call_next):
+    # Buộc trình duyệt kiểm tra lại app.js / style.css mỗi lần tải, tránh chạy code cũ sau khi sửa
+    response = await call_next(request)
+    response.headers.setdefault("Cache-Control", "no-cache")
+    return response
+
+
 class ActivityIn(BaseModel):
     session_id: str
     lesson: str
@@ -180,6 +188,14 @@ class ChatIn(BaseModel):
     history: list[dict] = []
 
 
+def _short(value, limit: int = 160):
+    # Đoạn bôi đen có thể dài cả trang slide; cắt gọn để AI tập trung vào danh sách mục
+    if not isinstance(value, str):
+        return value
+    value = " ".join(value.split())
+    return value if len(value) <= limit else value[:limit].rstrip() + "…"
+
+
 @app.post("/chat")
 def chat_endpoint(body: ChatIn):
     db = get_client()
@@ -207,7 +223,7 @@ def chat_endpoint(body: ChatIn):
             {
                 "slide": r["slide"],
                 "saved_at": local_time(r["created_at"]),
-                **{f: r.get(f) for f in fields if r.get(f) is not None},
+                **{f: _short(r.get(f)) for f in fields if r.get(f) is not None},
             }
             for r in items
         ]

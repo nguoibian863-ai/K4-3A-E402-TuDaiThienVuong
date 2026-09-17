@@ -8,8 +8,51 @@ Hàm thuần: context (tiến độ, ghi chú, câu hỏi, bookmark) do main.py 
 from llm import call_llm
 from prompts import get_prompt
 
-VALID_INTENTS = {"review_list", "answer"}
+VALID_INTENTS = {"review_list", "saved_list", "answer"}
 MAX_LINKS = 5
+MAX_SAVED_LINES = 6
+
+
+def _saved_list_reply(context: dict) -> dict:
+    """Liệt kê mục đã lưu bằng code (không để AI tóm tắt) -> luôn đủ, đúng trang, không bịa."""
+    entries = [("bookmark", b) for b in context.get("bookmarks", [])]
+    entries += [("note", n) for n in context.get("notes", [])]
+    # saved_at dạng "HH:MM dd/mm/YYYY" -> sắp mới nhất trước theo (năm, tháng, ngày, giờ)
+    def sort_key(entry):
+        at = entry[1].get("saved_at") or ""
+        try:
+            hm, dmy = at.split(" ")
+            d, m, y = dmy.split("/")
+            return (y, m, d, hm)
+        except ValueError:
+            return ("", "", "", at)
+    entries.sort(key=sort_key, reverse=True)
+
+    if not entries:
+        return {
+            "reply": "Bạn chưa lưu mục nào ở bộ slide này. Ở Giai đoạn 1, bôi đen đoạn cần nhớ → "
+                     "\"Ghi chú\" → lưu link slide hoặc lưu ghi chú kèm mức hiểu.",
+            "links": [],
+        }
+
+    lines, links, seen = [], [], set()
+    for kind, item in entries[:MAX_SAVED_LINES]:
+        slide = item.get("slide")
+        if kind == "bookmark":
+            text = f'link slide — "{item.get("highlight", "")}"'
+        else:
+            quote = item.get("note") or item.get("highlight") or ""
+            text = f'ghi chú, hiểu {item.get("rating")}/5 — "{quote}"'
+        lines.append(f"- Trang {slide}: {text}")
+        if slide not in seen and len(links) < MAX_LINKS:
+            seen.add(slide)
+            links.append({"slide": slide, "label": f"Trang {slide}"})
+    more = len(entries) - MAX_SAVED_LINES
+    tail = f"\n(và {more} mục cũ hơn)" if more > 0 else ""
+    return {
+        "reply": f"Bạn đã lưu {len(entries)} mục, mới nhất trước:\n" + "\n".join(lines) + tail,
+        "links": links,
+    }
 
 
 def _fallback(reason: str) -> dict:
@@ -24,9 +67,12 @@ def _fallback(reason: str) -> dict:
 def chat_reply(context: dict, history: list[dict], message: str) -> dict:
     payload = {"context": context, "history": history[-10:], "message": message}
     try:
-        _, parsed = call_llm(get_prompt("chat"), payload)
+        _, parsed = call_llm(get_prompt("chat"), payload, temperature=0)
     except Exception:
         return _fallback("AI không phản hồi")
+
+    if isinstance(parsed, dict) and parsed.get("intent") == "saved_list":
+        return {"intent": "saved_list", **_saved_list_reply(context), "used_fallback": False}
 
     if (
         not isinstance(parsed, dict)
