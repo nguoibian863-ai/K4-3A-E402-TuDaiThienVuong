@@ -1,0 +1,425 @@
+=== SLIDE 1 ===
+AI IN ACTION · DAY 02
+Xác định bàitoáncho .
+Từ yêu cầu mơ hồ đến Problem Statement rõ ràng.
+
+=== SLIDE 2 ===
+Agenda
+— Mục tiêu: Biến yêu cầu mơ hồ thành Problem Statement rõ ràng để ra quyết định
+SÁNG CHIỀU BÀI NỘP
+KHUNG LÝ THUYẾT 4H THỰC HÀNH LAB 4H CUỐI BUỔI
+· Problem Discovery Double Diamond, HCD · Cá nhân: Tìm 5 bài toán & điền 3 Problem · Nhật ký tìm và lọc bài toán Cá nhân)
+Cards
+· Problem Statement & định lượng hóa · Problem Statement hoàn chỉnh Nhóm
+· Nhóm: Phản biện chéo, chốt 1 bài toán
+· PAIR ① AI có thêm giá trị? · Nhật ký phản tư Cá nhân)
+· Nhóm: Xác thực dữ liệu & vẽ quy trình
+· PAIR ② Automate/Augment →
+Rule/Workflow/Agent · Nhóm: Xác định giải pháp & ra quyết định
+· PAIR ③ Reward function & success criteria · Cá nhân: Viết nhật ký phản tư Reflection Log)
+· Khi AI sai & UX/HITL
+· PS hoàn chỉnh → Go/Not Yet/No-Go
+MỞ ĐẦU · AGENDA DAY 02 · 04 / 83
+
+=== SLIDE 3 ===
+Tìm đúng vấn đề trước khi tìm giải pháp
+— Mô hình Double Diamond — Don Norman / British Design Council 2005
+DIAMOND 1 — TÌM ĐÚNG VẤN ĐỀ
+Discover: Mở rộng — khảo sát vấn đề căn bản.
+Define: Thu hẹp — xác định đúng bài toán gốc.
+DIAMOND 2 — TÌM ĐÚNG GIẢI PHÁP
+Develop: Mở rộng — nhiều giải pháp tiềm năng.
+Deliver: Thu hẹp — chọn và triển khai.
+"Kỹ sư và doanh nhân được đào tạo để giải vấn đề. Nhà thiết kế được đào
+tạo để khám phá vấn đề thật."
+Giải pháp xuất sắc cho sai vấn đề có thể còn tệ hơn không có giải pháp.
+NGUỒN Don Norman — jnd.org · Design Council — The Double Diamond
+BÀI TOÁN · DOUBLE DIAMOND DAY 02 · 16 / 83
+
+=== SLIDE 4 ===
+Diamond 1 — Tìm đúng vấn đề
+— Phân kỳ để thấu hiểu sâu sắc, hội tụ để lựa chọn chính xác
+DISCOVER · PHÂN KỲ DEFINE · HỘI TỤ
+Khám phá / mở rộng góc nhìn Định nghĩa / chọn lọc dựa vào dữ liệu
+· Quan sát thực tế Observation) · Sơ đồ đồng cảm / Gom nhóm Affinity Mapping)
+· Phỏng vấn người dùng User Interview) · Kỹ thuật đặt câu hỏi 5 Whys
+· Khảo sát Survey · Ma trận Tác động – Nỗ lực Impact-Effort)
+· Nhật ký hành vi Diary Study) · Biểu quyết bằng chấm tròn Dot Voting)
+· Phân tích dữ liệu / Nhật ký hệ thống · Câu hỏi mở hướng giải quyết How Might We)
+· Bản đồ các bên liên quan Stakeholder Mapping) · Phát biểu bài toán Problem Statement)
+BÀI TOÁN · DIAMOND 1 DAY 02 · 17 / 83
+
+=== SLIDE 5 ===
+Khởi nguồn từ bài toán, không bắt đầu từ AI
+— Ba bài học thực tế về am hiểu lĩnh vực, quy mô thị trường và định vị giải pháp
+CURSOR ARTIFACT NOTEBOOKLM
+"Lệch năng lực cốt lõi" "Sản phẩm tốt ≠ Thị trường lớn" "Định vị đúng điểm đau"
+Từ bỏ mảng AI thiết kế cơ khí CAD) để Ứng dụng đọc tin tích hợp AI xuất sắc, Tập trung giải quyết nhu cầu hỏi đáp, tóm
+tập trung vào AI code editor — nơi đội nhưng quy mô thị trường quá hẹp để tắt trên tài liệu cá nhân và đối chiếu
+ngũ am hiểu sâu sắc quy trình nghiệp vụ. thương mại hóa thành công (đóng cửa nguồn gốc bằng trích dẫn.
+1/2024.
+Lộ trình: Bài toán → Quy trình vận hành → Chỉ số đo lường → Giải pháp AI
+NGUỒN Lenny's Podcast — The rise of Cursor · The Verge — Artifact · Google Blog — NotebookLM
+BÀI TOÁN · CASE STUDY DAY 02 · 22 / 83
+
+=== SLIDE 6 ===
+Tìm bài toán AI ở đâu?
+— Bắt đầu từ việc quan sát các hoạt động thực tế xung quanh
+REPETITIVE TIME-CONSUMING AI ADVANTAGE USER PAIN POINTS
+Tác vụ lặp lại Tiêu tốn thời gian Lợi thế của AI Điểm đau người dùng
+Việc diễn ra thường xuyên; Khối lượng xử lý lớn; thời gian Tác vụ đòi hỏi phân tích ngữ Ai đang gặp khó khăn, phàn
+công đoạn nào cần chuẩn hóa hao phí ở bước nào (tìm kiếm, cảnh, xử lý ngôn ngữ tự nhiên, nàn hoặc bị tắc nghẽn liên tục?
+để hướng tới tự động hóa? đọc hiểu, chờ đợi, định dạng)? tổng hợp đa nguồn.
+Tập trung nhận diện vấn đề; chưa vội đề xuất giải pháp.
+Sàng lọc bài toán sẽ diễn ra vào buổi chiều.
+BÀI TOÁN · 4 LENSES DAY 02 · 23 / 83
+
+=== SLIDE 7 ===
+Sai lầm thường gặp — Anti-patterns
+— Dấu hiệu cảnh báo bài toán chưa được định hình rõ hoặc giải pháp AI được lựa chọn quá sớm
+Ưu tiên giải pháp Solution-first) Mơ hồ hiện trạng No baseline)
+Xây dựng chatbot/agent trước khi làm rõ quy trình vận hành và điểm Không lượng hóa tổn thất hiện tại, dẫn đến mất căn cứ đánh giá hiệu
+nghẽn thực tế. quả cải tiến.
+Bỏ qua đánh giá No evaluation) Mập mờ ranh giới No boundary)
+Không thiết lập kịch bản kiểm thử, chỉ số đo lường hoặc phương án đối Không rõ phạm vi tự chủ của AI và thời điểm cần con người phê duyệt
+chứng. Human-in-the-loop).
+Nếu phát hiện mắc các sai lầm trên, hãy quay lại làm rõ Problem Statement trước khi chọn công nghệ.
+BÀI TOÁN · ANTI-PATTERNS DAY 02 · 24 / 83
+
+=== SLIDE 8 ===
+PAIR · CHƯƠNG 1 — REFRAME CÂU HỎI
+"Can we use AI to ______?"
+↓ thay bằng hai câu hỏi: ↓
+"How might we "Can AI solve this problem
+solve ______?" in a unique way?"
+Hỏi về bài toán trước, về AI sau — AI chỉ là một phương án trong nhiều phương án khả dĩ.
+Câu hỏi đúng quyết định bài toán bạn giải — và giải pháp bạn chọn.
+NGUỒN Google PAIR  Ch.1 User Needs + Defining Success
+BÀI TOÁN · PAIR REFRAME DAY 02 · 26 / 83
+
+=== SLIDE 9 ===
+Quick Problem Card
+— Khung định hình bài toán
+Bài toán 1 câu problem Vấn đề cụ thể cần giải quyết (không bao gồm giải pháp).
+Đối tượng ảnh hưởng actor Cá nhân hoặc bộ phận chịu tác động trực tiếp từ vấn đề.
+Quy trình hiện tại workflow Các bước vận hành thủ công hoặc tự động hiện tại (gồm 37 bước).
+Nút thắt & Tác động bottleneck + impact Khâu gây chậm trễ, sai sót hoặc lặp lại; hệ quả hay tổn thất cụ thể.
+Chỉ số đo thành công success metric Chỉ số định lượng cụ thể dùng để chứng minh hiệu quả cải tiến.
+Định hướng giải pháp direction No AI / Rule / Workflow / Agent / Chưa xác định.
+PROBLEM STATEMENT · QUICK CARD DAY 02 · 28 / 83
+
+=== SLIDE 10 ===
+Câu hỏi khai thác bài toán
+BỘ THẺ CÂU HỎI #3 — CẤU TRÚC PS
+— Bộ câu hỏi định hình vấn đề dành cho các bên liên quan hoặc chính mình
+01 02
+Quy trình hiện tại như thế nào? Nút thắt nằm ở đâu?
+Công cụ, các bước, cơ chế bàn giao thông tin? Bước nào chậm, dễ sai sót, lặp lại?
+03 04
+Hao phí hiện tại là bao nhiêu? Tiêu chí thành công đo bằng gì?
+Thời gian, chi phí nhân sự, SLA, cơ hội bỏ lỡ? Hiệu quả cải tiến định lượng cụ thể?
+05 06
+Hậu quả khi xảy ra sai sót? Có giải pháp phi AI đơn giản hơn?
+Phạm vi tự quyết của AI; điểm cần con người phê duyệt? Quy tắc, checklist, quy trình hay tài liệu hướng dẫn?
+PROBLEM STATEMENT · 6 CÂU HỎI DAY 02 · 30 / 83
+
+=== SLIDE 11 ===
+Định lượng hóa bài toán
+— Điểm đau chưa được định lượng thì không thể xác định giá trị thực tế của AI
+01 · BASELINE 02 · TARGET 03 · MEASUREMENT
+Hiện trạng Mục tiêu Đo lường
+/ where we are / where to go / how we know
+Mức hao phí hiện tại là bao nhiêu? Bằng con Kỳ vọng cải thiện ở mức độ nào? Ngưỡng cụ Chỉ số nào chứng minh tính hiệu quả? Cách
+số cụ thể. thể là gì? thu thập?
+VÍ DỤ
+THỜI GIAN HOÀN THÀNH CHẤT LƯỢNG CÔNG VIỆC TẢI TRỌNG VẬN HÀNH
+Rút ngắn từ 90 phút xuống dưới 30 phút. Giảm tỷ lệ lỗi phân loại từ 20% xuống dưới Cắt giảm 40% câu hỏi trùng lặp cần Trợ
+5%. giảng xử lý.
+PROBLEM STATEMENT · ĐỊNH LƯỢNG DAY 02 · 31 / 83
+
+=== SLIDE 12 ===
+Thiết lập chỉ số: Output & Input
+— Chỉ số đo lường cần phản ánh kết quả cuối và các đòn bẩy có thể tác động
+OUTPUT METRIC INPUT METRICS
+Kết quả cuối cùng Các đòn bẩy
+/ what we optimize / what we can move
+· Thời lượng hoàn tất quy trình giảm bao nhiêu? · Tỷ lệ câu hỏi được phân loại chính xác.
+· Tỷ lệ sai sót / chất lượng đầu ra thay đổi thế nào? · Tỷ lệ yêu cầu được chuyển tiếp hỗ trợ kịp thời.
+· Giá trị thực tế người dùng nhận được rõ nét hơn? tăng cái này · Thời gian Trợ giảng hiệu chỉnh bản nháp phản hồi.
+→ đo cái kia
+"Nâng cao hiệu suất" không phải chỉ số — cần gắn với hiện trạng, mục tiêu và phương pháp đo.
+NGUỒN Amplitude — North Star Playbook · Lenny Rachitsky — Choosing Your North Star Metric
+PROBLEM STATEMENT · METRICS DAY 02 · 32 / 83
+
+=== SLIDE 13 ===
+Ba bước quyết định AI theo PAIR
+— Google People + AI Guidebook · Chương 1 User Needs + Defining Success
+BƯỚC ① BƯỚC ② BƯỚC ③
+Giao điểm: nhu cầu × thế mạnh Automate hay Augment? Reward function & tiêu chí
+AI thành công
+AI thay thế hay hỗ trợ con người? Mức tự
+Bài toán của bạn có nằm trong nhóm việc động hóa tăng dần theo độ tin cậy và rủi Định nghĩa "đúng/sai" của hệ thống
+AI làm tốt hơn hẳn rule/heuristic không? ro. (precision ↔ recall) và ngưỡng thành
+công đo được.
+VD: câu hỏi trùng lặp của 1000 học viên K3 & VD AI trả lời thay TA luôn, hay chỉ soạn nháp để
+K4 có nằm trong thế mạnh của AI? TA duyệt?
+VD: đo bằng gì — thời gian phản hồi? tỷ lệ định
+hướng sai?
+→ trả lời câu hỏi 1: có thực sự cần AI? → trả lời câu hỏi 2: giải pháp ở cấp độ nào? → trả lời câu hỏi 3 PS đã đủ rõ để đo?
+Ánh xạ về 4 câu hỏi trọng tâm của ngày: ① Có cần AI? · ② Cấp độ nào? · ③ Đủ rõ để đo? · Tổng hợp ①②③ → ④ Go / Not Yet / No-Go
+Đi hết 3 bước này, bạn trả lời được cả 4 câu hỏi của ngày hôm nay — từ "có thực sự cần AI?" đến "Go, Not Yet hay No-
+Go".
+NGUỒN Google PAIR  People + AI Guidebook · PAIR  Ch.1 User Needs + Defining Success
+CÓ NÊN ỨNG DỤNG AI · PAIR 3 BƯỚC DAY 02 · 35 / 83
+
+=== SLIDE 14 ===
+Khi nào AI có lợi thế? PAIR ① ② ③
+— Tám trường hợp PAIR gọi là "AI probably better" · Chương 1
+Gợi ý theo từng người · recommendation Dự đoán tương lai · prediction
+Mỗi người dùng nhận một nội dung gợi ý khác nhau. Đoán trước sự kiện sắp xảy ra để chuẩn bị phản ứng.
+Cá nhân hóa · personalization Hiểu ngôn ngữ tự nhiên · natural language
+Trải nghiệm tự điều chỉnh theo từng người, ngày càng hợp hơn. Hiểu câu hỏi viết tự do bằng lời nói hằng ngày.
+Nhận diện cả một lớp thực thể Phát hiện cái hiếm & biến đổi
+Nhận ra mọi đối tượng cùng loại — VD mọi khuôn mặt. Bắt sự kiện hiếm, thay đổi theo thời gian — VD gian lận.
+Agent/bot cho một lĩnh vực cụ thể Nội dung động thay giao diện tĩnh
+Trợ lý ảo xử lý trọn một phạm vi việc chuyên biệt. Nội dung linh hoạt hiệu quả hơn layout cố định, dễ đoán.
+AI chỉ đáng làm khi bài toán nằm trong nhóm này.
+NGUỒN PAIR  Ch.1 User Needs + Defining Success
+CÓ NÊN ỨNG DỤNG AI · AI PROBABLY BETTER DAY 02 · 36 / 83
+
+=== SLIDE 15 ===
+Khi nào AI KHÔNG tốt hơn? PAIR ① ② ③
+— Sáu trường hợp PAIR gọi là "AI probably NOT better" · Chương 1
+Cần duy trì tính dự đoán được Thông tin tĩnh, ít thay đổi
+Nút Home / Cancel phải luôn nằm ở một chỗ quen thuộc — người dùng Nội dung cố định thì cứ hiển thị trực tiếp — không cần AI sinh lại mỗi lần.
+không phải đoán mỗi lần.
+Lỗi quá tốn kém Yêu cầu minh bạch tuyệt đối
+Chi phí của một lần sai lớn hơn lợi ích của nhiều lần đúng. Mọi quyết định phải giải thích được từng bước, truy vết được.
+Tối ưu tốc độ & chi phí thấp Việc giá trị cao người dùng muốn tự làm
+Cần ra thị trường nhanh (time-to-market), vận hành rẻ — AI chỉ thêm độ trễ Tác vụ mang ý nghĩa cá nhân mà người dùng KHÔNG muốn bị tự động hóa.
+và chi phí.
+Rule/heuristic dễ build, dễ giải thích, dễ debug và bảo trì hơn — nếu nó giải quyết được, đó là lựa chọn tối ưu.
+NGUỒN PAIR  Ch.1 User Needs + Defining Success
+CÓ NÊN ỨNG DỤNG AI · KHI NÀO KHÔNG CẦN AI DAY 02 · 37 / 83
+
+=== SLIDE 16 ===
+Hệ thống AI = Model + Context + Planning + Tools
+— Một giải pháp AI thực tế là một hệ thống nhiều thành phần, không chỉ dừng lại ở mô hình ngôn ngữ
+MODEL
+Tư duy & Sáng tạo
+Xử lý đọc hiểu, soạn thảo, tổng hợp, phân loại và đưa ra gợi ý.
+CONTEXT
+Tri thức chuyên biệt
+Cơ sở dữ liệu, tài liệu nghiệp vụ, hồ sơ lịch sử giúp AI phản hồi chính xác theo
+bối cảnh.
+PLANNING
+Điều phối quy trình
+Tự động phân rã tác vụ phức tạp và linh hoạt điều chỉnh.
+TOOLS
+Liên kết hệ thống
+Tích hợp CRM, database, lịch làm việc hoặc API bên thứ ba.
+Giải pháp AI là một HỆ THỐNG — model chỉ là một thành phần.
+NGUỒN Anthropic — Building effective agents · Chip Huyen — AI Engineering
+HỆ THỐNG AI · KIẾN TRÚC DAY 02 · 42 / 83
+
+=== SLIDE 17 ===
+Automation vs Augmentation ① ② ③
+— Bước ② của PAIR: với từng tác vụ, AI nên làm thay hay hỗ trợ con người?
+AUTOMATE AUGMENT
+AI làm thay AI hỗ trợ con người
+Chọn khi: Chọn khi:
+· Việc khó, nhàm chán, nguy hiểm hoặc cần scale · Người dùng thích tự làm việc đó
+· Người dùng thiếu kiến thức / khả năng tự làm · Stakes cao: tiền bạc, pháp lý, sức khỏe
+· Có "đáp án đúng" mà mọi người cùng đồng thuận · Kết quả cần trách nhiệm cá nhân / social capital
+· Sở thích khó diễn đạt thành lời
+quyết định theo
+từng tác vụ
+Đo thành công bằng: hiệu quả tăng · an toàn hơn · giảm việc tẻ nhạt. Đo bằng: mức độ thích thú · cảm giác kiểm soát · sáng tạo tăng.
+Việc đã automate vẫn gần như luôn cần human oversight — preview, edit, undo.
+NGUỒN Google PAIR  Ch.1 User Needs + Defining Success
+RWA · AUTOMATE VS AUGMENT DAY 02 · 43 / 83
+
+=== SLIDE 18 ===
+Ba mức giải pháp: Rule / Workflow / Agent
+— Rule/Workflow/Agent là cấp độ KỸ THUẬT — còn Automate/Augment PAIR) là cấp độ VAI TRÒ của con người trong hệ thống
+CẤP ĐỘ 1 CẤP ĐỘ 2 CẤP ĐỘ 3
+Rule / Script LLM Feature / Workflow Agent
+· Đầu vào ổn định, ít thay đổi · Đầu vào đa dạng, không viết hết rule được · Nhiều bước, dùng nhiều công cụ
+· Logic viết được thành if/else · Đầu ra cần linh hoạt (tóm tắt, dịch, phân · Tình huống thay đổi liên tục
+· Cần kết quả luôn đúng 100% loại) · Cần tự ra quyết định giữa các bước
+· Quy định pháp lý / tuân thủ chặt · Có cách đo chất lượng · Có kiểm soát rủi ro rõ ràng
+· Người có thể kiểm tra trước khi gửi
+Ví dụ: Tính thuế · chặn email spam theo từ khóa · Ví dụ: Tóm tắt email · chatbot FAQ · phân loại Ví dụ: Agent nghiên cứu thị trường · coding agent
+auto-reply theo template. ticket hỗ trợ. sửa nhiều file.
+Thứ tự ưu tiên thực dụng: bắt đầu từ bên trái, chỉ đi sang bên phải khi giá trị tăng hơn độ phức tạp.
+RWA · TỔNG QUAN DAY 02 · 45 / 83
+
+=== SLIDE 19 ===
+Một tình huống, ba cấp độ giải pháp
+— Ưu tiên giải pháp đơn giản nhất có thể giải quyết bài toán và mang lại cải tiến đo lường được
+CẤP ĐỘ 1 — RULE (LUẬT TĨNH) CẤP ĐỘ 2 — WORKFLOW (QUY TRÌNH) CẤP ĐỘ 3 — AGENT (TÁC NHÂN)
+Trả lời tự động Duyệt Problem Card Đề xuất can thiệp chủ động
+· Tự động trả lời FAQ, gửi link thời khóa biểu · AI kiểm tra độ đầy đủ của Problem Card · Tự động theo dõi tiến độ nộp bài
+· Gửi tài liệu sửa lỗi cài đặt cơ bản · Yêu cầu bổ sung nếu thiếu thông tin · Phát hiện nhóm học viên bị kẹt lâu
+· Nhắc nhở checklist nộp bài · Chuyển cho Trợ giảng giải quyết · Chuẩn bị câu trả lời, đề xuất TA duyệt
+Khi nào? Logic tường minh, kết quả cố định. Khi nào? Có quy trình rõ, AI hỗ trợ từng bước. Khi nào? Tình huống động, đa công cụ.
+Không bắt buộc nâng cấp tuần tự từ Rule lên Agent → dừng ở cấp tối giản nhất nếu đã đáp ứng mục tiêu đề ra.
+RWA · SO SÁNH DAY 02 · 50 / 83
+
+=== SLIDE 20 ===
+Workflow patterns — đủ cho hầu hết bài toán
+— Ba mô hình cơ bản theo Anthropic · Building Effective Agents 2024
+1. Prompt Chaining 2. Routing
+In → LLM Call 1 → Gate → LLM Call 2 → LLM Call 3 → Out LLM Call 1
+┖ - - Gate fail → Exit In → Router → LLM Call 2 → Out
+Chia task thành chuỗi bước tuần tự, có gate kiểm tra giữa các bước. VD Viết outline LLM Call 3
+→ check → viết bài.
+Phân loại input → đưa vào nhánh chuyên biệt, tối ưu từng loại riêng. VD CS query →
+Ý nghĩa quyết định: đổi độ trễ lấy độ chính xác.
+FAQ / refund / kỹ thuật.
+Ý nghĩa quyết định: câu dễ đi model rẻ, câu khó đi model mạnh.
+3. Parallelization NGUYÊN TẮC ANTHROPIC
+LLM Call 1 → Luôn ưu tiên giải pháp đơn giản nhất; chỉ tăng độ phức tạp khi
+In → LLM Call 2 → Aggregator → Out thực sự cần thiết.
+LLM Call 3
+3 mô hình cơ bản bên cạnh đã đủ đáp ứng hầu hết bài toán thực
+Chạy song song rồi tổng hợp (sectioning), hoặc chạy nhiều lần lấy vote. VD
+tế.
+Guardrail + response đồng thời.
+Ý nghĩa quyết định: vote để giảm rủi ro một đầu ra sai.
+NGUỒN Anthropic — Building effective agents
+WORKFLOW PATTERNS · BASIC DAY 02 · 52 / 83
+
+=== SLIDE 21 ===
+Cây quyết định: Lựa chọn cấp độ giải pháp
+— Từ bài toán cốt lõi đến lựa chọn Rule, Workflow hay Agent
+Đi từ trên xuống — mỗi nhánh "KHÔNG" là một lần tránh được độ phức tạp không cần thiết.
+NGUỒN Anthropic — Building effective agents · Google — Rules of ML
+WORKFLOW · DECISION TREE DAY 02 · 55 / 83
+
+=== SLIDE 22 ===
+Reward function: hệ thống hiểu "đúng / sai" thế nào? ① Nhu cầu ② Auto / Augment ③ Reward function
+— PAIR Bước ③ · Case: AI gợi ý câu trả lời cho câu hỏi của 1000 học viên (khóa K3 & K4
+Reward function là công thức quyết định đâu là dự đoán "đúng", đâu là "sai" — và chính nó định hình trải nghiệm người dùng cuối. Vì vậy
+nó phải được thiết kế liên chức năng: tối thiểu UX  Product × Engineering cùng ngồi lại.
+BỐN KẾT QUẢ CÓ THỂ XẢY RA — CASE AI GỢI Ý CÂU TRẢ LỜI
+TP — TRUE POSITIVE · ĐÚNG-TÍCH CỰC TN — TRUE NEGATIVE · ĐÚNG-TIÊU CỰC
+Câu hỏi nghẽn thật → AI gợi ý đúng câu trả lời. Học viên được giải tỏa, Câu hỏi đã có tài liệu sẵn → AI không can thiệp. Đúng — không cần
+TA đỡ tải. gợi ý gì thêm.
+FP — FALSE POSITIVE · BÁO ĐỘNG GIẢ FN — FALSE NEGATIVE · BỎ SÓT
+AI gợi ý câu trả lời SAI (hallucination) và gửi thẳng cho học viên → học Học viên đang kẹt thật nhưng AI bỏ sót, không gợi ý → học viên vẫn
+viên đi sai hướng thực hành. chờ lâu như cũ.
+Chi phí của FP và FN KHÔNG đối xứng — báo cháy giả ≠ bỏ sót đám cháy. Cân nhắc đánh đổi này là quyết định then chốt khi
+thiết kế reward function.
+NGUỒN PAIR  Ch.1 User Needs + Defining Success
+REWARD · HÀM THƯỞNG DAY 02 · 57 / 83
+
+=== SLIDE 23 ===
+Precision ↔ Recall: đánh đổi không tránh khỏi ① Nhu cầu ② Auto / Augment ③ Reward function
+— Cùng một hệ thống AI, hai hướng vặn nút ngược nhau
+PRECISION CAO RECALL CAO
+TP / (TP + FP) TP / (TP + FN)
+⇄
+Ít gợi ý — nhưng gợi ý nào cũng chắc đúng. Người dùng Bao trọn mọi trường hợp cần giúp — không học viên
+tin vào từng gợi ý nhận được. nào bị bỏ lại phía sau.
+ĐÒN BẨY
+Vặn nút bên này
+lên, chất lượng
+bên kia xấu đi.
+HỆ QUẢ HỆ QUẢ
+Nhiều False Negative — bỏ sót học viên đang thực sự cần Nhiều False Positive — gợi ý sai nhiều, TA phải lọc lại thủ
+giúp. công.
+Không có cấu hình đúng tuyệt đối — phải test điểm cân bằng với chính người dùng.
+NGUỒN PAIR  Ch.1 User Needs + Defining Success
+REWARD · PRECISION ↔ RECALL DAY 02 · 58 / 83
+
+=== SLIDE 24 ===
+Viết tiêu chí thành công mà hành động được ① Nhu cầu ② Auto / Augment ③ Reward function
+— PAIR Bước ③ · Metric tốt = chỉ số cụ thể + ngưỡng có nghĩa + hành động cụ thể
+TEMPLATE CỦA PAIR
+̉ ́ ̉
+If {chi sô cụ thê} for {tính năng AI} {drops below / goes above} {ngưỡng có nghĩa}, we will
+̉
+{hành động cụ thê}.
+VÍ DỤ ĐIỀN SẴN — CASE TA 1000 HỌC VIÊN
+Nếu tỷ lệ câu trả lời AI gợi ý bị TA sửa > 30% trong 2 tuần, ta sẽ hạ mức tự động về pha 1 (chỉ gợi ý, không gửi thẳng cho học viên).
+CHECKLIST TRƯỚC KHI CHỐT METRIC
+01 02 03
+Metric có ý nghĩa với MỌI người dùng Có nhóm nào bị ảnh hưởng tiêu cực Đây là thành công của ngày 1 — còn
+không? không? ngày 1000 thì sao?
+→ Và đừng quên: lên lịch review metric định kỳ — tiêu chí thành công cũng cần được bảo trì theo thời gian.
+NGUỒN PAIR  Ch.1 User Needs + Defining Success · PAIR Worksheet — User Needs PDF
+REWARD · SUCCESS CRITERIA DAY 02 · 59 / 83
+
+=== SLIDE 25 ===
+Khoảng cách giữa Demo và Production
+— Phản hồi chính xác trong vài lần thử chưa đủ cơ sở để triển khai hệ thống thực tế
+01 · BASELINE 02 · EVALUATION 03 · CONTROLS 04 · OPERATIONS
+Thiết lập đối chứng Kiểm thử hệ thống Cơ chế kiểm soát Vận hành liên tục
+Đối chiếu hiệu quả với quy tắc Bộ dữ liệu kiểm thử, kịch bản Logging, fallback, rollback và Ai giám sát lỗi, cập nhật tri thức
+tĩnh, nhân sự hay quy trình hiện biên (edge cases) và tiêu chí nhân sự chịu trách nhiệm? nền và tối ưu hệ thống?
+tại? nghiệm thu?
+Mục tiêu Day 02 là xác định tính khả thi để tiếp tục nghiên cứu — chưa phải quyết định triển khai ngay.
+NGUỒN Google — Rules of ML · Chip Huyen — AI Engineering
+QUYẾT ĐỊNH AI · DEMO TO PRODUCTION DAY 02 · 61 / 83
+
+=== SLIDE 26 ===
+Từ Problem Statement đến Eval Plan
+— Problem Statement rõ ràng giúp định hình cụ thể các tiêu chí kiểm thử
+01 · INPUT 02 · TEST CASES 03 · SUCCESS
+Problem Statement Kịch bản kiểm thử Chỉ số hiệu năng
+9 trường đã hoàn chỉnh — từ Actor, Dữ liệu thực tế và các trường hợp biên (edge Đạt yêu cầu (pass) / Không đạt (fail) /
+Workflow, Bottleneck đến Boundary & HITL. cases). Chuyển tiếp kiểm duyệt thủ công HITL.
+TÁC VỤ ĐƠN LẺ HIỆU NĂNG QUY TRÌNH RỦI RO & SAI SỐ
+Hệ thống có phân loại chính xác các Nhóm học viên có hoàn thành bài lab Hệ thống có phản hồi sai lệch mà
+câu hỏi đầu vào không? nhanh hơn và ít kẹt hơn không? không chuyển tiếp cho Lab Coach phê
+duyệt không?
+PROBLEM STATEMENT · EVAL PLAN DAY 02 · 62 / 83
+
+=== SLIDE 27 ===
+Problem Statement cho hệ thống AI
+— 6 yếu tố bài toán cốt lõi và 3 yếu tố quyết định AI
+6 YẾU TỐ BÀI TOÁN CỐT LÕI
+Actor đối tượng ảnh hưởng Đối tượng trực tiếp chịu ảnh hưởng bởi vấn đề.
+Workflow quy trình hiện tại Quy trình vận hành hiện tại gồm các bước cụ thể nào?
+Bottleneck nút thắt Khâu nào gặp tình trạng chậm trễ, sai sót, lặp lại?
+Impact tác động Tổn thất lượng hóa bằng thời gian, chi phí, SLA hoặc chất lượng.
+Success Metric chỉ số thành công Chỉ số đo lường cụ thể để xác định sự cải thiện.
+Boundary ranh giới AI không được làm gì; khâu nào bắt buộc có con người.
+3 YẾU TỐ QUYẾT ĐỊNH AI
+Điểm AI can thiệp decision · entry AI hỗ trợ hoặc tự động hóa ở bước cụ thể nào?
+Mức chọn decision · level Rule / Workflow / Agent?
+Rủi ro & HITL decision · safety Phương án xử lý khi AI sai sót và quy trình phê duyệt thủ công.
+PROBLEM STATEMENT · 9 TRƯỜNG DAY 02 · 67 / 83
+
+=== SLIDE 28 ===
+Khung ra quyết định: Go / Not Yet / No-Go
+— Lập luận dựa trên tính khả thi của Problem Statement, tránh thiên kiến công nghệ
+⏸ ✕
+✓ Go Not Yet No-Go
+thực hiện tạm hoãn không triển khai
+ĐỦ ĐIỀU KIỆN CÓ TRIỂN VỌNG KHÔNG PHÙ HỢP
+— Bài toán rõ ràng — Cần bổ sung dữ liệu thực tế — AI không mang giá trị vượt trội
+— Chỉ số đo lường khả thi — Chuẩn hóa quy trình — Rủi ro vận hành quá cao
+— Điểm can thiệp AI phù hợp — Thiết lập chỉ số — Giải pháp không dùng AI tối ưu hơn
+— Kiểm soát được rủi ro — Xác định ranh giới
+Quyết định "Not Yet" thể hiện sự chín chắn trong tư duy thiết kế sản phẩm, không phải sự thất bại.
+QUYẾT ĐỊNH · GO / NOT YET / NO-GO DAY 02 · 70 / 83
+
+=== SLIDE 29 ===
+Sáu nguyên tắc cốt lõi sau Day 02
+— Kim chỉ nam để thẩm định mọi đề xuất ứng dụng AI
+01 Brief mơ hồ không thay thế Problem Statement.
+Một bản tóm tắt mơ hồ không thể thay thế cho một Problem Statement hoàn chỉnh.
+02 Mô hình hóa workflow trước khi tích hợp AI.
+Bắt buộc phải mô hình hóa quy trình trước khi xem xét tích hợp giải pháp AI.
+03 Pain point phải được lượng hóa.
+Mọi điểm đau cần được lượng hóa bằng baseline và chỉ số đo lường cụ thể.
+04 Phức tạp không đồng nghĩa với hiệu quả.
+Rule, Workflow và Agent là ba cấp độ khác nhau; độ phức tạp kỹ thuật không đồng nghĩa với hiệu quả tối ưu.
+05 Quyết định dựa trên lập luận thực tế.
+Quyết định Go / Not Yet / No-Go phải được thiết lập dựa trên lập luận thực tế và số liệu kiểm thử rõ ràng.
+06 Đo reward function bằng trải nghiệm người dùng, không chỉ accuracy. MỚI · PAIR
+Thiết kế đánh đổi precision ↔ recall theo lợi ích người dùng và kiểm chứng với người dùng thật.
+NGUỒN PAIR  Ch.1 User Needs + Defining Success
+RECAP · 6 NGUYÊN TẮC DAY 02 · 78 / 83
