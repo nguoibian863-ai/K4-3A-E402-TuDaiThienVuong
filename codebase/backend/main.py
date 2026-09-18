@@ -16,10 +16,11 @@ from pydantic import BaseModel, Field, field_validator
 
 from chat import chat_reply
 from db import get_client
+from embeddings import semantic_relevant_slides
 from explain import explain as explain_highlight
 from feynman import session_summary, student_reply
 import feynman_v3
-from slides import load_slides
+from slides import context_for_prompt, load_slides, relevant_slides
 from prompts import check_prompts
 from ranking import compute_base_group, rank
 
@@ -129,6 +130,7 @@ def review_session(session_id: str, body: ReviewIn):
         .eq("session_id", session_id)
         .eq("lesson_id", body.lesson_id)
         .in_("type", ["question", "note"])  # bookmark / progress không phải nội dung cần ôn
+        .is_("reviewed_at", "null")  # đã đánh dấu học xong -> xoá mềm, không hiện lại
         .execute()
     )
     activities = rows.data
@@ -195,6 +197,20 @@ def review_session(session_id: str, body: ReviewIn):
     return result
 
 
+class MarkReviewedIn(BaseModel):
+    item_ids: list[str] = Field(min_length=1)
+
+
+@app.post("/activities/mark-reviewed")
+def mark_reviewed(body: MarkReviewedIn):
+    """Đánh dấu học xong -> xoá mềm khỏi danh sách ôn tập B7 (giữ nguyên dữ liệu thật)."""
+    db = get_client()
+    db.table("activities").update(
+        {"reviewed_at": datetime.now(timezone.utc).isoformat()}
+    ).in_("id", body.item_ids).execute()
+    return {"marked": len(body.item_ids)}
+
+
 class ChatIn(BaseModel):
     session_id: str
     lesson_id: str = Field(min_length=1)
@@ -242,6 +258,11 @@ def chat_endpoint(body: ChatIn):
             for r in items
         ]
 
+    # Câu hỏi kiến thức có thể vượt ngoài những gì học viên đã tự ghi chú -> nạp thêm
+    # đúng vài trang slide liên quan để AI trả lời có căn cứ thay vì phải từ chối.
+    all_slides = load_slides(body.lesson_id)
+    grounding = relevant_slides(body.message, all_slides, k=8, semantic_fallback=semantic_relevant_slides)
+
     progress = pick("progress", ("highlight",))
     context = {
         "lesson": rows[0]["lesson"] if rows else "",
@@ -250,7 +271,8 @@ def chat_endpoint(body: ChatIn):
         "bookmarks": pick("bookmark", ("highlight",)),
         "notes": pick("note", ("highlight", "note", "rating")),
         "questions": pick("question", ("highlight", "question")),
-        "allowed_slides": sorted({r["slide"] for r in rows if r.get("slide")}),
+        "slides": context_for_prompt(grounding),
+        "allowed_slides": sorted({r["slide"] for r in rows if r.get("slide")} | set(grounding)),
     }
     return chat_reply(context, body.history, body.message)
 

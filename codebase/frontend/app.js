@@ -691,10 +691,28 @@ document.addEventListener('DOMContentLoaded', () => {
     currentHighlightText = text;
     currentHighlightPageNo = Number(pageWrapEl.dataset.pageNo);
     liveActionBar.style.display = 'flex';
-    liveActionBar.style.top = `${rect.top - liveActionBar.offsetHeight - 12}px`;
-    liveActionBar.style.left = `${rect.left + rect.width / 2}px`;
-    liveActionBar.style.transform = 'translateX(-50%)';
     liveActionBar.style.animation = 'none';
+
+    // Ghim popup trong khung nhìn — popup dùng position: fixed nên nếu bôi đen gần đầu
+    // hoặc sát mép trái/phải, top/left tính thẳng theo vùng bôi đen sẽ ra âm hoặc tràn
+    // ngoài màn hình, khiến popup vô hình và không cách nào cuộn tới được.
+    const barHeight = liveActionBar.offsetHeight || 48;
+    const barWidth = liveActionBar.offsetWidth || 200;
+    const margin = 10;
+
+    const placeBelow = rect.top - 12 < barHeight + margin;
+    const top = placeBelow ? rect.bottom + 12 : rect.top - barHeight - 12;
+
+    const halfWidth = barWidth / 2;
+    const centerX = Math.min(
+      Math.max(rect.left + rect.width / 2, margin + halfWidth),
+      window.innerWidth - margin - halfWidth,
+    );
+
+    liveActionBar.style.top = `${Math.max(top, margin)}px`;
+    liveActionBar.style.left = `${centerX}px`;
+    liveActionBar.style.transform = 'translateX(-50%)';
+    liveActionBar.classList.toggle('popup-below', placeBelow);
     requestAnimationFrame(() => {
       liveActionBar.style.animation = 'popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
     });
@@ -1225,6 +1243,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let p2Mode = 'review'; // 'review' | 'feynman'
   let p2Busy = false;
   let selectedConcept = null;
+  let selectedConceptItemIds = []; // id các activity thuộc khái niệm đang dạy -> để đánh dấu học xong
   let feynmanHistory = []; // [{role: 'teacher' | 'student', content}]
 
   // Lộ trình 8 bước (plan.md). Chạy song song với phiên Feynman cũ, bật/tắt bằng công tắc.
@@ -1233,7 +1252,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const ksList = document.getElementById('ks-list');
   const ksNextQ = document.getElementById('ks-next-q');
   let useV3 = v3Toggle ? v3Toggle.checked : true;
-  let v3State = {}; // {knowledge, probes, streak}
+  let v3State = {}; // {knowledge, probes, streak} — server trả về, client giữ giữa các lượt
+  // Bước 8: khi mọi khái niệm đã "understood", server chuyển stage sang "teach_again" —
+  // mời học viên giảng lại TOÀN BỘ khái niệm để chấm rubric so với lần giảng đầu tiên.
+  let v3TeachAgainInvited = false; // chỉ mời 1 lần/phiên, tránh lặp lại mỗi lượt
+  let v3AwaitingFinalExplanation = false; // lượt kế tiếp của giáo viên sẽ được chấm, không hỏi vặn nữa
 
   const ksMeta = {
     understood: { icon: '✓', label: 'hiểu', cls: 'ks-ok' },
@@ -1936,8 +1959,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function exitFeynmanMode() {
     selectedConcept = null;
+    selectedConceptItemIds = [];
     feynmanHistory = [];
     v3State = {};
+    v3TeachAgainInvited = false;
+    v3AwaitingFinalExplanation = false;
     if (ksPanel) ksPanel.hidden = true;
     const active = getActiveConversation();
     if (active) {
@@ -2031,7 +2057,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnTeach.textContent = '👨‍🏫 Dạy lại cho AI';
       btnTeach.addEventListener('click', () => {
         if (p2Busy) return;
-        startFeynmanSession(entry.concept);
+        startFeynmanSession(entry.concept, entry.item_ids || []);
       });
       actions.appendChild(btnTeach);
 
@@ -2362,7 +2388,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (message) feynmanHistory.push({ role: 'teacher', content: message });
       feynmanHistory.push({ role: 'student', content: result.reply });
       saveConversations();
-      renderKnowledgeState(result.next_question_type);
+      renderKnowledgeState(result.next_question_type); // bước 6 + bước 7
+
+      // Bước 8: mọi khái niệm đã hiểu -> mời giảng lại TOÀN BỘ, chỉ mời đúng 1 lần/phiên
+      if (result.stage === 'teach_again' && !v3TeachAgainInvited) {
+        v3TeachAgainInvited = true;
+        v3AwaitingFinalExplanation = true;
+        addChatMessage('system', {
+          text:
+            `🎉 Bạn đã gỡ hết các chỗ AI hỏi vặn về "${selectedConcept}". Hãy giảng lại TOÀN BỘ ` +
+            'khái niệm này từ đầu, như đang tổng kết cho một người chưa biết gì — mình sẽ chấm so ' +
+            'với lần giảng đầu tiên của bạn.',
+        });
+        p2Input.placeholder = 'Giảng lại toàn bộ khái niệm từ đầu để chốt điểm...';
+      }
       scrollChatToBottom();
     } catch (err) {
       console.warn('Gọi /feynman/v3/reply thất bại', err);
@@ -2373,7 +2412,180 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Bước 5.2 — chấm bản giảng lại (explanation_2) so với bản giảng đầu tiên
+  // (explanation_1, lấy từ lượt "teacher" đầu tiên của phiên) trên rubric 4 chiều.
+  function buildRubricCard(result) {
+    const card = document.createElement('div');
+    card.className = 'rubric-card';
+
+    if (result.used_fallback || !result.explanation_2) {
+      card.textContent = 'Không chấm được bài giảng lại lúc này (AI không phản hồi). Bạn có thể gửi lại.';
+      return card;
+    }
+
+    const title = document.createElement('div');
+    title.className = 'rubric-title';
+    title.textContent = `📊 Kết quả giảng lại "${selectedConcept}"`;
+    card.appendChild(title);
+
+    const dims = [
+      ['coverage', 'Bao phủ'], ['accuracy', 'Chính xác'], ['depth', 'Chiều sâu'], ['own_words', 'Lời riêng'],
+    ];
+    const table = document.createElement('table');
+    table.className = 'rubric-table';
+    const head = document.createElement('tr');
+    for (const label of ['', 'Lần 1', 'Lần 2']) {
+      const th = document.createElement('th');
+      th.textContent = label;
+      head.appendChild(th);
+    }
+    table.appendChild(head);
+    for (const [key, label] of dims) {
+      const row = document.createElement('tr');
+      for (const val of [label, result.explanation_1[key], result.explanation_2[key]]) {
+        const td = document.createElement('td');
+        td.textContent = val;
+        row.appendChild(td);
+      }
+      table.appendChild(row);
+    }
+    const totalRow = document.createElement('tr');
+    totalRow.className = 'rubric-total-row';
+    for (const val of ['Tổng /16', result.explanation_1.total, result.explanation_2.total]) {
+      const td = document.createElement('td');
+      td.textContent = val;
+      totalRow.appendChild(td);
+    }
+    table.appendChild(totalRow);
+    card.appendChild(table);
+
+    const addMisconceptions = (label, items) => {
+      if (!items || !items.length) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'rubric-miscon';
+      const t = document.createElement('div');
+      t.className = 'rubric-miscon-title';
+      t.textContent = label;
+      wrap.appendChild(t);
+      const ul = document.createElement('ul');
+      for (const item of items) {
+        const li = document.createElement('li');
+        li.textContent = item;
+        ul.appendChild(li);
+      }
+      wrap.appendChild(ul);
+      card.appendChild(wrap);
+    };
+    addMisconceptions('Còn hiểu lầm ở lần 1:', result.misconceptions_1);
+    addMisconceptions('Còn hiểu lầm ở lần 2:', result.misconceptions_2);
+
+    if (result.next_step) {
+      const badge = document.createElement('div');
+      badge.className = `rubric-next-step ${result.next_step.can_advance ? 'can-advance' : 'need-review'}`;
+      badge.textContent = (result.next_step.can_advance ? '✅ ' : '🔁 ') + result.next_step.message;
+      card.appendChild(badge);
+    }
+
+    if (result.caveat) {
+      const caveat = document.createElement('div');
+      caveat.className = 'rubric-caveat';
+      caveat.textContent = result.caveat;
+      card.appendChild(caveat);
+    }
+    return card;
+  }
+
+  // Vượt ngưỡng "đã hiểu" -> xoá mềm các mục đã lưu thuộc khái niệm này khỏi danh sách
+  // ôn tập B7 (activities.reviewed_at), giữ nguyên dữ liệu thật để không mất lịch sử.
+  async function markConceptReviewed() {
+    if (!selectedConceptItemIds.length) return;
+    try {
+      await apiPost('/activities/mark-reviewed', { item_ids: selectedConceptItemIds });
+      reviewStale = true;
+    } catch (err) {
+      console.warn('Gọi /activities/mark-reviewed thất bại', err);
+    }
+  }
+
+  // Sau khi vượt ngưỡng: cho học viên chọn tiếp tục khái niệm này hay chuyển sang phần khác.
+  function addNextStepChoice() {
+    const bubble = addChatMessage('ai', { author: 'AI (Học viên)' });
+    const wrap = document.createElement('div');
+    wrap.className = 'next-step-choice';
+
+    const label = document.createElement('div');
+    label.textContent = 'Bạn muốn tiếp tục học khái niệm này hay chuyển sang phần khác?';
+    wrap.appendChild(label);
+
+    const actions = document.createElement('div');
+    actions.className = 'next-step-actions';
+
+    const btnContinue = document.createElement('button');
+    btnContinue.className = 'btn-choice btn-choice-link';
+    btnContinue.textContent = '➡️ Tiếp tục học';
+    btnContinue.addEventListener('click', () => {
+      actions.querySelectorAll('button').forEach((b) => { b.disabled = true; });
+      addChatMessage('system', { text: `Tiếp tục với "${selectedConcept}" — hỏi hoặc giảng thêm cũng được.` });
+      p2Input.focus();
+    });
+
+    const btnOther = document.createElement('button');
+    btnOther.className = 'btn-choice btn-choice-primary';
+    btnOther.textContent = '📋 Học phần khác';
+    btnOther.addEventListener('click', () => {
+      actions.querySelectorAll('button').forEach((b) => { b.disabled = true; });
+      exitFeynmanMode();
+      requestReviewList('Xem danh sách phần cần học tiếp theo');
+    });
+
+    actions.append(btnContinue, btnOther);
+    wrap.appendChild(actions);
+    bubble.appendChild(wrap);
+    scrollChatToBottom();
+  }
+
+  async function requestFinalRubric(message) {
+    const explanation2 = (message || '').trim();
+    if (!explanation2) {
+      // Rỗng thì không có gì để chấm -> quay lại hỏi vặn bình thường thay vì kẹt cứng.
+      v3AwaitingFinalExplanation = false;
+      return requestStudentReplyV3(message);
+    }
+    const firstTeacherTurn = feynmanHistory.find((m) => m.role === 'teacher');
+    const explanation1 = firstTeacherTurn ? firstTeacherTurn.content : explanation2;
+
+    const bubble = addChatMessage('ai', { text: 'Đang chấm bài giảng lại...', loading: true, author: 'AI (Học viên)' });
+    v3AwaitingFinalExplanation = false; // dù kết quả ra sao, lượt sau quay lại hỏi vặn bình thường
+    try {
+      const result = await apiPost('/feynman/v3/rubric', {
+        lesson_id: lessonId,
+        concept: selectedConcept,
+        explanation_1: explanation1,
+        explanation_2: explanation2,
+      });
+      bubble.classList.remove('msg-loading');
+      bubble.textContent = '';
+      bubble.appendChild(buildRubricCard(result));
+      feynmanHistory.push({ role: 'teacher', content: explanation2 });
+      feynmanHistory.push({ role: 'student', content: '(đã chấm bài giảng lại — xem kết quả ở trên)' });
+      scrollChatToBottom();
+
+      if (result.next_step && result.next_step.can_advance) {
+        await markConceptReviewed();
+        addNextStepChoice();
+      }
+    } catch (err) {
+      console.warn('Gọi /feynman/v3/rubric thất bại', err);
+      bubble.textContent = 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.';
+      bubble.classList.remove('msg-loading');
+    }
+  }
+
+  // Một cửa duy nhất cho cả hai lộ trình — các chỗ gọi không cần biết đang bật cái nào.
+  // Ngoại lệ: sau khi được mời "giảng lại toàn bộ" (bước 8), lượt kế tiếp phải đi chấm
+  // rubric chứ không phải hỏi vặn tiếp như bình thường.
   function askStudent(message) {
+    if (useV3 && v3AwaitingFinalExplanation) return requestFinalRubric(message);
     return useV3 ? requestStudentReplyV3(message) : requestStudentReply(message);
   }
 
@@ -2381,6 +2593,8 @@ document.addEventListener('DOMContentLoaded', () => {
     v3Toggle.addEventListener('change', () => {
       useV3 = v3Toggle.checked;
       v3State = {};
+      v3TeachAgainInvited = false;
+      v3AwaitingFinalExplanation = false;
       renderKnowledgeState(null);
       if (p2Mode === 'feynman') {
         addChatMessage('system', {
@@ -2395,10 +2609,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function startFeynmanSession(concept) {
+  async function startFeynmanSession(concept, itemIds = []) {
     selectedConcept = concept;
+    selectedConceptItemIds = itemIds;
     feynmanHistory = [];
     v3State = {};
+    v3TeachAgainInvited = false;
+    v3AwaitingFinalExplanation = false;
     renderKnowledgeState(null);
     setMode('feynman');
     autoNameConversationIfNeeded(concept);

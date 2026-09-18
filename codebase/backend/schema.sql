@@ -12,6 +12,7 @@ create table if not exists activities (
   question text,
   note text,
   rating int check (rating between 1 and 5),
+  reviewed_at timestamptz,           -- đã học xong -> ẩn khỏi danh sách ôn (xoá mềm)
   created_at timestamptz default now()
 );
 

@@ -138,13 +138,23 @@ def _tokens(text: str) -> list[str]:
 
 
 def relevant_slides(
-    query: str, slides: dict[int, str], k: int = 10, anchor: str | None = None
+    query: str,
+    slides: dict[int, str],
+    k: int = 10,
+    anchor: str | None = None,
+    semantic_fallback=None,
 ) -> dict[int, str]:
     """Chọn k slide liên quan nhất tới câu người học vừa nói.
 
     Bộ slide đầy đủ (100 trang ~ 40k ký tự) mà nhét hết vào prompt thì vừa tốn token vừa
     loãng: đoạn cần trích chìm giữa 99 trang không liên quan. Chấm điểm bằng trùng lặp từ
     có trọng số nghịch đảo tần suất — từ hiếm (CFG, ComfyUI) nặng hơn từ chung chung.
+
+    `semantic_fallback(query, slides, k)` là hàm tuỳ chọn (tiêm từ ngoài, module này
+    không phụ thuộc OpenAI để giữ thuần/dễ test): chỉ được gọi khi so trùng từ khoá
+    không tìm được slide nào (`scores` rỗng) — ví dụ câu hỏi dùng từ khác hẳn slide gốc
+    (tiếng Anh trong khi slide viết tiếng Việt). Không có nó thì giữ hành vi cũ: trả về
+    k slide đầu theo số trang.
     """
     query_tokens = set(_tokens(query))
     if not query_tokens or not slides:
@@ -179,6 +189,10 @@ def relevant_slides(
             scores[number] = score / (norm or 1)
 
     if not scores:
+        if semantic_fallback is not None:
+            found = semantic_fallback(query, slides, k)
+            if found:
+                return found
         return dict(sorted(slides.items())[:k])
 
     # Slide nói về đúng khái niệm đang xét phải được xếp trước. Nếu để tự đoán từ neo bằng

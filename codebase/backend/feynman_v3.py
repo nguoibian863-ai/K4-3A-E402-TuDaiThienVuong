@@ -10,6 +10,7 @@ Mọi lần code sửa đầu ra của AI đều ghi vào "enforced" để UI v�
 Hàm thuần, không phụ thuộc DB — main.py nạp ngữ cảnh rồi truyền vào.
 """
 
+from embeddings import semantic_relevant_slides
 from llm import call_llm
 from prompts import get_prompt
 from slides import context_for_prompt, relevant_slides, verify_citation
@@ -142,7 +143,9 @@ def _check_against_slides(concept: str, slides: dict, claim: str) -> dict:
     payload = {
         "concept": concept,
         "claim": claim,
-        "slides": context_for_prompt(relevant_slides(concept + " " + claim, slides, k=16, anchor=concept)),
+        "slides": context_for_prompt(relevant_slides(
+            concept + " " + claim, slides, k=16, anchor=concept, semantic_fallback=semantic_relevant_slides,
+        )),
     }
     try:
         _, parsed = call_llm(get_prompt("feynman_v3_evidence"), payload, temperature=0.1)
@@ -566,6 +569,33 @@ LEARNING_GAIN_CAVEAT = (
 )
 
 
+# Ngưỡng "đã hiểu, có thể chuyển tiếp" sau khi chấm rubric bước 8 (giảng lại). accuracy
+# bắt buộc tuyệt đối (không cho 3 chiều còn lại bù vào) — tổng điểm cao mà vẫn còn hiểu
+# lầm (accuracy thấp) không được coi là đã hiểu, đúng tinh thần LEARNING_GAIN_CAVEAT.
+NEXT_STEP_TOTAL_THRESHOLD = 10
+NEXT_STEP_MIN_ACCURACY = 4
+
+
+def decide_next_step(explanation_scores: dict) -> dict:
+    """Từ điểm rubric của 1 lần giảng (đã có "total"), quyết định nên mời ôn thêm khái
+    niệm này hay có thể chuyển tiếp sang khái niệm/chủ đề khác.
+    """
+    total = explanation_scores.get("total")
+    accuracy = explanation_scores.get("accuracy")
+    can_advance = (
+        isinstance(total, int) and not isinstance(total, bool)
+        and isinstance(accuracy, int) and not isinstance(accuracy, bool)
+        and total >= NEXT_STEP_TOTAL_THRESHOLD
+        and accuracy >= NEXT_STEP_MIN_ACCURACY
+    )
+    message = (
+        "Bạn đã hiểu — có thể chuyển sang khái niệm/chủ đề khác."
+        if can_advance
+        else "Nên ôn thêm khái niệm này trước khi chuyển tiếp."
+    )
+    return {"can_advance": can_advance, "message": message}
+
+
 def _validate_rubric(data: dict) -> bool:
     if not isinstance(data, dict):
         return False
@@ -592,7 +622,9 @@ def rubric_score(concept: str, slides: dict, explanation_1: str, explanation_2: 
     """
     payload = {
         "concept": concept,
-        "slides": context_for_prompt(relevant_slides(concept + " " + explanation_2, slides, k=12, anchor=concept)),
+        "slides": context_for_prompt(relevant_slides(
+            concept + " " + explanation_2, slides, k=12, anchor=concept, semantic_fallback=semantic_relevant_slides,
+        )),
         "explanation_1": explanation_1,
         "explanation_2": explanation_2,
     }
@@ -608,6 +640,7 @@ def rubric_score(concept: str, slides: dict, explanation_1: str, explanation_2: 
             "misconceptions_2": [],
             "delta": None,
             "caveat": LEARNING_GAIN_CAVEAT,
+            "next_step": None,
             "used_fallback": True,
         }
     total_1 = sum(parsed["explanation_1"][d] for d in RUBRIC_DIMENSIONS)
@@ -616,6 +649,7 @@ def rubric_score(concept: str, slides: dict, explanation_1: str, explanation_2: 
     parsed["explanation_2"]["total"] = total_2
     parsed["delta"] = total_2 - total_1
     parsed["caveat"] = LEARNING_GAIN_CAVEAT
+    parsed["next_step"] = decide_next_step(parsed["explanation_2"])
     parsed["used_fallback"] = False
     return parsed
 

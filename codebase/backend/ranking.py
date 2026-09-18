@@ -43,6 +43,41 @@ def validate_output(data: dict, items_by_id: dict) -> bool:
     return True
 
 
+def _rescue_missing_items(
+    review_list: list[dict], items_by_id: dict, excluded: list[dict], flags: list[dict],
+) -> list[dict]:
+    """validate_output() chỉ chặn AI BỊA id, không chặn AI BỎ SÓT id thật — một mục không
+    nằm trong review_list, cũng không bị đưa vào "excluded"/"flags" một cách có chủ đích,
+    thì biến mất im lặng khỏi danh sách ôn tập. Vá lại bằng cách thêm riêng từng mục bị bỏ
+    sót theo đúng base_group gốc, thay vì vứt cả phần gộp/xếp hạng hợp lệ của AI để fallback
+    toàn bộ.
+    """
+    covered = {iid for entry in review_list for iid in entry.get("item_ids", [])}
+    covered |= {e["item_id"] for e in excluded if isinstance(e, dict) and "item_id" in e}
+    covered |= {f["item_id"] for f in flags if isinstance(f, dict) and "item_id" in f}
+    missing = [iid for iid in items_by_id if iid not in covered]
+    if not missing:
+        return review_list
+
+    for iid in missing:
+        item = items_by_id[iid]
+        group = item["base_group"]
+        review_list.append({
+            "concept": item.get("highlight") or item.get("question") or iid,
+            "item_ids": [iid],
+            "base_group": group,
+            "final_group": group,
+            "adjusted": False,
+            "reason": "AI bỏ sót mục này -> hệ thống tự thêm lại theo mức tự chấm gốc",
+            "evidence_ids": [],
+            "order": 0,
+        })
+    review_list.sort(key=lambda e: -GROUP_RANK.get(e["final_group"], 1))
+    for i, entry in enumerate(review_list):
+        entry["order"] = i + 1
+    return review_list
+
+
 def fallback_output(items: list[dict]) -> dict:
     """AI lỗi hoặc trả sai định dạng: xếp thẳng theo base_group, mỗi mục một dòng."""
     review_list = []
@@ -92,4 +127,7 @@ def rank(items: list[dict], known_concepts: list[str] | None = None) -> dict:
     parsed["raw_response"] = raw_response
     parsed.setdefault("excluded", [])
     parsed.setdefault("flags", [])
+    parsed["review_list"] = _rescue_missing_items(
+        parsed["review_list"], items_by_id, parsed["excluded"], parsed["flags"],
+    )
     return parsed
