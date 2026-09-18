@@ -386,13 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnPrevSlide.addEventListener('click', () => scrollToPage(currentPageNo - 1));
   btnNextSlide.addEventListener('click', () => scrollToPage(currentPageNo + 1));
 
-  function base64ToUint8Array(base64) {
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return bytes;
-  }
-
   async function buildPageWraps() {
     pdfScrollContainer.innerHTML = '';
     pageEntries = [];
@@ -541,8 +534,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const stored = await getStoredDeck(wantedId);
       if (stored) ok = await loadPdf(stored.bytes, stored.name);
     }
-    if (!ok && typeof LECTURE_PDF_BASE64 !== 'undefined') {
-      ok = await loadPdf(base64ToUint8Array(LECTURE_PDF_BASE64), DEFAULT_DECK_NAME);
+    if (!ok) {
+      try {
+        const res = await fetch(`${API_BASE}/data/${DEFAULT_DECK_NAME}.pdf`);
+        if (res.ok) {
+          const buf = new Uint8Array(await res.arrayBuffer());
+          ok = await loadPdf(buf, DEFAULT_DECK_NAME, { persist: true });
+        }
+      } catch (err) {
+        console.warn('Không tải được slide mặc định', err);
+      }
     }
     if (!ok) return;
 

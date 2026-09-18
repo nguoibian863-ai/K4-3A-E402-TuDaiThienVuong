@@ -396,6 +396,10 @@ def create_correction(correction: CorrectionIn):
     return row.data[0]
 
 
+_data_dir = Path(__file__).resolve().parent.parent.parent / "data"
+if _data_dir.exists():
+    app.mount("/data", StaticFiles(directory=str(_data_dir)), name="data")
+
 _frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
 if _frontend_dir.exists():
     app.mount("/", StaticFiles(directory=str(_frontend_dir), html=True), name="frontend")
