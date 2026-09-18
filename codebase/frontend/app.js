@@ -960,10 +960,23 @@ document.addEventListener('DOMContentLoaded', () => {
     currentActivitiesList = Array.isArray(items) ? items : [];
     liveActivityStream.innerHTML = '';
     if (!currentActivitiesList || currentActivitiesList.length === 0) {
+      const emptyWrap = document.createElement('div');
+      emptyWrap.className = 'review-empty-wrap text-center';
       const empty = document.createElement('p');
       empty.className = 'review-empty-state';
-      empty.textContent = 'Chưa có hoạt động nào trong buổi học này.';
-      liveActivityStream.appendChild(empty);
+      empty.textContent = 'Chưa có ghi chú nào trong buổi học này.';
+      const btnSeed = document.createElement('button');
+      btnSeed.type = 'button';
+      btnSeed.className = 'btn-create-sample-note';
+      btnSeed.textContent = '➕ Nạp ghi chú mẫu để thử nghiệm xóa';
+      btnSeed.addEventListener('click', () => {
+        renderActivityLog(FALLBACK_ACTIVITIES);
+        setSavedHighlights(FALLBACK_ACTIVITIES);
+        showToast('📝 Đã nạp 3 ghi chú mẫu vào Nhật ký buổi học!');
+      });
+      emptyWrap.appendChild(empty);
+      emptyWrap.appendChild(btnSeed);
+      liveActivityStream.appendChild(emptyWrap);
       return;
     }
     currentActivitiesList.forEach(item => {

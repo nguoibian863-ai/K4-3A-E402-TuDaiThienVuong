@@ -1449,57 +1449,79 @@ body {
 }
 
 .stream-card {
-  padding: 10px;
+  padding: 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--slate-200);
   background: #f8fafc;
   display: flex;
-  gap: 8px;
+  gap: 10px;
   font-size: 0.8rem;
-  position: relative;
+  position: relative !important;
   transition: var(--transition);
 }
 
 .stream-card:hover {
   border-color: var(--slate-300);
   background: #ffffff;
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
 }
 
+.stream-body {
+  flex: 1;
+  min-width: 0;
+  padding-right: 36px !important;
+}
+
+/* Nút xóa thùng rác luôn luôn hiển thị 100% rõ ràng, không ẩn khi chưa hover */
 .btn-delete-stream-item {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  font-size: 0.82rem;
-  cursor: pointer;
-  padding: 3px 6px;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #fca5a5 !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  color: #dc2626 !important;
+  opacity: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  z-index: 10 !important;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.12) !important;
+  transition: all 0.18s ease !important;
+}
+
+.btn-delete-stream-item:hover,
+.btn-delete-stream-item:focus-visible {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  transform: scale(1.12) !important;
+  box-shadow: 0 3px 8px rgba(239, 68, 68, 0.25) !important;
+}
+
+.btn-create-sample-note {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #eff6ff;
+  border: 1px dashed #3b82f6;
   border-radius: 6px;
-  color: #64748b;
-  opacity: 0.8;
+  color: #1d4ed8;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  line-height: 1;
-  transition: all 0.18s ease;
+  gap: 6px;
 }
 
-.stream-card:hover .btn-delete-stream-item,
-.btn-delete-stream-item:focus-visible {
-  opacity: 1;
-  background: #fee2e2;
-  border-color: #fca5a5;
-  color: #dc2626;
-}
-
-.btn-delete-stream-item:hover {
-  opacity: 1;
-  background: #fecaca;
-  border-color: #f87171;
-  color: #b91c1c;
-  transform: scale(1.1);
-  box-shadow: 0 1px 4px rgba(220, 38, 38, 0.15);
+.btn-create-sample-note:hover {
+  background: #dbeafe;
+  border-style: solid;
 }
 
 .stream-time {
