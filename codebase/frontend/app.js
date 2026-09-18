@@ -939,6 +939,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnConfirmDeleteConv = document.getElementById('btn-confirm-delete-conv');
   const deleteConvName = document.getElementById('delete-conv-name');
 
+  // DOM Elements cho Modal Đổi Tên Cuộc Trò Chuyện
+  const modalRenameConv = document.getElementById('modal-rename-conv');
+  const closeRenameConvModalBtn = document.getElementById('close-rename-conv-modal');
+  const btnCancelRenameConv = document.getElementById('btn-cancel-rename-conv');
+  const formRenameConv = document.getElementById('form-rename-conv');
+  const inputRenameConv = document.getElementById('input-rename-conv');
+  let pendingRenameConvId = null;
+
   const activityTypeMeta = {
     question: { tag: 'tag-blue', icon: '🤖', label: 'Hỏi đáp', className: 'stream-qa' },
     bookmark: { tag: 'tag-purple', icon: '🔗', label: 'Ghi chú (link slide)', className: 'stream-link' },
@@ -1401,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRename.setAttribute('aria-label', 'Đổi tên');
       btnRename.addEventListener('click', (e) => {
         e.stopPropagation();
-        promptRenameConversation(c.id);
+        openRenameConvModal(c.id);
       });
 
       const btnDel = document.createElement('button');
@@ -1429,19 +1437,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function promptRenameConversation(convId) {
+  function openRenameConvModal(convId) {
     const c = conversations.find((x) => x.id === convId);
     if (!c) return;
-    const current = c.title || '';
-    const newTitle = window.prompt('Nhập tên mới cho cuộc trò chuyện:', current);
-    if (newTitle !== null && newTitle.trim() && newTitle.trim() !== current) {
+    pendingRenameConvId = convId;
+    if (inputRenameConv) {
+      inputRenameConv.value = c.title || '';
+    }
+    if (modalRenameConv) {
+      modalRenameConv.classList.add('open');
+      if (inputRenameConv) {
+        setTimeout(() => {
+          inputRenameConv.focus();
+          inputRenameConv.select();
+        }, 80);
+      }
+    }
+  }
+
+  function closeRenameConvModal() {
+    pendingRenameConvId = null;
+    if (modalRenameConv) modalRenameConv.classList.remove('open');
+  }
+
+  function confirmRenameConv(newTitle) {
+    if (!pendingRenameConvId) return;
+    const convId = pendingRenameConvId;
+    const c = conversations.find((x) => x.id === convId);
+    if (c && newTitle) {
       c.title = newTitle.trim();
       if (convId === activeConversationId && p2ActiveChatTitle) {
         p2ActiveChatTitle.textContent = c.title;
       }
       saveConversations();
       renderSidebarConversations();
+      showToast(`✏️ Đã đổi tên thành: "${c.title}"`);
     }
+    closeRenameConvModal();
+  }
+
+  if (closeRenameConvModalBtn) closeRenameConvModalBtn.addEventListener('click', closeRenameConvModal);
+  if (btnCancelRenameConv) btnCancelRenameConv.addEventListener('click', closeRenameConvModal);
+  if (formRenameConv) {
+    formRenameConv.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = inputRenameConv ? inputRenameConv.value.trim() : '';
+      if (val) confirmRenameConv(val);
+    });
+  }
+  if (modalRenameConv) {
+    modalRenameConv.addEventListener('click', (e) => {
+      if (e.target === modalRenameConv) closeRenameConvModal();
+    });
   }
 
   function openDeleteConvModal(convId) {
@@ -2610,15 +2657,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnNewChat) btnNewChat.addEventListener('click', createNewConversation);
   if (btnRenameChat) {
     btnRenameChat.addEventListener('click', () => {
-      if (activeConversationId) promptRenameConversation(activeConversationId);
+      if (activeConversationId) openRenameConvModal(activeConversationId);
     });
   }
 
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       toggleSidebar(false);
+      toggleNotificationPopover(false);
       closeDeleteNoteModal();
       closeDeleteConvModal();
+      closeRenameConvModal();
     }
   });
 
@@ -2898,6 +2947,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnClearAllNotifs.addEventListener('click', (e) => {
       e.stopPropagation();
       clearAllNotifications();
+    });
+  }
+
+  const btnCloseNotifPopover = document.getElementById('btn-close-notif-popover');
+  if (btnCloseNotifPopover) {
+    btnCloseNotifPopover.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleNotificationPopover(false);
     });
   }
 

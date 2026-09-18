@@ -251,6 +251,15 @@ body {
   overflow: hidden;
   animation: notifSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.notification-popover[hidden] {
+  display: none !important;
+}
+
+.notification-popover:not([hidden]) {
+  display: flex !important;
+}
+
 @keyframes notifSlideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -263,17 +272,20 @@ body {
   padding: 12px 14px;
   background: #f8fafc;
   border-bottom: 1px solid var(--slate-200);
+  gap: 10px;
 }
 .notif-header-title {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 .notif-header-title h4 {
   margin: 0;
   font-size: 0.92rem;
   font-weight: 700;
   color: var(--slate-800);
+  white-space: nowrap;
 }
 .notif-unread-count {
   font-size: 0.72rem;
@@ -282,11 +294,13 @@ body {
   background: #fee2e2;
   color: #dc2626;
   border-radius: var(--radius-full);
+  white-space: nowrap;
 }
 .notif-header-actions {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 .btn-notif-action {
   background: transparent;
@@ -298,6 +312,7 @@ body {
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 .btn-notif-action:hover {
   background: #e2e8f0;
@@ -306,6 +321,16 @@ body {
 .btn-notif-clear:hover {
   background: #fee2e2;
   color: #dc2626;
+}
+.btn-notif-close {
+  font-size: 0.95rem !important;
+  padding: 2px 7px !important;
+  color: var(--slate-400) !important;
+  border-radius: 4px;
+}
+.btn-notif-close:hover {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
 }
 
 /* Tabs */
@@ -2937,6 +2962,24 @@ body {
 .btn-danger-action:hover {
   background: #b91c1c;
   transform: translateY(-1px);
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--slate-300);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  background: #fff;
+  color: var(--slate-800);
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+.modal-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 /* Success Notification Screen in Modal */

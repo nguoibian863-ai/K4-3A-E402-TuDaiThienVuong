@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3.0">
+  <link rel="stylesheet" href="style.css?v=3.1">
 </head>
 <body>
 
@@ -59,6 +59,7 @@
               <div class="notif-header-actions">
                 <button class="btn-notif-action" id="btn-mark-all-read" title="Đánh dấu tất cả đã đọc">✓✓ Đã đọc</button>
                 <button class="btn-notif-action btn-notif-clear" id="btn-clear-all-notifs" title="Xóa tất cả thông báo">🗑️ Xóa hết</button>
+                <button class="btn-notif-action btn-notif-close" id="btn-close-notif-popover" title="Đóng cửa sổ thông báo" aria-label="Đóng">✕</button>
               </div>
             </div>
 
@@ -463,6 +464,34 @@
     </div>
 
     <!-- ================================================================= -->
+    <!-- MODAL: ĐỔI TÊN CUỘC TRÒ CHUYỆN (GIAI ĐOẠN 2) -->
+    <!-- ================================================================= -->
+    <div class="live-modal-backdrop" id="modal-rename-conv" role="dialog" aria-modal="true" aria-labelledby="modal-rename-conv-title">
+      <div class="live-modal-content sm-modal-content">
+        <div class="modal-head">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">✏️</span>
+            <div>
+              <h3 id="modal-rename-conv-title">Đổi tên cuộc trò chuyện</h3>
+              <small>Đặt tên ngắn gọn để dễ quản lý các phiên ôn tập</small>
+            </div>
+          </div>
+          <button class="close-modal-btn" id="close-rename-conv-modal" aria-label="Đóng cửa sổ">✕</button>
+        </div>
+        <form id="form-rename-conv" class="modal-body">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="input-rename-conv" style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--slate-700); margin-bottom: 6px;">Tên cuộc trò chuyện:</label>
+            <input type="text" id="input-rename-conv" class="modal-input" maxlength="50" required placeholder="Nhập tên cuộc trò chuyện...">
+          </div>
+          <div class="modal-footer-actions">
+            <button class="btn-tertiary-action" id="btn-cancel-rename-conv" type="button">Hủy bỏ</button>
+            <button class="btn-primary-action" id="btn-submit-rename-conv" type="submit">💾 Lưu tên mới</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
     <!-- MODAL: XÁC NHẬN XÓA CUỘC TRÒ CHUYỆN (GIAI ĐOẠN 2) -->
     <!-- ================================================================= -->
     <div class="live-modal-backdrop" id="modal-delete-conv" role="dialog" aria-modal="true" aria-labelledby="modal-delete-conv-title" aria-describedby="modal-delete-conv-desc">
@@ -492,6 +521,6 @@
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="app.js?v=3.0"></script>
+  <script src="app.js?v=3.1"></script>
 </body>
 </html>
