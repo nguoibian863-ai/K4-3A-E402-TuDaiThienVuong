@@ -124,5 +124,5 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 | 17/9 | Bổ sung số liệu khảo sát, quote ẩn danh và evidence summary | Khảo sát n = 24 xác nhận nhu cầu ôn sau giờ học và mức sẵn sàng 100%. |
 | 17/9 | Điền impact, error taxonomy, bốn đường đi và kế hoạch validation | Bám workflow B7–B10, contract AI và các failure case đã định nghĩa. |
 | 17/9 | Ghi kết quả eval Prompt v1/v2 | Golden set 25 case đạt 25/25 với Prompt v2. |
-| 18/9 | Cập nhật kết quả user testing 5 người (R6), fix đóng popover thông báo, bổ sung modal đổi tên hội thoại & modal 2 giai đoạn xóa ghi chú | Dựa trên user testing log (`validation/user_testing_log.md`) với 2 willing users CP1 và 3 người ngoài nhóm. |
+| 18/9 | Cập nhật kết quả user testing 5 người (R6), fix đóng popover thông báo, bổ sung modal đổi tên hội thoại & modal 2 giai đoạn xóa ghi chú | Dựa trên user testing log (`validation/user_testing_log.md`) với 2 willing users CP1 và 3 người ngoài lớp học. |
 ```
