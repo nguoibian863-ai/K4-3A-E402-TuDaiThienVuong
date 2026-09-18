@@ -5,7 +5,9 @@ from typing import Literal, Optional
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load the backend-local .env regardless of the directory used to launch
+# uvicorn (for example, when it is started from the repository root).
+load_dotenv(Path(__file__).with_name(".env"))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -102,6 +104,16 @@ def list_activities(session_id: str, lesson_id: str):
         .execute()
     )
     return rows.data
+
+
+@app.delete("/activities/{activity_id}")
+def delete_activity(activity_id: str):
+    db = get_client()
+    try:
+        db.table("activities").delete().eq("id", activity_id).execute()
+        return {"status": "ok", "deleted_id": activity_id}
+    except Exception as e:
+        raise HTTPException(500, f"Lỗi xóa hoạt động: {e}")
 
 
 class ReviewIn(BaseModel):

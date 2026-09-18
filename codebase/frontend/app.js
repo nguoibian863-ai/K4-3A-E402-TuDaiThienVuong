@@ -15,26 +15,93 @@ let lessonId = null;
 const DEFAULT_DECK_NAME = 'Buoi3_PromptEngineering_v2_compressed';
 const LAST_DECK_KEY = 'vlearn:lastDeckId';
 
-// Backend không phản hồi -> hiện rỗng, không bịa data giả để tránh nhầm với data thật.
-const FALLBACK_ACTIVITIES = [];
+// Dữ liệu mẫu demo ban đầu (nếu buổi học mới chưa có ghi chú)
+const FALLBACK_ACTIVITIES = [
+  {
+    id: 'demo-note-1',
+    type: 'note',
+    slide: 3,
+    highlight: 'Query, Key, Value trong cơ chế Self-Attention',
+    note: 'Chưa hiểu rõ công thức tính ma trận Attention score.',
+    rating: 2,
+    time_label: '10:05'
+  },
+  {
+    id: 'demo-note-2',
+    type: 'note',
+    slide: 4,
+    highlight: 'Multi-head Attention chia thành h không gian biểu diễn khác nhau',
+    note: 'Cần xem lại vì sao phải chia ra h head thay vì dùng 1 ma trận lớn.',
+    rating: 3,
+    time_label: '10:14'
+  },
+  {
+    id: 'demo-prog-1',
+    type: 'progress',
+    slide: 4,
+    highlight: 'Đã học đến phần Multi-head Attention',
+    time_label: '10:18'
+  }
+];
 
 // true khi có hoạt động mới chưa được AI xếp vào danh sách ôn (B7)
 let reviewStale = true;
 
+// Delegate trung tâm thông báo để có thể gọi từ bất kỳ đâu (kể cả ngoài DOMContentLoaded)
+let pushNotification = function({ category = 'system', title = 'Thông báo', message = '', showToastNotification = true, meta = null }) {
+  console.log('[Notification fallback]', category, title, message);
+};
+
+let lastApiErrorNotifTime = 0;
+function notifyApiError(actionName) {
+  const now = Date.now();
+  if (now - lastApiErrorNotifTime > 6000) {
+    lastApiErrorNotifTime = now;
+    pushNotification({
+      category: 'system',
+      title: 'Lỗi kết nối máy chủ',
+      message: `Không thể kết nối đến backend AI (${actionName}). Kiểm tra server rồi thử lại.`
+    });
+  }
+}
+
 async function apiPost(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
-  return res.json();
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    notifyApiError(`POST ${path}`);
+    throw err;
+  }
 }
 
 async function apiGet(path) {
-  const res = await fetch(`${API_BASE}${path}`);
-  if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
-  return res.json();
+  try {
+    const res = await fetch(`${API_BASE}${path}`);
+    if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    notifyApiError(`GET ${path}`);
+    throw err;
+  }
+}
+
+async function apiDelete(path) {
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) throw new Error(`DELETE ${path} failed: ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    notifyApiError(`DELETE ${path}`);
+    throw err;
+  }
 }
 
 async function saveActivity(payload) {
@@ -324,8 +391,15 @@ document.addEventListener('DOMContentLoaded', () => {
           const mark = document.createElement('mark');
           const types = [...new Set(covering.map((it) => it.type))];
           mark.className = ['saved-hl', ...types.map((t) => `saved-hl-${t}`)].join(' ');
-          mark.title = covering.map(highlightTitle).join('\n');
+          mark.title = covering.map(highlightTitle).join('\n') + '\n(Nhấp để xem hoặc xóa ghi chú)';
           mark.textContent = chunk;
+          mark.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const noteItem = covering.find((it) => it.type === 'note') || covering[0];
+            if (noteItem) {
+              openDeleteNoteModal(noteItem);
+            }
+          });
           span.appendChild(mark);
         }
         pos = end;
@@ -708,10 +782,25 @@ document.addEventListener('DOMContentLoaded', () => {
       qaHistory.push({ question, answer: result.answer });
       if (result.used_fallback) {
         showToast('⚠️ AI không phản hồi, đang hiện thông báo tạm thời.');
+        pushNotification({
+          category: 'system',
+          title: 'Dữ liệu dự phòng',
+          message: 'AI không phản hồi, đang hiển thị câu trả lời dự phòng cục bộ.'
+        });
       } else if (result.status === 'out_of_scope') {
         showToast('🤖 Câu hỏi không liên quan đoạn đã bôi đen.');
+        pushNotification({
+          category: 'ai',
+          title: 'AI không đủ căn cứ',
+          message: 'Câu hỏi không nằm trong phạm vi nội dung đoạn slide đã bôi đen.'
+        });
       } else if (result.status === 'insufficient_context') {
         showToast('🤖 Đoạn bôi đen chưa đủ ngữ cảnh để trả lời.');
+        pushNotification({
+          category: 'ai',
+          title: 'AI không đủ căn cứ',
+          message: 'Đoạn slide đã chọn chưa đủ ngữ cảnh để AI đưa ra câu trả lời chính xác.'
+        });
       }
     } catch (err) {
       console.warn('Gọi /explain thất bại', err);
@@ -793,6 +882,11 @@ document.addEventListener('DOMContentLoaded', () => {
       window.getSelection().removeAllRanges();
       loadActivities();
       showToast(`📍 Đã lưu tiến độ: học đến Trang ${currentHighlightPageNo}. Hỏi chatbot ở Giai đoạn 2 để quay lại đây.`);
+      pushNotification({
+        category: 'learning',
+        title: 'Đã lưu tiến độ học tập',
+        message: `Đã đánh dấu tiến độ học đến Trang ${currentHighlightPageNo}.`
+      });
     } else {
       showToast('⚠️ Chưa lưu được tiến độ (backend không phản hồi hoặc DB chưa cập nhật).');
     }
@@ -812,10 +906,38 @@ document.addEventListener('DOMContentLoaded', () => {
     window.getSelection().removeAllRanges();
     loadActivities();
     showToast(`💾 Đã lưu ghi chú & đánh giá ${currentLiveRating}/5 vào Learning Activity Database!`);
+    pushNotification({
+      category: 'learning',
+      title: 'Đã lưu ghi chú',
+      message: `Đã lưu ghi chú Trang ${currentHighlightPageNo} với mức hiểu ${currentLiveRating}/5 vào Nhật ký học tập.`
+    });
   });
 
   // ---- Nhật ký buổi học (Bước 5): đọc từ backend, fallback data giả nếu offline ----
   const liveActivityStream = document.getElementById('live-activity-stream');
+
+  let currentActivitiesList = [];
+  let pendingDeleteActivityItem = null;
+  let pendingDeleteConvId = null;
+
+  // DOM Elements cho Modal Xóa Ghi Chú & Màn hình thông báo kết quả
+  const modalDeleteNote = document.getElementById('modal-delete-note');
+  const deleteNoteConfirmView = document.getElementById('delete-note-confirm-view');
+  const deleteNoteSuccessView = document.getElementById('delete-note-success-view');
+  const closeDeleteNoteModalBtn = document.getElementById('close-delete-note-modal');
+  const closeDeleteSuccessModalBtn = document.getElementById('close-delete-success-modal');
+  const btnCancelDeleteNote = document.getElementById('btn-cancel-delete-note');
+  const btnConfirmDeleteNote = document.getElementById('btn-confirm-delete-note');
+  const btnCloseDeleteSuccess = document.getElementById('btn-close-delete-success');
+  const deleteSuccessSummaryBox = document.getElementById('delete-success-summary-box');
+  let deleteSuccessTimer = null;
+
+  // DOM Elements cho Modal Xóa Cuộc Trò Chuyện
+  const modalDeleteConv = document.getElementById('modal-delete-conv');
+  const closeDeleteConvModalBtn = document.getElementById('close-delete-conv-modal');
+  const btnCancelDeleteConv = document.getElementById('btn-cancel-delete-conv');
+  const btnConfirmDeleteConv = document.getElementById('btn-confirm-delete-conv');
+  const deleteConvName = document.getElementById('delete-conv-name');
 
   const activityTypeMeta = {
     question: { tag: 'tag-blue', icon: '🤖', label: 'Hỏi đáp', className: 'stream-qa' },
@@ -835,18 +957,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderActivityLog(items) {
+    currentActivitiesList = Array.isArray(items) ? items : [];
     liveActivityStream.innerHTML = '';
-    if (!items || items.length === 0) {
+    if (!currentActivitiesList || currentActivitiesList.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'review-empty-state';
       empty.textContent = 'Chưa có hoạt động nào trong buổi học này.';
       liveActivityStream.appendChild(empty);
       return;
     }
-    items.forEach(item => {
+    currentActivitiesList.forEach(item => {
       const meta = activityTypeMeta[item.type] || activityTypeMeta.question;
       const card = document.createElement('div');
       card.className = `stream-card ${meta.className}`;
+      if (item.id) card.dataset.activityId = item.id;
 
       const timeEl = document.createElement('div');
       timeEl.className = 'stream-time';
@@ -869,27 +993,179 @@ document.addEventListener('DOMContentLoaded', () => {
       body.appendChild(msg);
       card.appendChild(timeEl);
       card.appendChild(body);
+
+      // Nút Xóa ghi chú / hoạt động
+      const btnDel = document.createElement('button');
+      btnDel.className = 'btn-delete-stream-item';
+      btnDel.title = item.type === 'note' ? 'Xóa ghi chú này' : 'Xóa hoạt động này';
+      btnDel.setAttribute('aria-label', `Xóa: ${activityMessage(item).slice(0, 30)}`);
+      btnDel.textContent = '🗑️';
+      btnDel.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openDeleteNoteModal(item);
+      });
+      card.appendChild(btnDel);
+
       liveActivityStream.appendChild(card); // backend trả mới nhất trước -> mới nhất ở trên cùng
     });
     liveActivityStream.scrollTop = 0;
   }
 
+  function openDeleteNoteModal(item) {
+    if (!item) return;
+    if (deleteSuccessTimer) {
+      clearTimeout(deleteSuccessTimer);
+      deleteSuccessTimer = null;
+    }
+    pendingDeleteActivityItem = item;
+    const meta = activityTypeMeta[item.type] || activityTypeMeta.note;
+
+    // Luôn reset về màn hình xác nhận trước
+    if (deleteNoteConfirmView) deleteNoteConfirmView.style.display = 'block';
+    if (deleteNoteSuccessView) deleteNoteSuccessView.style.display = 'none';
+
+    const tagEl = document.getElementById('delete-note-tag');
+    const pageEl = document.getElementById('delete-note-page');
+    const quoteEl = document.getElementById('delete-note-quote');
+    const textEl = document.getElementById('delete-note-text');
+
+    if (tagEl) {
+      tagEl.className = `preview-tag ${meta.tag}`;
+      tagEl.textContent = item.type === 'note'
+        ? `${meta.icon} Ghi chú (đánh giá ${item.rating || 2}/5)`
+        : `${meta.icon} ${meta.label || 'Hoạt động'}`;
+    }
+    if (pageEl) {
+      pageEl.textContent = item.slide ? `Trang ${item.slide}` : '';
+    }
+    if (quoteEl) {
+      if (item.highlight) {
+        quoteEl.textContent = `“${item.highlight}”`;
+        quoteEl.style.display = 'block';
+      } else {
+        quoteEl.style.display = 'none';
+      }
+    }
+    if (textEl) {
+      const msg = activityMessage(item);
+      textEl.textContent = msg || '(Không có nội dung chi tiết)';
+    }
+
+    if (modalDeleteNote) {
+      modalDeleteNote.classList.add('open');
+      if (btnCancelDeleteNote) setTimeout(() => btnCancelDeleteNote.focus(), 80);
+    }
+  }
+
+  function closeDeleteNoteModal() {
+    if (deleteSuccessTimer) {
+      clearTimeout(deleteSuccessTimer);
+      deleteSuccessTimer = null;
+    }
+    pendingDeleteActivityItem = null;
+    if (modalDeleteNote) modalDeleteNote.classList.remove('open');
+  }
+
+  async function confirmDeleteNote() {
+    if (!pendingDeleteActivityItem) return;
+    const item = pendingDeleteActivityItem;
+
+    if (item.id && !String(item.id).startsWith('demo-')) {
+      try {
+        await apiDelete(`/activities/${item.id}`);
+      } catch (err) {
+        console.warn('Lỗi gọi API xóa activity, fallback lọc local:', err);
+      }
+    }
+
+    currentActivitiesList = currentActivitiesList.filter(
+      (x) => x !== item && (!item.id || x.id !== item.id)
+    );
+    renderActivityLog(currentActivitiesList);
+    setSavedHighlights(currentActivitiesList);
+
+    // Đánh dấu đã tương tác hoạt động để lưu trạng thái
+    if (lessonId) {
+      try { localStorage.setItem(`vlearn_act_touched_${lessonId}`, 'true'); } catch (e) {}
+    }
+
+    // 1. Thêm thông báo chính thức vào Trung tâm thông báo (Màn hình thông báo)
+    pushNotification({
+      category: 'learning',
+      title: 'Đã xóa ghi chú',
+      message: `Đã xóa ghi chú${item.slide ? ` Trang ${item.slide}` : ''}: "${(item.note || item.highlight || '').slice(0, 45)}" khỏi Nhật ký học tập.`
+    });
+
+    // 2. Hiện Toast thông báo góc dưới
+    showToast('🗑️ Đã xóa ghi chú khỏi Nhật ký buổi học!');
+
+    // 3. Chuyển sang Màn hình thông báo kết quả xóa (Success Notification Screen) ngay trong Modal
+    if (deleteNoteConfirmView && deleteNoteSuccessView) {
+      deleteNoteConfirmView.style.display = 'none';
+      deleteNoteSuccessView.style.display = 'block';
+
+      if (deleteSuccessSummaryBox) {
+        deleteSuccessSummaryBox.innerHTML = `
+          <div><strong>Loại:</strong> ${item.type === 'note' ? '📊 Ghi chú cá nhân' : '📍 Hoạt động buổi học'}</div>
+          ${item.slide ? `<div><strong>Vị trí:</strong> Trang slide ${item.slide}</div>` : ''}
+          ${item.highlight ? `<div><strong>Đoạn trích:</strong> “${item.highlight.slice(0, 70)}${item.highlight.length > 70 ? '...' : ''}”</div>` : ''}
+          ${item.note ? `<div><strong>Nội dung:</strong> "${item.note}"</div>` : ''}
+          <div style="color: #059669; font-weight: 600; margin-top: 6px;">✓ Đã gỡ khỏi lộ trình ôn tập AI và cập nhật Trung tâm thông báo</div>
+        `;
+      }
+
+      if (btnCloseDeleteSuccess) {
+        setTimeout(() => btnCloseDeleteSuccess.focus(), 60);
+      }
+
+      // Tự động đóng modal sau 4 giây nếu người dùng không bấm
+      if (deleteSuccessTimer) clearTimeout(deleteSuccessTimer);
+      deleteSuccessTimer = setTimeout(() => {
+        closeDeleteNoteModal();
+      }, 4000);
+    } else {
+      closeDeleteNoteModal();
+    }
+  }
+
+  if (closeDeleteNoteModalBtn) closeDeleteNoteModalBtn.addEventListener('click', closeDeleteNoteModal);
+  if (closeDeleteSuccessModalBtn) closeDeleteSuccessModalBtn.addEventListener('click', closeDeleteNoteModal);
+  if (btnCancelDeleteNote) btnCancelDeleteNote.addEventListener('click', closeDeleteNoteModal);
+  if (btnConfirmDeleteNote) btnConfirmDeleteNote.addEventListener('click', confirmDeleteNote);
+  if (btnCloseDeleteSuccess) btnCloseDeleteSuccess.addEventListener('click', closeDeleteNoteModal);
+  if (modalDeleteNote) {
+    modalDeleteNote.addEventListener('click', (e) => {
+      if (e.target === modalDeleteNote) closeDeleteNoteModal();
+    });
+  }
+
   async function loadActivities() {
     if (!lessonId) {
-      renderActivityLog([]);
-      setSavedHighlights([]);
+      renderActivityLog(FALLBACK_ACTIVITIES);
+      setSavedHighlights(FALLBACK_ACTIVITIES);
       return;
     }
     try {
       const requestedLessonId = lessonId;
       const items = await apiGet(`/sessions/${SESSION_ID}/activities?lesson_id=${encodeURIComponent(lessonId)}`);
       if (requestedLessonId !== lessonId) return; // đã đổi bộ slide trong lúc chờ
-      renderActivityLog(items);
-      setSavedHighlights(items);
+      if (items && items.length > 0) {
+        renderActivityLog(items);
+        setSavedHighlights(items);
+      } else {
+        const touched = localStorage.getItem(`vlearn_act_touched_${lessonId}`);
+        if (!touched) {
+          renderActivityLog(FALLBACK_ACTIVITIES);
+          setSavedHighlights(FALLBACK_ACTIVITIES);
+        } else {
+          renderActivityLog([]);
+          setSavedHighlights([]);
+        }
+      }
     } catch (err) {
       console.warn('loadActivities: dùng data giả vì backend không phản hồi.', err);
       renderActivityLog(FALLBACK_ACTIVITIES);
-      setSavedHighlights([]);
+      setSavedHighlights(FALLBACK_ACTIVITIES);
     }
   }
 
@@ -909,6 +1185,15 @@ document.addEventListener('DOMContentLoaded', () => {
     hint: '💡 Gợi ý khi bí',
   };
 
+  const chatSidebar = document.getElementById('chat-sidebar');
+  const chatSidebarBackdrop = document.getElementById('chat-sidebar-backdrop');
+  const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
+  const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+  const btnNewChat = document.getElementById('btn-new-chat');
+  const sidebarConvList = document.getElementById('sidebar-conv-list');
+  const p2ActiveChatTitle = document.getElementById('p2-active-chat-title');
+  const btnRenameChat = document.getElementById('btn-rename-chat');
+
   const p2Messages = document.getElementById('p2-messages');
   const p2Input = document.getElementById('p2-input');
   const p2Send = document.getElementById('p2-send');
@@ -926,10 +1211,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const ksPanel = document.getElementById('ks-panel');
   const ksList = document.getElementById('ks-list');
   const ksNextQ = document.getElementById('ks-next-q');
-  // Mặc định BẬT: đây là lộ trình có đối chiếu slide + phân tích đúng/sai.
-  // Bỏ tích để quay về phiên dạy lại cũ (chỉ hỏi vặn, không có căn cứ).
   let useV3 = v3Toggle ? v3Toggle.checked : true;
-  let v3State = {}; // {knowledge, probes, streak} — server trả về, client giữ giữa các lượt
+  let v3State = {}; // {knowledge, probes, streak}
 
   const ksMeta = {
     understood: { icon: '✓', label: 'hiểu', cls: 'ks-ok' },
@@ -949,28 +1232,492 @@ document.addEventListener('DOMContentLoaded', () => {
     transfer: 'chuyển giao',
   };
 
+  // =========================================================================
+  // MODEL VÀ QUẢN LÝ ĐA HỘI THOẠI (CONVERSATIONS MANAGEMENT)
+  // =========================================================================
+  let conversations = [];
+  let activeConversationId = null;
+
+  function getConvStorageKey() {
+    return `vlearn_conversations_${lessonId || 'default'}`;
+  }
+
+  function getActiveConversation() {
+    if (!activeConversationId && conversations.length > 0) {
+      activeConversationId = conversations[0].id;
+    }
+    return conversations.find((c) => c.id === activeConversationId) || null;
+  }
+
+  function createNewConversationData(title = 'Cuộc trò chuyện mới', initialGreeting = true) {
+    const id = `conv_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const msgs = [];
+    if (initialGreeting) {
+      msgs.push({
+        id: `msg_${Date.now()}`,
+        role: 'ai',
+        text: 'Chào bạn! Hỏi mình về quá trình học nhé, ví dụ "Hôm nay tôi cần ôn gì?", "Tôi đã học đến đâu?", "Tôi đã ghi chú gì về latent space?" — mình sẽ trả lời kèm link tới đúng trang slide.',
+        timestamp: Date.now(),
+      });
+    }
+    return {
+      id,
+      title,
+      concept: null,
+      mode: 'review',
+      lessonId: lessonId || '',
+      sessionId: SESSION_ID,
+      updatedAt: Date.now(),
+      messages: msgs,
+      p2ChatHistory: [],
+      feynmanHistory: [],
+      v3State: {},
+    };
+  }
+
+  function saveConversations() {
+    const active = getActiveConversation();
+    if (active) {
+      active.mode = p2Mode;
+      active.concept = selectedConcept;
+      active.feynmanHistory = feynmanHistory || [];
+      active.v3State = v3State || {};
+      active.p2ChatHistory = p2ChatHistory || [];
+      active.updatedAt = Date.now();
+    }
+    try {
+      localStorage.setItem(getConvStorageKey(), JSON.stringify(conversations));
+    } catch (err) {
+      console.warn('Lỗi khi lưu hội thoại vào localStorage:', err);
+    }
+  }
+
+  function loadConversations() {
+    try {
+      const raw = localStorage.getItem(getConvStorageKey());
+      if (raw) {
+        conversations = JSON.parse(raw);
+        if (!Array.isArray(conversations)) conversations = [];
+      } else {
+        conversations = [];
+      }
+    } catch (e) {
+      conversations = [];
+    }
+
+    if (conversations.length === 0) {
+      const def = createNewConversationData('Cuộc trò chuyện mới', true);
+      conversations.push(def);
+      activeConversationId = def.id;
+      saveConversations();
+    } else {
+      if (!activeConversationId || !conversations.some((c) => c.id === activeConversationId)) {
+        conversations.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+        activeConversationId = conversations[0].id;
+      }
+    }
+    renderSidebarConversations();
+    loadActiveConversationToUI();
+  }
+
+  function autoNameConversationIfNeeded(conceptOrText) {
+    const active = getActiveConversation();
+    if (!active) return;
+    if (!active.title || active.title === 'Cuộc trò chuyện mới' || active.title === 'Ôn tập & Dạy lại cho AI') {
+      let clean = String(conceptOrText).trim().replace(/^[^\w\s\u00C0-\u1EF9]+/, '').trim();
+      if (clean.length > 26) clean = clean.substring(0, 24) + '...';
+      if (clean) {
+        active.title = clean;
+        if (p2ActiveChatTitle) p2ActiveChatTitle.textContent = clean;
+        saveConversations();
+        renderSidebarConversations();
+      }
+    }
+  }
+
+  function renderSidebarConversations() {
+    if (!sidebarConvList) return;
+    sidebarConvList.innerHTML = '';
+    conversations.forEach((c) => {
+      const item = document.createElement('div');
+      item.className = `conv-item${c.id === activeConversationId ? ' active' : ''}`;
+      item.setAttribute('role', 'button');
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('aria-label', `Cuộc trò chuyện: ${c.title || 'Cuộc trò chuyện mới'}`);
+
+      const left = document.createElement('div');
+      left.className = 'conv-item-left';
+
+      const icon = document.createElement('span');
+      icon.className = 'conv-item-icon';
+      icon.textContent = c.mode === 'feynman' ? '👨‍🏫' : '💬';
+
+      const info = document.createElement('div');
+      info.className = 'conv-item-info';
+
+      const title = document.createElement('span');
+      title.className = 'conv-item-title';
+      title.textContent = c.title || 'Cuộc trò chuyện mới';
+
+      const meta = document.createElement('div');
+      meta.className = 'conv-item-meta';
+
+      if (c.concept) {
+        const tag = document.createElement('span');
+        tag.className = 'conv-tag-concept';
+        tag.textContent = c.concept;
+        meta.appendChild(tag);
+      }
+
+      const time = document.createElement('span');
+      time.className = 'conv-time';
+      const d = new Date(c.updatedAt || Date.now());
+      time.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+      meta.appendChild(time);
+
+      info.append(title, meta);
+      left.append(icon, info);
+
+      const actions = document.createElement('div');
+      actions.className = 'conv-item-actions';
+
+      const btnRename = document.createElement('button');
+      btnRename.className = 'btn-conv-action btn-conv-rename';
+      btnRename.title = 'Đổi tên cuộc trò chuyện';
+      btnRename.textContent = '✏️';
+      btnRename.setAttribute('aria-label', 'Đổi tên');
+      btnRename.addEventListener('click', (e) => {
+        e.stopPropagation();
+        promptRenameConversation(c.id);
+      });
+
+      const btnDel = document.createElement('button');
+      btnDel.className = 'btn-conv-action btn-conv-delete';
+      btnDel.title = 'Xóa cuộc trò chuyện';
+      btnDel.textContent = '🗑️';
+      btnDel.setAttribute('aria-label', 'Xóa');
+      btnDel.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openDeleteConvModal(c.id);
+      });
+
+      actions.append(btnRename, btnDel);
+      item.append(left, actions);
+
+      item.addEventListener('click', () => selectConversation(c.id));
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectConversation(c.id);
+        }
+      });
+
+      sidebarConvList.appendChild(item);
+    });
+  }
+
+  function promptRenameConversation(convId) {
+    const c = conversations.find((x) => x.id === convId);
+    if (!c) return;
+    const current = c.title || '';
+    const newTitle = window.prompt('Nhập tên mới cho cuộc trò chuyện:', current);
+    if (newTitle !== null && newTitle.trim() && newTitle.trim() !== current) {
+      c.title = newTitle.trim();
+      if (convId === activeConversationId && p2ActiveChatTitle) {
+        p2ActiveChatTitle.textContent = c.title;
+      }
+      saveConversations();
+      renderSidebarConversations();
+    }
+  }
+
+  function openDeleteConvModal(convId) {
+    const c = conversations.find((x) => x.id === convId);
+    if (!c) return;
+    pendingDeleteConvId = convId;
+    if (deleteConvName) deleteConvName.textContent = c.title || 'Cuộc trò chuyện';
+    if (modalDeleteConv) {
+      modalDeleteConv.classList.add('open');
+      if (btnCancelDeleteConv) setTimeout(() => btnCancelDeleteConv.focus(), 80);
+    }
+  }
+
+  function closeDeleteConvModal() {
+    pendingDeleteConvId = null;
+    if (modalDeleteConv) modalDeleteConv.classList.remove('open');
+  }
+
+  function confirmDeleteConv() {
+    if (!pendingDeleteConvId) return;
+    const convId = pendingDeleteConvId;
+    closeDeleteConvModal();
+
+    const idx = conversations.findIndex((x) => x.id === convId);
+    if (idx === -1) return;
+    const deletedTitle = conversations[idx].title || 'Cuộc trò chuyện';
+    conversations.splice(idx, 1);
+    if (conversations.length === 0) {
+      const newConv = createNewConversationData('Cuộc trò chuyện mới', true);
+      conversations.push(newConv);
+      activeConversationId = newConv.id;
+    } else if (activeConversationId === convId) {
+      activeConversationId = conversations[0].id;
+    }
+    saveConversations();
+    renderSidebarConversations();
+    loadActiveConversationToUI();
+
+    pushNotification({
+      category: 'ai',
+      title: 'Đã xóa cuộc trò chuyện',
+      message: `Đã xóa cuộc trò chuyện "${deletedTitle}" khỏi danh sách ôn tập.`
+    });
+
+    showToast(`🗑️ Đã xóa "${deletedTitle}"`);
+  }
+
+  if (closeDeleteConvModalBtn) closeDeleteConvModalBtn.addEventListener('click', closeDeleteConvModal);
+  if (btnCancelDeleteConv) btnCancelDeleteConv.addEventListener('click', closeDeleteConvModal);
+  if (btnConfirmDeleteConv) btnConfirmDeleteConv.addEventListener('click', confirmDeleteConv);
+  if (modalDeleteConv) {
+    modalDeleteConv.addEventListener('click', (e) => {
+      if (e.target === modalDeleteConv) closeDeleteConvModal();
+    });
+  }
+
+  function selectConversation(convId) {
+    if (activeConversationId === convId) {
+      toggleSidebar(false);
+      return;
+    }
+    saveConversations();
+    activeConversationId = convId;
+    renderSidebarConversations();
+    loadActiveConversationToUI();
+    toggleSidebar(false);
+    if (p2Input) p2Input.focus();
+  }
+
+  function createNewConversation() {
+    saveConversations();
+    const newConv = createNewConversationData('Cuộc trò chuyện mới', true);
+    conversations.unshift(newConv);
+    activeConversationId = newConv.id;
+    saveConversations();
+    renderSidebarConversations();
+    loadActiveConversationToUI();
+    toggleSidebar(false);
+    if (p2Input) p2Input.focus();
+  }
+
+  function loadActiveConversationToUI() {
+    const active = getActiveConversation();
+    if (!active) return;
+    selectedConcept = active.concept || null;
+    feynmanHistory = active.feynmanHistory || [];
+    v3State = active.v3State || {};
+    p2ChatHistory = active.p2ChatHistory || [];
+    setMode(active.mode || 'review');
+    if (p2ActiveChatTitle) {
+      p2ActiveChatTitle.textContent = active.title || 'Cuộc trò chuyện mới';
+    }
+    renderKnowledgeState(null);
+    renderMessagesFromActiveConv();
+    renderQuickActions();
+  }
+
+  function renderMessagesFromActiveConv() {
+    p2Messages.innerHTML = '';
+    const active = getActiveConversation();
+    if (!active || !active.messages || active.messages.length === 0) {
+      renderChatEmptyState();
+      return;
+    }
+    active.messages.forEach((msg) => {
+      renderStoredMessage(msg);
+    });
+    scrollChatToBottom();
+  }
+
+  function renderChatEmptyState() {
+    p2Messages.innerHTML = '';
+    const empty = document.createElement('div');
+    empty.className = 'chat-empty-state';
+
+    const icon = document.createElement('div');
+    icon.className = 'empty-icon';
+    icon.textContent = '🌙';
+
+    const title = document.createElement('div');
+    title.className = 'empty-title';
+    title.textContent = 'Bắt đầu phiên ôn tập cùng AI';
+
+    const desc = document.createElement('div');
+    desc.className = 'empty-desc';
+    desc.textContent = 'Hỏi AI về tiến độ học tập, nhờ xếp danh sách các khái niệm cần củng cố, hoặc chọn khái niệm để dạy lại cho AI theo phương pháp Feynman.';
+
+    const sugWrap = document.createElement('div');
+    sugWrap.className = 'empty-suggestions';
+
+    const suggestions = [
+      { icon: '📋', text: 'Hôm nay tôi cần ôn gì?', action: () => requestReviewList('Hôm nay tôi cần ôn gì?') },
+      { icon: '📍', text: 'Tôi đã học đến đâu?', action: () => requestChat('Tôi đã học đến đâu?') },
+      { icon: '🔗', text: 'Tôi đã lưu những trang nào?', action: () => requestChat('Tôi đã lưu những trang nào?') },
+    ];
+
+    suggestions.forEach((sug) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-suggestion';
+      btn.innerHTML = `<span class="sug-icon">${sug.icon}</span><span>${sug.text}</span>`;
+      btn.addEventListener('click', () => {
+        if (p2Busy) return;
+        sug.action();
+      });
+      sugWrap.appendChild(btn);
+    });
+
+    empty.append(icon, title, desc, sugWrap);
+    p2Messages.appendChild(empty);
+  }
+
+  function renderStoredMessage(msg) {
+    if (msg.role === 'system') {
+      const divider = document.createElement('div');
+      divider.className = 'p2-system-msg';
+      divider.textContent = msg.text;
+      p2Messages.appendChild(divider);
+      return;
+    }
+
+    const isUser = msg.role === 'user';
+    const row = document.createElement('div');
+    row.className = `msg-row ${isUser ? 'msg-student' : 'msg-teacher'} p2-msg${msg.isError ? ' p2-msg-error' : ''}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.textContent = isUser ? '🙋' : '🤖';
+
+    const content = document.createElement('div');
+    content.className = 'msg-content';
+
+    const authorEl = document.createElement('div');
+    authorEl.className = 'msg-author';
+    authorEl.textContent = msg.author || (isUser ? 'Bạn' : 'AI');
+    if (msg.badge) {
+      const badgeEl = document.createElement('span');
+      badgeEl.className = 'p2-feedback-badge';
+      badgeEl.textContent = msg.badge;
+      authorEl.appendChild(badgeEl);
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+
+    if (msg.cardType === 'review' && msg.cardData) {
+      bubble.classList.add('p2-card-bubble');
+      bubble.appendChild(buildReviewCard(msg.cardData));
+    } else if (msg.cardType === 'summary' && msg.cardData) {
+      bubble.classList.add('p2-card-bubble');
+      bubble.appendChild(buildSummaryCard(msg.cardData));
+    } else if (msg.cardType === 'v3_reply' && msg.cardData) {
+      renderV3ReplyContent(bubble, msg.cardData);
+    } else if (msg.isError) {
+      showChatError(bubble, msg.text, msg.retryPayload, false);
+    } else {
+      bubble.textContent = msg.text || '';
+      if (msg.links && msg.links.length) {
+        addSlideLinks(bubble, msg.links);
+      }
+    }
+
+    content.append(authorEl, bubble);
+    row.append(avatar, content);
+    p2Messages.appendChild(row);
+  }
+
+  function renderV3ReplyContent(bubble, data) {
+    if (!data) return;
+    if (data.encourage) {
+      const enc = document.createElement('div');
+      enc.className = 'v3-encourage';
+      enc.textContent = data.encourage;
+      bubble.appendChild(enc);
+    }
+    if (data.mirror) {
+      const mir = document.createElement('div');
+      mir.className = 'v3-mirror';
+      mir.textContent = data.mirror;
+      bubble.appendChild(mir);
+    }
+    if (data.reply) {
+      const main = document.createElement('div');
+      main.className = 'v3-reply';
+      main.textContent = data.reply;
+      bubble.appendChild(main);
+    }
+    if (data.evidence) {
+      bubble.appendChild(buildEvidenceCard(data.evidence));
+    }
+    if (data.enforced && data.enforced.length) {
+      bubble.appendChild(buildEnforcedBox(data.enforced));
+    }
+  }
+
   function scrollChatToBottom() {
     p2Messages.scrollTop = p2Messages.scrollHeight;
   }
 
   // role: 'user' (bên phải) | 'ai' (bên trái) | 'system' (dải giữa)
-  function addChatMessage(role, { text = '', loading = false, badge = '', author = '' } = {}) {
+  function addChatMessage(role, {
+    text = '',
+    loading = false,
+    badge = '',
+    author = '',
+    isError = false,
+    retryPayload = null,
+    cardType = null,
+    cardData = null,
+    links = null,
+    persist = true,
+  } = {}) {
+    const emptyState = p2Messages.querySelector('.chat-empty-state');
+    if (emptyState) emptyState.remove();
+
     if (role === 'system') {
       const divider = document.createElement('div');
       divider.className = 'p2-system-msg';
       divider.textContent = text;
       p2Messages.appendChild(divider);
       scrollChatToBottom();
+
+      if (persist) {
+        const active = getActiveConversation();
+        if (active) {
+          active.messages = active.messages || [];
+          active.messages.push({
+            id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+            role: 'system',
+            text,
+            timestamp: Date.now(),
+          });
+          saveConversations();
+          renderSidebarConversations();
+        }
+      }
       return divider;
     }
+
     const isUser = role === 'user';
     const row = document.createElement('div');
-    row.className = `msg-row ${isUser ? 'msg-student' : 'msg-teacher'} p2-msg`;
+    row.className = `msg-row ${isUser ? 'msg-student' : 'msg-teacher'} p2-msg${isError ? ' p2-msg-error' : ''}`;
+
     const avatar = document.createElement('div');
     avatar.className = 'msg-avatar';
     avatar.textContent = isUser ? '🙋' : '🤖';
+
     const content = document.createElement('div');
     content.className = 'msg-content';
+
     const authorEl = document.createElement('div');
     authorEl.className = 'msg-author';
     authorEl.textContent = author || (isUser ? 'Bạn' : 'AI');
@@ -980,16 +1727,102 @@ document.addEventListener('DOMContentLoaded', () => {
       badgeEl.textContent = badge;
       authorEl.appendChild(badgeEl);
     }
+
     const bubble = document.createElement('div');
     bubble.className = `msg-bubble${loading ? ' msg-loading' : ''}`;
-    bubble.textContent = text;
-    content.appendChild(authorEl);
-    content.appendChild(bubble);
-    row.appendChild(avatar);
-    row.appendChild(content);
+
+    if (loading) {
+      bubble.innerHTML = '<span class="typing-indicator" aria-label="Đang suy nghĩ..."><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></span>';
+    } else {
+      bubble.textContent = text;
+    }
+
+    content.append(authorEl, bubble);
+    row.append(avatar, content);
     p2Messages.appendChild(row);
     scrollChatToBottom();
+
+    if (persist && !loading) {
+      const active = getActiveConversation();
+      if (active) {
+        active.messages = active.messages || [];
+        active.messages.push({
+          id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+          role,
+          text,
+          badge,
+          author,
+          isError,
+          retryPayload,
+          cardType,
+          cardData,
+          links,
+          timestamp: Date.now(),
+        });
+        saveConversations();
+        renderSidebarConversations();
+      }
+    }
+
     return bubble;
+  }
+
+  function showChatError(bubble, errText, retryPayload, persist = true) {
+    if (!bubble) return;
+    const row = bubble.closest('.msg-row');
+    if (row) row.classList.add('p2-msg-error');
+    bubble.classList.remove('msg-loading');
+    bubble.innerHTML = '';
+
+    const errContent = document.createElement('div');
+    errContent.className = 'p2-bubble-error';
+
+    const msgP = document.createElement('div');
+    msgP.textContent = `⚠️ ${errText || 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.'}`;
+
+    const btnRetry = document.createElement('button');
+    btnRetry.className = 'btn-retry-chat';
+    btnRetry.innerHTML = '🔄 Thử lại';
+    btnRetry.addEventListener('click', async () => {
+      if (p2Busy) return;
+      if (row) row.remove();
+      const active = getActiveConversation();
+      if (active && active.messages) {
+        active.messages = active.messages.filter((m) => m.retryPayload !== retryPayload);
+        saveConversations();
+      }
+      if (retryPayload) {
+        if (retryPayload.type === 'chat') {
+          await requestChat(retryPayload.text, false);
+        } else if (retryPayload.type === 'review') {
+          await requestReviewList(retryPayload.text, false);
+        } else if (retryPayload.type === 'feynman') {
+          await askStudent(retryPayload.text);
+        } else if (retryPayload.type === 'feynman_summary') {
+          await endFeynmanSession();
+        }
+      }
+    });
+
+    errContent.append(msgP, btnRetry);
+    bubble.appendChild(errContent);
+    scrollChatToBottom();
+
+    if (persist) {
+      const active = getActiveConversation();
+      if (active) {
+        active.messages = active.messages || [];
+        active.messages.push({
+          id: `msg_${Date.now()}_err`,
+          role: 'ai',
+          text: errText || 'Không kết nối được backend AI.',
+          isError: true,
+          retryPayload,
+          timestamp: Date.now(),
+        });
+        saveConversations();
+      }
+    }
   }
 
   function setBusy(busy) {
@@ -1017,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestReviewList('Xem lại danh sách ôn tập');
       });
     } else {
-      addChip('Hôm nay tôi cần ôn gì?', () => requestReviewList('Hôm nay tôi cần ôn gì?'));
+      addChip('📋 Hôm nay tôi cần ôn gì?', () => requestReviewList('Hôm nay tôi cần ôn gì?'));
       addChip('📍 Tôi đã học đến đâu?', () => requestChat('Tôi đã học đến đâu?'));
       addChip('🔗 Tôi đã lưu những trang nào?', () => requestChat('Tôi đã lưu những trang nào?'));
     }
@@ -1025,14 +1858,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setMode(mode) {
     p2Mode = mode;
+    const active = getActiveConversation();
+    if (active) {
+      active.mode = mode;
+    }
     if (mode === 'feynman') {
       p2ModeTag.textContent = 'Dạy lại cho AI';
-      p2ChatStatus.textContent = `Bạn là "Giáo viên" · Chủ đề: ${selectedConcept}`;
-      p2Input.placeholder = 'Giải thích khái niệm bằng lời của bạn...';
+      p2ChatStatus.textContent = `Bạn là "Giáo viên" · Chủ đề: ${selectedConcept || (active && active.concept) || 'Khái niệm ôn tập'}`;
+      p2Input.placeholder = 'Giải thích khái niệm bằng lời của bạn... (Enter gửi, Shift+Enter xuống dòng)';
     } else {
       p2ModeTag.textContent = 'Ôn tập';
       p2ChatStatus.textContent = 'Hỏi AI hôm nay cần ôn gì, chọn khái niệm để dạy lại cho AI';
-      p2Input.placeholder = 'Hỏi AI: Hôm nay tôi cần ôn gì?';
+      p2Input.placeholder = 'Hỏi AI: Hôm nay tôi cần ôn gì? (Enter gửi, Shift+Enter xuống dòng)';
     }
     renderQuickActions();
   }
@@ -1042,6 +1879,13 @@ document.addEventListener('DOMContentLoaded', () => {
     feynmanHistory = [];
     v3State = {};
     if (ksPanel) ksPanel.hidden = true;
+    const active = getActiveConversation();
+    if (active) {
+      active.concept = null;
+      active.mode = 'review';
+      saveConversations();
+      renderSidebarConversations();
+    }
     setMode('review');
   }
 
@@ -1162,28 +2006,55 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  function addCardMessage(cardEl) {
-    const bubble = addChatMessage('ai');
+  function addCardMessage(cardEl, { cardType = null, cardData = null } = {}) {
+    const bubble = addChatMessage('ai', { isCard: true, cardType, cardData });
     bubble.classList.add('p2-card-bubble');
     bubble.appendChild(cardEl);
     scrollChatToBottom();
     return bubble;
   }
 
-  async function requestReviewList(userText) {
+  async function requestReviewList(userText, addToHistory = true) {
     if (p2Busy) return;
-    if (userText) addChatMessage('user', { text: userText });
+    if (userText && addToHistory) {
+      addChatMessage('user', { text: userText });
+      autoNameConversationIfNeeded(userText);
+    }
     setBusy(true);
-    const loading = addChatMessage('ai', { text: 'Đang phân tích ghi chú và câu hỏi buổi học...', loading: true });
+    pushNotification({
+      category: 'ai',
+      title: 'AI đang phân tích',
+      message: 'Hệ thống đang tổng hợp dữ liệu học tập để lập danh sách ôn tập...',
+      showToastNotification: false
+    });
+    const loading = addChatMessage('ai', { loading: true, persist: false });
     try {
       const data = await apiPost(`/sessions/${SESSION_ID}/review`, { lesson_id: lessonId });
       reviewStale = false;
       loading.closest('.msg-row').remove();
-      addCardMessage(buildReviewCard(data));
+      addCardMessage(buildReviewCard(data), { cardType: 'review', cardData: data });
+
+      const count = (data.items || []).length;
+      pushNotification({
+        category: 'ai',
+        title: 'AI đã hoàn tất',
+        message: `Đã hoàn tất phân tích và xếp lịch ${count} nội dung ôn tập.`
+      });
+
+      const highItems = (data.items || []).filter(it => it.group === 'high');
+      if (highItems.length > 0) {
+        pushNotification({
+          category: 'learning',
+          title: 'Nội dung cần ôn tập',
+          message: `Có ${highItems.length} khái niệm ưu tiên cao cần củng cố lại sớm trong danh sách ôn tập!`
+        });
+      }
     } catch (err) {
       console.warn('Gọi /review thất bại', err);
-      loading.textContent = 'Không kết nối được backend AI. Kiểm tra server (FastAPI) rồi thử lại.';
-      loading.classList.remove('msg-loading');
+      showChatError(loading, 'Không kết nối được backend AI (FastAPI) để tải danh sách ôn tập.', {
+        type: 'review',
+        text: userText || 'Hôm nay tôi cần ôn gì?',
+      });
     } finally {
       setBusy(false);
       renderQuickActions();
@@ -1202,7 +2073,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- B8-B9: dạy lại cho AI (Feynman, AI thật) ----------
   async function requestStudentReply(message) {
-    const bubble = addChatMessage('ai', { text: 'Đang suy nghĩ...', loading: true, author: 'AI (Học viên)' });
+    pushNotification({
+      category: 'ai',
+      title: 'AI đang suy nghĩ',
+      message: 'Học viên AI đang lắng nghe và phản hồi bài giảng của bạn...',
+      showToastNotification: false
+    });
+    const bubble = addChatMessage('ai', { loading: true, author: 'AI (Học viên)', persist: false });
     try {
       const result = await apiPost('/feynman/reply', {
         session_id: SESSION_ID,
@@ -1211,22 +2088,37 @@ document.addEventListener('DOMContentLoaded', () => {
         history: feynmanHistory,
         message,
       });
-      bubble.textContent = result.reply;
-      bubble.classList.remove('msg-loading');
-      if (result.used_fallback) return; // không đưa lượt lỗi vào lịch sử
+      bubble.closest('.msg-row').remove();
+      const label = feedbackTypeMeta[result.feedback_type];
+      addChatMessage('ai', {
+        text: result.reply,
+        author: 'AI (Học viên)',
+        badge: label && message ? label : '',
+      });
+
+      pushNotification({
+        category: 'ai',
+        title: 'AI đã phản hồi',
+        message: 'Học viên AI đã đưa ra phản hồi mới cho bài giảng của bạn.'
+      });
+
+      if (result.used_fallback) {
+        pushNotification({
+          category: 'system',
+          title: 'Dữ liệu dự phòng',
+          message: 'Học viên AI đang dùng câu trả lời dự phòng do máy chủ chưa phản hồi.'
+        });
+        return;
+      }
       if (message) feynmanHistory.push({ role: 'teacher', content: message });
       feynmanHistory.push({ role: 'student', content: result.reply });
-      const label = feedbackTypeMeta[result.feedback_type];
-      if (label && message) {
-        const badgeEl = document.createElement('span');
-        badgeEl.className = 'p2-feedback-badge';
-        badgeEl.textContent = label;
-        bubble.parentElement.querySelector('.msg-author').appendChild(badgeEl);
-      }
+      saveConversations();
     } catch (err) {
       console.warn('Gọi /feynman/reply thất bại', err);
-      bubble.textContent = 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.';
-      bubble.classList.remove('msg-loading');
+      showChatError(bubble, 'Không kết nối được backend AI.', {
+        type: 'feynman',
+        text: message,
+      });
     }
   }
 
@@ -1234,10 +2126,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderKnowledgeState(nextQuestionType) {
     const knowledge = (v3State && v3State.knowledge) || {};
     const names = Object.keys(knowledge);
+    if (!ksPanel) return;
     ksPanel.hidden = !useV3 || names.length === 0;
     if (ksPanel.hidden) return;
     ksList.textContent = '';
-    // Đang nhầm lên trước, đã hiểu xuống cuối — nhìn phát biết còn vướng chỗ nào
     const order = { misconception: 0, unclear: 1, understood: 2 };
     names.sort((a, b) => order[knowledge[a]] - order[knowledge[b]] || a.localeCompare(b));
     for (const name of names) {
@@ -1257,9 +2149,11 @@ document.addEventListener('DOMContentLoaded', () => {
       row.append(icon, text, tag);
       ksList.appendChild(row);
     }
-    ksNextQ.textContent = nextQuestionType
-      ? `câu hỏi tiếp theo: ${nextQMeta[nextQuestionType] || nextQuestionType}`
-      : '';
+    if (ksNextQ) {
+      ksNextQ.textContent = nextQuestionType
+        ? `câu hỏi tiếp theo: ${nextQMeta[nextQuestionType] || nextQuestionType}`
+        : '';
+    }
   }
 
   function buildEvidenceCard(evidence) {
@@ -1272,10 +2166,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const badge = document.createElement('span');
     badge.className = 'ev-badge';
     badge.textContent = `📄 ${meta.label}`;
-    head.appendChild(badge); // link trang nằm ở từng dẫn chứng bên dưới, không lặp ở đây
+    head.appendChild(badge);
     card.appendChild(head);
 
-    // Phân tích đúng / sai, mỗi mục đã kèm lý do ngay trong câu
     const addPoints = (items, cls, label) => {
       if (!items || !items.length) return;
       const block = document.createElement('div');
@@ -1297,7 +2190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     addPoints(evidence.wrong_points, 'ev-points-bad', '✗ Phần chưa chính xác');
     addPoints(evidence.missing_points, 'ev-points-miss', '○ Ý quan trọng còn thiếu');
 
-    // Dẫn chứng: mỗi trích dẫn đã được backend đối chiếu từng chữ với slide gốc
     const citations = evidence.citations && evidence.citations.length
       ? evidence.citations
       : (evidence.quote ? [{ slide: evidence.slide, quote: evidence.quote }] : []);
@@ -1353,7 +2245,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function requestStudentReplyV3(message) {
-    const bubble = addChatMessage('ai', { text: 'Đang suy nghĩ...', loading: true, author: 'AI (Học viên)' });
+    pushNotification({
+      category: 'ai',
+      title: 'AI đang suy nghĩ',
+      message: 'Học viên AI đang đối chiếu bài giảng với slide...',
+      showToastNotification: false
+    });
+    const bubble = addChatMessage('ai', { loading: true, author: 'AI (Học viên)', persist: false });
     try {
       const result = await apiPost('/feynman/v3/reply', {
         session_id: SESSION_ID,
@@ -1363,49 +2261,58 @@ document.addEventListener('DOMContentLoaded', () => {
         message,
         state: v3State,
       });
-      bubble.classList.remove('msg-loading');
-      bubble.textContent = '';
+      bubble.closest('.msg-row').remove();
 
-      // Bước 2 ENCOURAGE — một dòng nhỏ, bám nội dung vừa nghe
-      if (result.encourage) {
-        const enc = document.createElement('div');
-        enc.className = 'v3-encourage';
-        enc.textContent = result.encourage;
-        bubble.appendChild(enc);
-      }
-      // Bước 3 MIRROR — tách khỏi câu hỏi để thấy rõ AI đang phản chiếu gì
-      if (result.mirror) {
-        const mir = document.createElement('div');
-        mir.className = 'v3-mirror';
-        mir.textContent = result.mirror;
-        bubble.appendChild(mir);
-      }
-      // Bước 4 PROBE (hoặc kết luận khi đã chốt)
-      const main = document.createElement('div');
-      main.className = 'v3-reply';
-      main.textContent = result.reply;
-      bubble.appendChild(main);
+      addChatMessage('ai', {
+        text: result.reply,
+        author: 'AI (Học viên)',
+        cardType: 'v3_reply',
+        cardData: {
+          encourage: result.encourage,
+          mirror: result.mirror,
+          reply: result.reply,
+          evidence: result.evidence,
+          enforced: result.enforced,
+        },
+      });
 
-      // Bước 5 EVIDENCE CHECK
-      if (result.evidence) bubble.appendChild(buildEvidenceCard(result.evidence));
-      if (result.enforced && result.enforced.length) {
-        bubble.appendChild(buildEnforcedBox(result.enforced));
+      pushNotification({
+        category: 'ai',
+        title: 'AI đã phản hồi',
+        message: 'Học viên AI đã đưa ra phản hồi mới cho bài giảng của bạn.'
+      });
+
+      if (result.evidence && (result.evidence.verdict === 'insufficient_evidence' || (result.evidence.flags && result.evidence.flags.length > 0))) {
+        pushNotification({
+          category: 'ai',
+          title: 'AI không đủ căn cứ',
+          message: 'Bài giảng chứa nội dung chưa có trong slide hoặc slide chưa đủ dữ kiện để AI đối chiếu.'
+        });
       }
 
-      if (result.used_fallback) return; // lượt lỗi: không ghi vào lịch sử, không cập nhật state
+      if (result.used_fallback) {
+        pushNotification({
+          category: 'system',
+          title: 'Dữ liệu dự phòng',
+          message: 'Học viên AI đang dùng câu trả lời dự phòng do máy chủ chưa phản hồi.'
+        });
+        return;
+      }
       v3State = result.state || v3State;
       if (message) feynmanHistory.push({ role: 'teacher', content: message });
       feynmanHistory.push({ role: 'student', content: result.reply });
-      renderKnowledgeState(result.next_question_type); // bước 6 + bước 7
+      saveConversations();
+      renderKnowledgeState(result.next_question_type);
       scrollChatToBottom();
     } catch (err) {
       console.warn('Gọi /feynman/v3/reply thất bại', err);
-      bubble.textContent = 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.';
-      bubble.classList.remove('msg-loading');
+      showChatError(bubble, 'Không kết nối được backend AI.', {
+        type: 'feynman',
+        text: message,
+      });
     }
   }
 
-  // Một cửa duy nhất cho cả hai lộ trình — các chỗ gọi không cần biết đang bật cái nào
   function askStudent(message) {
     return useV3 ? requestStudentReplyV3(message) : requestStudentReply(message);
   }
@@ -1434,12 +2341,20 @@ document.addEventListener('DOMContentLoaded', () => {
     v3State = {};
     renderKnowledgeState(null);
     setMode('feynman');
+    autoNameConversationIfNeeded(concept);
+    const active = getActiveConversation();
+    if (active) {
+      active.concept = concept;
+      active.mode = 'feynman';
+      saveConversations();
+      renderSidebarConversations();
+    }
     addChatMessage('system', { text: `👨‍🏫 Bắt đầu dạy lại "${concept}" — bạn là Giáo viên, AI là Học viên` });
     setBusy(true);
     await askStudent('');
     setBusy(false);
     renderQuickActions();
-    p2Input.focus();
+    if (p2Input) p2Input.focus();
   }
 
   // ---------- B10: tổng kết + lưu mức hiểu ----------
@@ -1517,6 +2432,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const concept = selectedConcept;
       await submitCorrection(concept, 're_rate', chosen);
       addChatMessage('system', { text: `✅ Đã lưu "${concept}" ở mức ${ratingLabels[chosen]}` });
+      pushNotification({
+        category: 'learning',
+        title: 'Cập nhật mức hiểu',
+        message: `Khái niệm "${concept}" đã được cập nhật sang mức hiểu: ${ratingLabels[chosen]} (${chosen}/5).`
+      });
       exitFeynmanMode();
       requestReviewList('');
     });
@@ -1528,7 +2448,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (p2Busy || !selectedConcept) return;
     addChatMessage('user', { text: '🏁 Kết thúc phiên & tổng kết' });
     setBusy(true);
-    const loading = addChatMessage('ai', { text: 'Đang tổng kết phiên dạy...', loading: true });
+    pushNotification({
+      category: 'ai',
+      title: 'AI đang tổng kết',
+      message: `Hệ thống đang phân tích toàn bộ phiên thảo luận để tổng kết mức hiểu "${selectedConcept}"...`,
+      showToastNotification: false
+    });
+    const loading = addChatMessage('ai', { loading: true, persist: false });
     try {
       const result = await apiPost('/feynman/summary', {
         session_id: SESSION_ID,
@@ -1537,11 +2463,18 @@ document.addEventListener('DOMContentLoaded', () => {
         history: feynmanHistory,
       });
       loading.closest('.msg-row').remove();
-      addCardMessage(buildSummaryCard(result));
+      addCardMessage(buildSummaryCard(result), { cardType: 'summary', cardData: result });
+
+      pushNotification({
+        category: 'ai',
+        title: 'AI đã tổng kết',
+        message: `Bản đánh giá tổng kết mức độ hiểu cho khái niệm "${selectedConcept}" đã sẵn sàng.`
+      });
     } catch (err) {
       console.warn('Gọi /feynman/summary thất bại', err);
-      loading.textContent = 'Không kết nối được backend AI để tổng kết.';
-      loading.classList.remove('msg-loading');
+      showChatError(loading, 'Không kết nối được backend AI để tổng kết.', {
+        type: 'feynman_summary',
+      });
     } finally {
       setBusy(false);
       renderQuickActions();
@@ -1553,13 +2486,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const text = p2Input.value.trim();
     if (!text || p2Busy) return;
     p2Input.value = '';
+    p2Input.style.height = 'auto';
     if (p2Mode === 'feynman') {
       addChatMessage('user', { text, author: 'Bạn (Giáo viên)' });
       setBusy(true);
       await askStudent(text);
       setBusy(false);
       renderQuickActions();
-      p2Input.focus();
+      if (p2Input) p2Input.focus();
     } else {
       requestChat(text);
     }
@@ -1584,11 +2518,14 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollChatToBottom();
   }
 
-  async function requestChat(text) {
+  async function requestChat(text, addToHistory = true) {
     if (p2Busy) return;
-    addChatMessage('user', { text });
+    if (addToHistory) {
+      addChatMessage('user', { text });
+      autoNameConversationIfNeeded(text);
+    }
     setBusy(true);
-    const bubble = addChatMessage('ai', { text: 'Đang xem lại quá trình học của bạn...', loading: true });
+    const bubble = addChatMessage('ai', { loading: true, persist: false });
     let result = null;
     try {
       result = await apiPost('/chat', {
@@ -1599,54 +2536,114 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } catch (err) {
       console.warn('Gọi /chat thất bại', err);
-      bubble.textContent = 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.';
-      bubble.classList.remove('msg-loading');
+      showChatError(bubble, 'Không kết nối được backend AI. Kiểm tra server rồi thử lại.', {
+        type: 'chat',
+        text,
+      });
       setBusy(false);
       renderQuickActions();
       return;
     }
+
+    bubble.closest('.msg-row').remove();
     p2ChatHistory.push({ role: 'user', content: text });
+
     if (result.intent === 'review_list' && !result.used_fallback) {
-      bubble.closest('.msg-row').remove();
       p2ChatHistory.push({ role: 'assistant', content: result.reply });
       setBusy(false);
-      requestReviewList('');
+      requestReviewList('', false);
       return;
     }
-    bubble.textContent = result.reply;
-    bubble.classList.remove('msg-loading');
-    addSlideLinks(bubble, result.links);
+
+    addChatMessage('ai', {
+      text: result.reply,
+      links: result.links,
+    });
+
     if (!result.used_fallback) p2ChatHistory.push({ role: 'assistant', content: result.reply });
+    saveConversations();
     setBusy(false);
     renderQuickActions();
-    p2Input.focus();
+    if (p2Input) p2Input.focus();
   }
 
-  p2Send.addEventListener('click', handleP2Send);
-  p2Input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleP2Send();
+  // Controls & Listeners
+  if (p2Send) p2Send.addEventListener('click', handleP2Send);
+  if (p2Input) {
+    p2Input.addEventListener('input', () => {
+      p2Input.style.height = 'auto';
+      p2Input.style.height = `${Math.min(p2Input.scrollHeight, 130)}px`;
+    });
+    p2Input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleP2Send();
+      }
+    });
+  }
+
+  function toggleSidebar(open) {
+    if (!chatSidebar) return;
+    const willOpen = open !== undefined ? open : !chatSidebar.classList.contains('open');
+    chatSidebar.classList.toggle('open', willOpen);
+    if (chatSidebarBackdrop) {
+      chatSidebarBackdrop.classList.toggle('active', willOpen);
+    }
+  }
+
+  if (btnToggleSidebar) btnToggleSidebar.addEventListener('click', () => toggleSidebar(true));
+  if (btnCloseSidebar) btnCloseSidebar.addEventListener('click', () => toggleSidebar(false));
+  if (chatSidebarBackdrop) chatSidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
+  if (btnNewChat) btnNewChat.addEventListener('click', createNewConversation);
+  if (btnRenameChat) {
+    btnRenameChat.addEventListener('click', () => {
+      if (activeConversationId) promptRenameConversation(activeConversationId);
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      toggleSidebar(false);
+      closeDeleteNoteModal();
+      closeDeleteConvModal();
+    }
   });
 
   function resetPhase2Chat() {
     p2Messages.innerHTML = '';
     p2ChatHistory = [];
-    exitFeynmanMode();
+    selectedConcept = null;
+    feynmanHistory = [];
+    v3State = {};
+    if (ksPanel) ksPanel.hidden = true;
+    loadConversations();
     if (simScreenAfterClass.classList.contains('active')) onEnterPhase2();
   }
 
-  // Vào Giai đoạn 2: chỉ chào, chờ người dùng tự hỏi (không tự gửi "hôm nay ôn gì")
+  // Vào Giai đoạn 2: nạp lại hội thoại và focus ô nhập
   function onEnterPhase2() {
-    if (!p2Messages.childElementCount) {
-      addChatMessage('ai', { text: 'Chào bạn! Hỏi mình về quá trình học nhé, ví dụ "Hôm nay tôi cần ôn gì?", "Tôi đã học đến đâu?", "Tôi đã ghi chú gì về latent space?" — mình sẽ trả lời kèm link tới đúng trang slide.' });
-      setMode('review');
-    }
+    loadConversations();
+    setTimeout(() => {
+      if (p2Input) p2Input.focus();
+    }, 100);
   }
 
-  setMode('review');
+  // Tải hội thoại ban đầu
+  loadConversations();
 
   // =========================================================================
-  // 5. TOAST NOTIFICATION UTILITY
+  // 5. NOTIFICATION CENTER & TOAST UTILITY
   // =========================================================================
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function showToast(message) {
     const existing = document.querySelector('.toast-notice');
     if (existing) existing.remove();
@@ -1663,6 +2660,282 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => toast.remove(), 300);
     }, 3200);
   }
+
+  const NOTIF_ICONS = {
+    system: '⚠️',
+    learning: '📚',
+    ai: '🤖',
+  };
+
+  const NOTIF_STORAGE_KEY = 'vlearn_notifications';
+  let notifications = [];
+  let currentNotifFilter = 'all';
+
+  const btnNotificationBell = document.getElementById('btn-notification-bell');
+  const notificationBadge = document.getElementById('notification-badge');
+  const notificationPopover = document.getElementById('notification-popover');
+  const notifUnreadCount = document.getElementById('notif-unread-count');
+  const btnMarkAllRead = document.getElementById('btn-mark-all-read');
+  const btnClearAllNotifs = document.getElementById('btn-clear-all-notifs');
+  const notifList = document.getElementById('notif-list');
+  const notifTabs = document.querySelectorAll('.notif-tab');
+
+  function formatNotifTime(ts) {
+    if (!ts) return '';
+    const diff = Math.floor((Date.now() - ts) / 1000);
+    if (diff < 60) return 'Vừa xong';
+    if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
+    return `${Math.floor(diff / 86400)} ngày trước`;
+  }
+
+  function saveNotifications() {
+    try {
+      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(notifications));
+    } catch (err) {
+      console.warn('Không thể lưu notifications vào localStorage', err);
+    }
+  }
+
+  function loadNotifications() {
+    try {
+      const raw = localStorage.getItem(NOTIF_STORAGE_KEY);
+      notifications = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(notifications)) notifications = [];
+    } catch (err) {
+      console.warn('Lỗi đọc notifications từ localStorage', err);
+      notifications = [];
+    }
+    renderNotificationUI();
+  }
+
+  function renderNotificationUI() {
+    const unreadCount = notifications.filter((n) => !n.read).length;
+
+    // Cập nhật Badge trên chuông
+    if (notificationBadge) {
+      if (unreadCount > 0) {
+        notificationBadge.hidden = false;
+        notificationBadge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+      } else {
+        notificationBadge.hidden = true;
+      }
+    }
+
+    // Cập nhật Text số lượng chưa đọc trong Header popover
+    if (notifUnreadCount) {
+      notifUnreadCount.textContent = `${unreadCount} chưa đọc`;
+    }
+
+    // Lọc danh sách theo Tab hiện tại
+    const filtered = currentNotifFilter === 'all'
+      ? notifications
+      : notifications.filter((n) => n.category === currentNotifFilter);
+
+    if (!notifList) return;
+
+    if (filtered.length === 0) {
+      const filterLabels = {
+        system: 'hệ thống',
+        learning: 'học tập',
+        ai: 'AI',
+      };
+      const scopeText = currentNotifFilter !== 'all' ? ` trong mục ${filterLabels[currentNotifFilter] || ''}` : '';
+      notifList.innerHTML = `
+        <div class="notif-empty">
+          <span class="notif-empty-icon">🔔</span>
+          <span>Chưa có thông báo nào${scopeText}</span>
+        </div>
+      `;
+      return;
+    }
+
+    notifList.innerHTML = filtered.map((n) => {
+      const icon = NOTIF_ICONS[n.category] || '🔔';
+      const unreadCls = n.read ? '' : 'unread';
+      return `
+        <div class="notif-item notif-item-${n.category} ${unreadCls}" data-id="${n.id}">
+          <div class="notif-icon-box">${icon}</div>
+          <div class="notif-body">
+            <div class="notif-title-row">
+              <span class="notif-title">${escapeHtml(n.title)}</span>
+              <span class="notif-time">${formatNotifTime(n.timestamp)}</span>
+            </div>
+            <div class="notif-msg">${escapeHtml(n.message)}</div>
+          </div>
+          <button class="btn-delete-single-notif" data-id="${n.id}" title="Xóa thông báo">✕</button>
+        </div>
+      `;
+    }).join('');
+
+    // Gắn sự kiện đánh dấu đọc và xóa item
+    notifList.querySelectorAll('.notif-item').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        // Nếu click vào nút xóa thì không trigger đọc
+        if (e.target.closest('.btn-delete-single-notif')) return;
+        const id = el.getAttribute('data-id');
+        markNotificationAsRead(id);
+      });
+    });
+
+    notifList.querySelectorAll('.btn-delete-single-notif').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        deleteNotification(id);
+      });
+    });
+  }
+
+  function markNotificationAsRead(id) {
+    const item = notifications.find((n) => n.id === id);
+    if (item && !item.read) {
+      item.read = true;
+      saveNotifications();
+      renderNotificationUI();
+    }
+  }
+
+  function markAllNotificationsAsRead() {
+    let changed = false;
+    notifications.forEach((n) => {
+      if (!n.read) {
+        n.read = true;
+        changed = true;
+      }
+    });
+    if (changed) {
+      saveNotifications();
+      renderNotificationUI();
+      showToast('✓ Đã đánh dấu tất cả thông báo là đã đọc');
+    }
+  }
+
+  function deleteNotification(id) {
+    notifications = notifications.filter((n) => n.id !== id);
+    saveNotifications();
+    renderNotificationUI();
+  }
+
+  function clearAllNotifications() {
+    if (notifications.length === 0) return;
+    notifications = [];
+    saveNotifications();
+    renderNotificationUI();
+    showToast('🗑️ Đã xóa sạch danh sách thông báo');
+  }
+
+  function toggleNotificationPopover(forceOpen) {
+    if (!notificationPopover) return;
+    const isHidden = notificationPopover.hidden;
+    const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+    notificationPopover.hidden = !shouldOpen;
+    if (btnNotificationBell) {
+      btnNotificationBell.setAttribute('aria-expanded', String(shouldOpen));
+    }
+  }
+
+  // Khởi tạo pushNotification thực thi
+  pushNotification = function({ category = 'system', title = 'Thông báo', message = '', showToastNotification = true, meta = null }) {
+    const newNotif = {
+      id: `notif_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      category,
+      title,
+      message,
+      timestamp: Date.now(),
+      read: false,
+      meta,
+    };
+    notifications.unshift(newNotif);
+    if (notifications.length > 50) {
+      notifications = notifications.slice(0, 50);
+    }
+    saveNotifications();
+    renderNotificationUI();
+
+    if (showToastNotification) {
+      const icon = NOTIF_ICONS[category] || '🔔';
+      showToast(`${icon} ${title}: ${message}`);
+    }
+    return newNotif;
+  };
+
+  // Event Listeners cho Notification Popover
+  if (btnNotificationBell) {
+    btnNotificationBell.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleNotificationPopover();
+    });
+  }
+
+  if (notificationPopover) {
+    notificationPopover.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  if (btnMarkAllRead) {
+    btnMarkAllRead.addEventListener('click', (e) => {
+      e.stopPropagation();
+      markAllNotificationsAsRead();
+    });
+  }
+
+  if (btnClearAllNotifs) {
+    btnClearAllNotifs.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clearAllNotifications();
+    });
+  }
+
+  notifTabs.forEach((tab) => {
+    tab.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetCategory = tab.getAttribute('data-tab') || 'all';
+      currentNotifFilter = targetCategory;
+      notifTabs.forEach((t) => {
+        const isActive = t === tab;
+        t.classList.toggle('active', isActive);
+        t.setAttribute('aria-selected', String(isActive));
+      });
+      renderNotificationUI();
+    });
+  });
+
+  // Đóng Popover khi click ra ngoài
+  document.addEventListener('click', (e) => {
+    const centerWrap = document.getElementById('notification-center-wrap');
+    if (centerWrap && !centerWrap.contains(e.target) && notificationPopover && !notificationPopover.hidden) {
+      toggleNotificationPopover(false);
+    }
+  });
+
+  // Đóng Popover khi nhấn Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && notificationPopover && !notificationPopover.hidden) {
+      toggleNotificationPopover(false);
+    }
+  });
+
+  // Sự kiện mạng Online / Offline
+  window.addEventListener('offline', () => {
+    pushNotification({
+      category: 'system',
+      title: 'Mất kết nối mạng',
+      message: 'Thiết bị đang ngoại tuyến. Dữ liệu mới có thể chưa được đồng bộ với máy chủ.',
+    });
+  });
+
+  window.addEventListener('online', () => {
+    pushNotification({
+      category: 'system',
+      title: 'Đã kết nối lại',
+      message: 'Kết nối mạng Internet đã được khôi phục bình thường.',
+    });
+  });
+
+  // Tải danh sách thông báo từ localStorage
+  loadNotifications();
 
   // Deep-link qua URL hash: #afterclass (Giai đoạn 2), #slide=10&deck=<mã bộ slide>
   const slideHash = window.location.hash.match(/^#slide=(\d+)(?:&deck=([\w-]+))?$/);

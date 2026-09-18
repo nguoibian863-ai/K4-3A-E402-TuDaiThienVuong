@@ -29,16 +29,53 @@
         </div>
       </div>
 
-      <!-- Stage Quick Switcher -->
-      <div class="stage-nav">
-        <button id="nav-stage-1" class="stage-pill active" data-target="stage1">
-          <span class="stage-num">1</span>
-          <span>Trong lớp</span>
-        </button>
-        <button id="nav-stage-2" class="stage-pill" data-target="stage2">
-          <span class="stage-num">2</span>
-          <span>Sau buổi học</span>
-        </button>
+      <div class="header-right-group">
+        <!-- Stage Quick Switcher -->
+        <div class="stage-nav">
+          <button id="nav-stage-1" class="stage-pill active" data-target="stage1">
+            <span class="stage-num">1</span>
+            <span>Trong lớp</span>
+          </button>
+          <button id="nav-stage-2" class="stage-pill" data-target="stage2">
+            <span class="stage-num">2</span>
+            <span>Sau buổi học</span>
+          </button>
+        </div>
+
+        <!-- Trung tâm thông báo (Notification Center) -->
+        <div class="notification-center-wrap" id="notification-center-wrap">
+          <button class="btn-notification-bell" id="btn-notification-bell" aria-label="Trung tâm thông báo" aria-expanded="false" title="Thông báo">
+            <span class="bell-icon">🔔</span>
+            <span class="notification-badge" id="notification-badge" hidden>0</span>
+          </button>
+
+          <!-- Popover danh sách thông báo -->
+          <div class="notification-popover" id="notification-popover" hidden>
+            <div class="notif-header">
+              <div class="notif-header-title">
+                <h4>Trung tâm thông báo</h4>
+                <span class="notif-unread-count" id="notif-unread-count">0 chưa đọc</span>
+              </div>
+              <div class="notif-header-actions">
+                <button class="btn-notif-action" id="btn-mark-all-read" title="Đánh dấu tất cả đã đọc">✓✓ Đã đọc</button>
+                <button class="btn-notif-action btn-notif-clear" id="btn-clear-all-notifs" title="Xóa tất cả thông báo">🗑️ Xóa hết</button>
+              </div>
+            </div>
+
+            <!-- Bộ lọc tab: Tất cả, Hệ thống, Học tập, AI -->
+            <div class="notif-tabs" role="tablist">
+              <button class="notif-tab active" data-tab="all" role="tab" aria-selected="true">Tất cả</button>
+              <button class="notif-tab" data-tab="system" role="tab" aria-selected="false">⚠️ Hệ thống</button>
+              <button class="notif-tab" data-tab="learning" role="tab" aria-selected="false">📚 Học tập</button>
+              <button class="notif-tab" data-tab="ai" role="tab" aria-selected="false">🤖 AI</button>
+            </div>
+
+            <!-- Danh sách thông báo -->
+            <div class="notif-list" id="notif-list" role="region" aria-live="polite">
+              <!-- Render động bởi JavaScript -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -282,14 +319,44 @@
         <!-- SIMULATION PHASE 2: After Class - Teach AI & Review -->
         <div id="sim-screen-afterclass" class="sim-screen">
 
-          <!-- GIAI ĐOẠN 2 — 1 khung chat duy nhất: hỏi ôn gì -> danh sách ôn -> dạy lại cho AI -> tổng kết -->
+          <!-- Backdrop cho mobile drawer -->
+          <div class="chat-sidebar-backdrop" id="chat-sidebar-backdrop" aria-hidden="true"></div>
+
+          <!-- GIAI ĐOẠN 2 — Layout 2 cột: Sidebar Lịch sử hội thoại + Khung Chat -->
           <div class="p2-chat-layout">
+
+            <!-- Sidebar Lịch sử hội thoại -->
+            <aside class="chat-sidebar" id="chat-sidebar" aria-label="Lịch sử hội thoại">
+              <div class="chat-sidebar-header">
+                <div class="sidebar-title-row">
+                  <div class="sidebar-title-text">
+                    <span class="sidebar-icon">💬</span>
+                    <h4>Lịch sử ôn tập</h4>
+                  </div>
+                  <button class="btn-sidebar-close" id="btn-close-sidebar" aria-label="Đóng danh sách hội thoại" title="Đóng">✕</button>
+                </div>
+                <button class="btn-new-chat" id="btn-new-chat" aria-label="Tạo cuộc trò chuyện mới">
+                  <span class="plus-icon">＋</span> Cuộc trò chuyện mới
+                </button>
+              </div>
+              <div class="chat-sidebar-list" id="sidebar-conv-list" role="navigation" aria-label="Danh sách cuộc trò chuyện">
+                <!-- Sẽ được render động bằng JavaScript -->
+              </div>
+            </aside>
+
+            <!-- Khung chat chính -->
             <div class="p2-chat-panel">
               <div class="chat-panel-header">
                 <div class="roleplay-badge">
+                  <button class="btn-toggle-sidebar" id="btn-toggle-sidebar" aria-label="Mở danh sách hội thoại" title="Lịch sử hội thoại">
+                    <span class="hamburger-icon">☰</span>
+                  </button>
                   <span class="icon">🌙</span>
-                  <div>
-                    <h4>Ôn tập &amp; Dạy lại cho AI</h4>
+                  <div class="chat-header-info">
+                    <div class="chat-title-line">
+                      <h4 id="p2-active-chat-title">Ôn tập &amp; Dạy lại cho AI</h4>
+                      <button class="btn-rename-chat" id="btn-rename-chat" aria-label="Đổi tên cuộc trò chuyện" title="Đổi tên">✏️</button>
+                    </div>
                     <small id="p2-chat-status">Hỏi AI hôm nay cần ôn gì để bắt đầu</small>
                   </div>
                 </div>
@@ -316,8 +383,8 @@
               <div class="p2-quick-actions" id="p2-quick-actions"></div>
 
               <div class="p2-input-bar">
-                <input type="text" id="p2-input" placeholder="Hỏi AI: Hôm nay tôi cần ôn gì?">
-                <button class="btn-send-custom" id="p2-send">Gửi</button>
+                <textarea id="p2-input" rows="1" placeholder="Hỏi AI: Hôm nay tôi cần ôn gì? (Enter để gửi, Shift+Enter xuống dòng)" aria-label="Nhập tin nhắn"></textarea>
+                <button class="btn-send-custom" id="p2-send" aria-label="Gửi tin nhắn">Gửi</button>
               </div>
             </div>
           </div>
@@ -325,8 +392,102 @@
         </div><!-- End #sim-screen-afterclass -->
 
       </div>
-
     </div><!-- End #view-sim -->
+
+    <!-- ================================================================= -->
+    <!-- MODAL: XÁC NHẬN VÀ THÔNG BÁO XÓA GHI CHÚ (BƯỚC 5) -->
+    <!-- ================================================================= -->
+    <div class="live-modal-backdrop" id="modal-delete-note" role="dialog" aria-modal="true" aria-labelledby="modal-delete-note-title" aria-describedby="modal-delete-note-desc">
+      <div class="live-modal-content sm-modal-content">
+        <!-- 1. MÀN HÌNH XÁC NHẬN XÓA (CONFIRM VIEW) -->
+        <div id="delete-note-confirm-view">
+          <div class="modal-head head-danger">
+            <div class="modal-title-wrap">
+              <span class="modal-icon delete-icon">🗑️</span>
+              <div>
+                <h3 id="modal-delete-note-title">Xác nhận xóa ghi chú</h3>
+                <small>Hành động này không thể hoàn tác</small>
+              </div>
+            </div>
+            <button class="close-modal-btn" id="close-delete-note-modal" aria-label="Đóng cửa sổ">✕</button>
+          </div>
+          <div class="modal-body">
+            <p id="modal-delete-note-desc" class="modal-confirm-desc">
+              Bạn có chắc chắn muốn xóa ghi chú này? Ghi chú sẽ bị gỡ bỏ khỏi Nhật ký buổi học và không được đưa vào lộ trình ôn tập AI buổi tối.
+            </p>
+            <div class="note-preview-box" id="delete-note-preview">
+              <div class="preview-meta">
+                <span class="preview-tag" id="delete-note-tag">📊 Ghi chú</span>
+                <span class="preview-page" id="delete-note-page">Trang 1</span>
+              </div>
+              <div class="preview-quote" id="delete-note-quote"></div>
+              <div class="preview-content" id="delete-note-text"></div>
+            </div>
+            <div class="modal-footer-actions">
+              <button class="btn-tertiary-action" id="btn-cancel-delete-note" type="button">Hủy bỏ</button>
+              <button class="btn-danger-action" id="btn-confirm-delete-note" type="button">🗑️ Xóa vĩnh viễn</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. MÀN HÌNH THÔNG BÁO KẾT QUẢ ĐÃ XÓA (SUCCESS NOTIFICATION VIEW) -->
+        <div id="delete-note-success-view" style="display: none;">
+          <div class="modal-head head-success">
+            <div class="modal-title-wrap">
+              <span class="modal-icon success-icon">✅</span>
+              <div>
+                <h3 id="modal-delete-success-title">Thông báo xóa ghi chú</h3>
+                <small>Hệ thống đã cập nhật dữ liệu</small>
+              </div>
+            </div>
+            <button class="close-modal-btn" id="close-delete-success-modal" aria-label="Đóng cửa sổ">✕</button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="delete-success-badge">
+              <span class="success-icon-large">🗑️</span>
+              <span class="success-check-badge">✓</span>
+            </div>
+            <h4 class="delete-success-heading">Đã xóa ghi chú thành công!</h4>
+            <p class="delete-success-desc">
+              Ghi chú đã được gỡ bỏ khỏi <strong>Nhật ký buổi học</strong> và <strong>slide bài giảng</strong>. Đồng thời hệ thống đã ghi nhận thông báo vào <strong>Trung tâm thông báo</strong>.
+            </p>
+            <div class="delete-success-summary" id="delete-success-summary-box">
+              <!-- Render động tóm tắt ghi chú đã xóa -->
+            </div>
+            <div class="modal-footer-actions justify-center">
+              <button class="btn-primary-action" id="btn-close-delete-success" type="button">✓ Đã hiểu & Đóng</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- MODAL: XÁC NHẬN XÓA CUỘC TRÒ CHUYỆN (GIAI ĐOẠN 2) -->
+    <!-- ================================================================= -->
+    <div class="live-modal-backdrop" id="modal-delete-conv" role="dialog" aria-modal="true" aria-labelledby="modal-delete-conv-title" aria-describedby="modal-delete-conv-desc">
+      <div class="live-modal-content sm-modal-content">
+        <div class="modal-head head-danger">
+          <div class="modal-title-wrap">
+            <span class="modal-icon delete-icon">🗑️</span>
+            <div>
+              <h3 id="modal-delete-conv-title">Xóa cuộc trò chuyện?</h3>
+              <small>Toàn bộ tin nhắn sẽ bị xóa vĩnh viễn</small>
+            </div>
+          </div>
+          <button class="close-modal-btn" id="close-delete-conv-modal" aria-label="Đóng cửa sổ">✕</button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-delete-conv-desc" class="modal-confirm-desc">
+            Bạn có chắc muốn xóa cuộc trò chuyện "<strong id="delete-conv-name">Cuộc trò chuyện</strong>"? Bạn sẽ không thể khôi phục lại lịch sử trao đổi này.
+          </p>
+          <div class="modal-footer-actions">
+            <button class="btn-tertiary-action" id="btn-cancel-delete-conv" type="button">Hủy bỏ</button>
+            <button class="btn-danger-action" id="btn-confirm-delete-conv" type="button">🗑️ Xóa vĩnh viễn</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </main>
 
