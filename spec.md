@@ -109,7 +109,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
   - Code / frontend-backend: thành viên phụ trách `codebase/frontend/` và `codebase/backend/` theo `codebase/WORKFLOW.md`.
   - Demo / tổng hợp trình bày: đại diện nhóm (cần bổ sung tên thật trước khi nộp).
 - Willing users (≥2 tên) + kế hoạch vòng validation *(bonus, nếu làm)*:
-  - R01 và R02 (mã ẩn danh trong survey; cần thay bằng tên người tham gia nếu được phép công khai).
+  - Nguyễn Văn An (`2A202602115` - Lớp 3A, Phòng E402, mã R01) và Lê Thị Mai Hương (`2A202602340` - Lớp 3A, Phòng E402, mã R02) (đã khai báo từ mốc CP1; kết quả thử nghiệm chi tiết tại `validation/user_testing_log.md`).
   - Vòng 1: cho người dùng chọn concept, tự giải thích, nhận câu hỏi ngược; đo việc họ có nhận ra và sửa điểm thiếu không.
   - Vòng 2: cho người dùng dùng lại sau 24–48 giờ; đo khả năng xác định đúng phần cần ôn, thời gian hoàn thành và số lần bấm “Không đúng”.
 - Multi-prototype (nếu làm):
@@ -124,4 +124,5 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 | 17/9 | Bổ sung số liệu khảo sát, quote ẩn danh và evidence summary | Khảo sát n = 24 xác nhận nhu cầu ôn sau giờ học và mức sẵn sàng 100%. |
 | 17/9 | Điền impact, error taxonomy, bốn đường đi và kế hoạch validation | Bám workflow B7–B10, contract AI và các failure case đã định nghĩa. |
 | 17/9 | Ghi kết quả eval Prompt v1/v2 | Golden set 25 case đạt 25/25 với Prompt v2. |
+| 18/9 | Cập nhật kết quả user testing 5 người (R6), fix đóng popover thông báo, bổ sung modal đổi tên hội thoại & modal 2 giai đoạn xóa ghi chú | Dựa trên user testing log (`validation/user_testing_log.md`) với 2 willing users CP1 và 3 người ngoài nhóm. |
 ```
